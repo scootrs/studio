@@ -3,7 +3,6 @@ import styled, { ThemeProvider } from 'styled-components';
 import theme from './theme';
 import Header from './components/header';
 import UtilityPane from './components/utility-pane';
-import DetailsPane from './components/details-pane';
 import React from 'react';
 import LiveBlueprint from './components/live-blueprint';
 
@@ -16,14 +15,6 @@ const AppContentLeft = styled.div`
   height: 100%;
   width: 100%;
   max-width: 300px;
-`;
-
-const AppContentRight = styled.div`
-  height: 100%;
-  width: 100%;
-  max-width: 300px;
-  align-self: flex-end;
-  flex-shrink: 1;
 `;
 
 const AppContentMain = styled.div`
@@ -42,9 +33,6 @@ function App() {
         <AppContentMain>
           <LiveBlueprint />
         </AppContentMain>
-        <AppContentRight>
-          <DetailsPane />
-        </AppContentRight>
       </AppContent>
     </ThemeProvider>
   );

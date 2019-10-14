@@ -5,4 +5,4 @@ function DetailsPane() {
   return <DetailsPaneView />;
 }
 
-export default DetailsPaneView;
+export default DetailsPane;

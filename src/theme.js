@@ -1,10 +1,10 @@
 export default {
   colors: {
     primary: {
-      main: '#240090',
-      light: '#3500D3',
-      medium: '#190061',
-      dark: '#0C0032'
+      main: '#1156CC',
+      light: '#5A88D7',
+      medium: '#09419F',
+      dark: '#07327B'
     },
     fonts: {
       light: '#fefefe',
@@ -14,7 +14,7 @@ export default {
       dark: '#282828',
       medium: '#373737',
       light: '#fefefe',
-      brand: '#190061'
+      brand: '#1156CC'
     }
   }
 };

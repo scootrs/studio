@@ -5,12 +5,19 @@ const DetailsPaneRoot = styled.div`
   height: 100%;
   width: 100%;
   box-shadow: -1px 1px 3px ${({ theme }) => theme.colors.backgrounds.medium};
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+`;
+
+const DetailsPaneTitle = styled.h2`
+  padding: 0px 5px;
 `;
 
 function DetailsPaneView() {
   return (
     <DetailsPaneRoot>
-      <p>Hello, world!</p>
+      <DetailsPaneTitle>Details</DetailsPaneTitle>
     </DetailsPaneRoot>
   );
 }

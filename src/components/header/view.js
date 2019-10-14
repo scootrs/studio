@@ -8,7 +8,7 @@ const Header = styled.header`
   justify-content: flex-start;
   background-color: ${({ theme }) => theme.colors.backgrounds.brand};
   color: ${({ theme }) => theme.colors.fonts.light};
-  padding: 10px;
+  padding: 0px 10px;
 `;
 
 function HeaderView() {
