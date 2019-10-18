@@ -1,12 +1,12 @@
 import React from 'react';
 import View from './view';
-import ServiceProviderList from './service-provider-list';
+import ComputeProviderList from './compute-provider-list';
 import StorageProviderList from './storage-provider-list';
 
 function UtilityPane() {
   return (
     <View>
-      <ServiceProviderList />
+      <ComputeProviderList />
       <StorageProviderList />
     </View>
   );

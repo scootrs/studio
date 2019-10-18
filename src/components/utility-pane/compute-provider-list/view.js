@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import styled from 'styled-components';
+import ListItem from '../list-item';
 
 const ListContainer = styled.div`
   display: flex;
@@ -18,17 +19,10 @@ const List = styled.div`
   flex-wrap: wrap;
 `;
 
-const ListItem = styled.div`
-  height: 100px;
-  width: 100px;
-  background-color: ${({ theme }) => theme.colors.primary.main};
-  margin: 5px;
-`;
-
-function ServiceProviderListView() {
+function ComputeProviderListView({}, ref) {
   return (
     <ListContainer>
-      <ListTitle>Service Providers</ListTitle>
+      <ListTitle>Compute Providers</ListTitle>
       <List>
         <ListItem />
         <ListItem />
@@ -38,4 +32,4 @@ function ServiceProviderListView() {
   );
 }
 
-export default ServiceProviderListView;
+export default forwardRef(ComputeProviderListView);

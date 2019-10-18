@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import ListItem from '../list-item';
 
 const ListContainer = styled.div`
   display: flex;
@@ -16,13 +17,6 @@ const List = styled.div`
   flex-direction: row;
   justify-content; space-between;
   flex-wrap: wrap;
-`;
-
-const ListItem = styled.div`
-  height: 100px;
-  width: 100px;
-  background-color: ${({ theme }) => theme.colors.primary.main};
-  margin: 5px;
 `;
 
 function StorageProviderListView() {

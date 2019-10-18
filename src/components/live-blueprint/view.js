@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import DetailsPane from './details-pane';
+import Blueprint from './blueprint';
 
 const BlueprintContainer = styled.div`
   width: 100%;
@@ -17,7 +18,7 @@ const BlueprintViewportContainer = styled.div`
 const DetailsContainer = styled.div`
   height: 100%;
   width: 100%;
-  max-width: 300px;
+  max-width: 800px;
   align-self: flex-end;
   flex-shrink: 1;
 `;
@@ -25,7 +26,9 @@ const DetailsContainer = styled.div`
 function LiveBlueprintView() {
   return (
     <BlueprintContainer>
-      <BlueprintViewportContainer />
+      <BlueprintViewportContainer>
+        <Blueprint />
+      </BlueprintViewportContainer>
       <DetailsContainer>
         <DetailsPane />
       </DetailsContainer>
