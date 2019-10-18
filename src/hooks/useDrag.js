@@ -1,11 +1,16 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
-const useDrag = ({ id, effect, ref, onDragStart, onDragOver, onDragEnd }) => {
+const useDrag = ({ data, effect, ref, onDragStart, onDragOver, onDragEnd }) => {
   const [dragState, updateDragState] = useState('draggable');
   const dragStartCb = ev => {
     updateDragState('dragStart');
     ev.dataTransfer.dropEffect = effect;
-    ev.dataTransfer.setData('source', id);
+    let pkg = {
+      offsetX: ev.offsetX,
+      offsetY: ev.offsetY,
+      data
+    };
+    ev.dataTransfer.setData('source', JSON.stringify(pkg));
     onDragStart && onDragStart();
   };
   const dragOverCb = ev => {

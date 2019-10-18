@@ -9,7 +9,14 @@ function useDrop({ ref, onDrop }) {
 
   const dropCb = ev => {
     ev.preventDefault();
-    onDrop(ev.dataTransfer.getData('source'));
+    let data = JSON.parse(ev.dataTransfer.getData('source'));
+    onDrop({
+      sourceOffsetX: data.offsetX,
+      sourceOffsetY: data.offsetY,
+      targetOffsetX: ev.offsetX,
+      targetOffsetY: ev.offsetY,
+      data: data.data
+    });
     updateDropState('dropped');
   };
   useEffect(() => {

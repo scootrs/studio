@@ -6,7 +6,7 @@ function Blueprint() {
   const dropRef = useRef();
   useDrop({
     ref: dropRef,
-    onDrop: data => console.log(`Caught ${data}`)
+    onDrop: data => console.log(data)
   });
   return <BlueprintView ref={dropRef} />;
 }

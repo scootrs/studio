@@ -5,10 +5,8 @@ import useDrag from '../../../hooks/useDrag';
 function ListItem() {
   const dragRef = useRef();
   useDrag({
-    id: 'test',
-    ref: dragRef,
-    onDragStart: () => console.log('dragging'),
-    onDragEnd: () => console.log('dropped')
+    data: 'test',
+    ref: dragRef
   });
   return <ListItemView ref={dragRef} />;
 }
