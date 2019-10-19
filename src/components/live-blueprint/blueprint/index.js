@@ -1,14 +1,8 @@
-import React, { useRef } from 'react';
-import useDrop from '../../../hooks/useDrop';
+import React from 'react';
 import BlueprintView from './view';
 
 function Blueprint() {
-  const dropRef = useRef();
-  useDrop({
-    ref: dropRef,
-    onDrop: data => console.log(data)
-  });
-  return <BlueprintView ref={dropRef} />;
+  return <BlueprintView />;
 }
 
 export default Blueprint;

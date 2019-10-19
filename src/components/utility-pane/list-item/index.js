@@ -2,13 +2,13 @@ import React, { useRef } from 'react';
 import ListItemView from './view';
 import useDrag from '../../../hooks/useDrag';
 
-function ListItem() {
+function ListItem({ provider }) {
   const dragRef = useRef();
   useDrag({
-    data: 'test',
+    data: provider,
     ref: dragRef
   });
-  return <ListItemView ref={dragRef} />;
+  return <ListItemView ref={dragRef} id={provider.id} />;
 }
 
 export default ListItem;

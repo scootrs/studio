@@ -19,15 +19,11 @@ const List = styled.div`
   flex-wrap: wrap;
 `;
 
-function StorageProviderListView() {
+function StorageProviderListView({ providers }) {
   return (
     <ListContainer>
       <ListTitle>Storage Providers</ListTitle>
-      <List>
-        <ListItem />
-        <ListItem />
-        <ListItem />
-      </List>
+      <List>{providers ? providers.map(p => <ListItem key={p.id} provider={p} />) : ''}</List>
     </ListContainer>
   );
 }

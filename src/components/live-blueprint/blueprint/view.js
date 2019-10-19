@@ -1,14 +1,20 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import Board from './board';
 
 const Viewport = styled.div`
+  position: relative;
   width: 100%;
   height: 100%;
-  text-align: center;
+  overflow: auto;
 `;
 
-function BlueprintView({}, ref) {
-  return <Viewport ref={ref}>Hello, world!</Viewport>;
+function BlueprintView() {
+  return (
+    <Viewport>
+      <Board>Hello, world!</Board>
+    </Viewport>
+  );
 }
 
-export default forwardRef(BlueprintView);
+export default BlueprintView;

@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import ListItem from '../list-item';
 
@@ -19,17 +19,13 @@ const List = styled.div`
   flex-wrap: wrap;
 `;
 
-function ComputeProviderListView({}, ref) {
+function ComputeProviderListView({ providers }) {
   return (
     <ListContainer>
       <ListTitle>Compute Providers</ListTitle>
-      <List>
-        <ListItem />
-        <ListItem />
-        <ListItem />
-      </List>
+      <List>{providers ? providers.map(p => <ListItem key={p.id} provider={p} />) : ''}</List>
     </ListContainer>
   );
 }
 
-export default forwardRef(ComputeProviderListView);
+export default ComputeProviderListView;

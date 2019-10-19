@@ -1,10 +1,28 @@
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
 import ComputeProviderListView from './view';
-import useDrag from '../../../hooks/useDrag';
+
+const initialState = [
+  {
+    id: 'function-1',
+    type: 'function',
+    name: 'Function 1'
+  },
+  {
+    id: 'function-2',
+    type: 'function',
+    name: 'Function 2'
+  },
+  {
+    id: 'function-3',
+    type: 'function',
+    name: 'Function 3'
+  }
+];
 
 function ComputeProviderList() {
-  
-  return <ComputeProviderListView />;
+  const [providers, setProviders] = useState(initialState);
+
+  return <ComputeProviderListView providers={providers} />;
 }
 
 export default ComputeProviderList;
