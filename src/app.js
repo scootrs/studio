@@ -5,35 +5,39 @@ import Header from './components/header';
 import UtilityPane from './components/utility-pane';
 import React from 'react';
 import LiveBlueprint from './components/live-blueprint';
+import Split from 'react-split';
 
-const AppContent = styled.div`
+const SplitAppContent = styled(Split)`
   display: flex;
   flex-grow: 1;
+  flex-direction: row;
+  align-items: stretch;
+  overflow: auto;
 `;
 
-const AppContentLeft = styled.div`
-  height: 100%;
-  width: 100%;
-  max-width: 300px;
-`;
+const splitStyler = (dimension, size, gutterSize) => ({
+  'flex-basis': `calc(${size}% - ${gutterSize}px)`
+});
 
-const AppContentMain = styled.div`
-  height: 100%;
-  flex-grow: 1;
-`;
+const gutterStyler = (dimension, gutterSize) => ({
+  'flex-basis': `${gutterSize}px`
+});
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <Header />
-      <AppContent>
-        <AppContentLeft>
-          <UtilityPane />
-        </AppContentLeft>
-        <AppContentMain>
-          <LiveBlueprint />
-        </AppContentMain>
-      </AppContent>
+      <SplitAppContent
+        sizes={[1, 99]}
+        minSize={[300, 500]}
+        expandToMin={true}
+        cursor={'ew-resize'}
+        elementStyle={splitStyler}
+        gutterStyle={gutterStyler}
+      >
+        <UtilityPane />
+        <LiveBlueprint />
+      </SplitAppContent>
     </ThemeProvider>
   );
 }

@@ -2,13 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import DetailsPane from './details-pane';
 import Blueprint from './blueprint';
+import Split from 'react-split';
 
-const BlueprintContainer = styled.div`
-  width: 100%;
-  height: 100%;
+const SplitBlueprintContainer = styled(Split)`
   display: flex;
   flex-direction: row;
   align-items: stretch;
+  overflow: auto;
 `;
 
 const BlueprintViewportContainer = styled.div`
@@ -16,23 +16,19 @@ const BlueprintViewportContainer = styled.div`
 `;
 
 const DetailsContainer = styled.div`
-  height: 100%;
-  width: 100%;
   max-width: 800px;
-  align-self: flex-end;
-  flex-shrink: 1;
 `;
 
 function LiveBlueprintView() {
   return (
-    <BlueprintContainer>
+    <SplitBlueprintContainer>
       <BlueprintViewportContainer>
         <Blueprint />
       </BlueprintViewportContainer>
       <DetailsContainer>
         <DetailsPane />
       </DetailsContainer>
-    </BlueprintContainer>
+    </SplitBlueprintContainer>
   );
 }
 

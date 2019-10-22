@@ -4,6 +4,7 @@ import styled from 'styled-components';
 const Header = styled.header`
   display: flex;
   flex-direction: row;
+  flex-shrink: 0;
   align-items: center;
   justify-content: flex-start;
   background-color: ${({ theme }) => theme.colors.backgrounds.brand};
