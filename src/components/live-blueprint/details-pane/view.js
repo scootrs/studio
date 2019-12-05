@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Tabs, TabList, TabPanel, Tab } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';;
 
 const DetailsPaneRoot = styled.div`
   height: 100%;
@@ -10,6 +12,10 @@ const DetailsPaneRoot = styled.div`
   align-items: stretch;
 `;
 
+const StyledTabs = styled(Tabs)`
+  height: 100%;
+`;
+
 const DetailsPaneTitle = styled.h2`
   padding: 0px 5px;
 `;
@@ -17,7 +23,23 @@ const DetailsPaneTitle = styled.h2`
 function DetailsPaneView() {
   return (
     <DetailsPaneRoot>
-      <DetailsPaneTitle>Details</DetailsPaneTitle>
+      <StyledTabs>
+        <TabList>
+          <Tab>Config</Tab>
+          <Tab>Code</Tab>
+          <Tab>Environment</Tab>
+        </TabList>
+
+        <TabPanel>
+          <p>Hello, world!</p>
+        </TabPanel>
+        <TabPanel>
+          <p>Hello, world!</p>
+        </TabPanel>
+        <TabPanel>
+          <p>Hello, world!</p>
+        </TabPanel>
+      </StyledTabs>
     </DetailsPaneRoot>
   );
 }
