@@ -29,7 +29,7 @@ function App() {
       <Header />
       <SplitAppContent
         sizes={[1, 99]}
-        minSize={[300, 500]}
+        minSize={[60, 500]}
         expandToMin={true}
         cursor={'ew-resize'}
         elementStyle={splitStyler}

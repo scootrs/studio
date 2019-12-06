@@ -1,15 +1,15 @@
 import React from 'react';
 
 export const initialState = {
-  functions: {},
+  compute: {},
   storage: {}
 };
 
 export const onDrop = (curState, setState) => provider =>
   setState({
     ...curState,
-    functions: {
-      ...curState.functions,
+    compute: {
+      ...curState.compute,
       [provider.id]: provider
     }
   });

@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import Logo from '../../../assets/vectors/logo-white.svg';
 
 const Header = styled.header`
   display: flex;
@@ -7,15 +8,23 @@ const Header = styled.header`
   flex-shrink: 0;
   align-items: center;
   justify-content: flex-start;
-  background-color: ${({ theme }) => theme.colors.backgrounds.brand};
+  background-color: ${({ theme }) => theme.colors.primary.main};
   color: ${({ theme }) => theme.colors.fonts.light};
   padding: 0px 10px;
+`;
+
+const logoWidth = 100;
+
+const StyledLogo = styled(Logo)`
+  width: ${logoWidth}px;
+  height: ${Math.floor(logoWidth * 0.244)}px;
+  margin: 10px 0px;
 `;
 
 function HeaderView() {
   return (
     <Header>
-      <h2>Mooter</h2>
+      <StyledLogo />
     </Header>
   );
 }

@@ -9,14 +9,16 @@ function Board() {
   useDrop({
     ref: dropRef,
     onDrop: pkg => {
+      console.log(pkg);
       onDrop({
         id: Math.random() * 10000000,
-        x: pkg.targetOffsetX - pkg.sourceOffsetX,
-        y: pkg.targetOffsetY - pkg.sourceOffsetY
+        x: pkg.x,
+        y: pkg.y
       });
-    }
+    },
+    svg: true
   });
-  return <BoardView ref={dropRef} functions={state.functions} />;
+  return <BoardView ref={dropRef} functions={state.compute} />;
 }
 
 export default Board;
