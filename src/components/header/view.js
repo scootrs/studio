@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Logo from '../../../assets/vectors/logo-white.svg';
+import Logo from './logo-white.svg';
 
 const Header = styled.header`
   display: flex;
