@@ -12,7 +12,7 @@ const Viewport = styled.div`
 function BlueprintView() {
   return (
     <Viewport>
-      <Board>Hello, world!</Board>
+      <Board />
     </Viewport>
   );
 }

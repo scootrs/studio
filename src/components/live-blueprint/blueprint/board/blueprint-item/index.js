@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import BlueprintItemView from './view';
+import Item from './view';
+import Object from '../../../../objects';
 
-function BlueprintItem({ x, y }) {
-  const [state, setState] = useState({ x, y });
+function BlueprintItem({ item }) {
+  const [state, setState] = useState({ x: item.x, y: item.y });
   const onMouseDown = ev => {
     setState(prev => ({ ...prev }));
     document.onmousemove = ev => {
@@ -18,7 +19,11 @@ function BlueprintItem({ x, y }) {
     };
   };
 
-  return <BlueprintItemView x={state.x} y={state.y} onMouseDown={onMouseDown} />;
+  return (
+    <Item x={state.x} y={state.y} onMouseDown={onMouseDown}>
+      <Object type={item.data.type} />
+    </Item>
+  );
 }
 
 export default BlueprintItem;

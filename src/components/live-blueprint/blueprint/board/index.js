@@ -1,6 +1,7 @@
 import React, { useRef, useContext } from 'react';
 import useDrop from '../../../../hooks/useDrop';
 import BoardView from './view';
+import BlueprintItem from './blueprint-item';
 import LiveBlueprintContext from '../../context';
 
 function Board() {
@@ -9,16 +10,28 @@ function Board() {
   useDrop({
     ref: dropRef,
     onDrop: pkg => {
-      console.log(pkg);
       onDrop({
-        id: Math.random() * 10000000,
+        id: Math.floor(Math.random() * 10000000),
         x: pkg.x,
-        y: pkg.y
+        y: pkg.y,
+        data: pkg.data
       });
     },
     svg: true
   });
-  return <BoardView ref={dropRef} functions={state.compute} />;
+  return (
+    <BoardView ref={dropRef}>
+      {Object.values(state.computeObjects).map(c => (
+        <BlueprintItem key={c.id} item={c} />
+      ))}
+      {Object.values(state.storageObjects).map(s => (
+        <BlueprintItem key={s.id} item={s} />
+      ))}
+      {Object.values(state.eventObjects).map(e => (
+        <BlueprintItem key={e.id} item={e} />
+      ))}
+    </BoardView>
+  );
 }
 
 export default Board;

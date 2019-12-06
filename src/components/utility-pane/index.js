@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import View from './view';
-import Object from './objects';
+import { DraggableObject } from '../objects';
 
 const types = ['compute', 'storage', 'event'];
 
@@ -18,7 +18,7 @@ function UtilityPane() {
     <View>
       {types.map(t => (
         <ObjectContainer key={t}>
-          <Object type={t} />
+          <DraggableObject type={t} />
         </ObjectContainer>
       ))}
     </View>
