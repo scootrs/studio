@@ -1,20 +1,15 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import styled from 'styled-components';
-import Board from './board';
 
-const Viewport = styled.div`
+const Blueboard = styled.div`
   position: relative;
-  width: 100%;
-  height: 100%;
   overflow: auto;
+  display: flex;
+  flex: 1;
 `;
 
-function BlueprintView() {
-  return (
-    <Viewport>
-      <Board />
-    </Viewport>
-  );
+function BoardView({ children }, ref) {
+  return <Blueboard ref={ref}>{children}</Blueboard>;
 }
 
-export default BlueprintView;
+export default forwardRef(BoardView);

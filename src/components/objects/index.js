@@ -5,29 +5,29 @@ import StorageObject, { DraggableStorageObject } from './storage';
 import EventObject, { DraggableEventObject } from './event';
 
 export default function Object({ type, ...rest }) {
-  let wh = { width: 40, height: 40 };
+  let whc = { width: 40, height: 40, className: '' };
   switch (type) {
     case 'compute':
-      return <ComputeObject {...rest} {...wh} />;
+      return <ComputeObject {...rest} {...whc} />;
 
     case 'storage':
-      return <StorageObject {...rest} {...wh} />;
+      return <StorageObject {...rest} {...whc} />;
 
     case 'event':
-      return <EventObject {...rest} {...wh} />;
+      return <EventObject {...rest} {...whc} />;
   }
 }
 
 export function DraggableObject({ type, ...rest }) {
-  let wh = { width: 40, height: 40 };
+  let whc = { width: 40, height: 40, className: '' };
   switch (type) {
     case 'compute':
-      return <DraggableComputeObject {...rest} {...wh} />;
+      return <DraggableComputeObject {...rest} {...whc} />;
 
     case 'storage':
-      return <DraggableStorageObject {...rest} {...wh} />;
+      return <DraggableStorageObject {...rest} {...whc} />;
 
     case 'event':
-      return <DraggableEventObject {...rest} {...wh} />;
+      return <DraggableEventObject {...rest} {...whc} />;
   }
 }

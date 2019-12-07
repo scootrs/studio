@@ -8,6 +8,8 @@ const Pane = styled.div`
   justify-content: flex-start;
   background-color: ${({ theme }) => theme.colors.backgrounds.medium};
   color: ${({ theme }) => theme.colors.fonts.light};
+  min-width: 60px;
+  flex-shrink: 0;
 `;
 
 function UtilityPaneView({ children }) {

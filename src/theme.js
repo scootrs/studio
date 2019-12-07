@@ -6,6 +6,12 @@ export default {
       medium: '#4A1383',
       dark: '#370868'
     },
+    secondary: {
+      main: '#EABF2A',
+      dark: '#9A770',
+      medium: '#C29A0E',
+      light: '#FAD553'
+    },
     fonts: {
       light: '#fefefe',
       dark: '#010101'

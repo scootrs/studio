@@ -2,11 +2,11 @@ import React, { useRef } from 'react';
 import useDrag from '../../../hooks/useDrag';
 import StorageObjectSvg from './object-storage.svg';
 
-export default function StorageObject(props = {}) {
-  return <StorageObjectSvg {...props} />;
+export default function StorageObject({ width = 40, height = 40, ...rest }) {
+  return <StorageObjectSvg width={width} height={height} {...rest} />;
 }
 
-export function DraggableStorageObject(props = {}) {
+export function DraggableStorageObject({ width = 40, height = 40, ...rest }) {
   const ref = useRef();
   useDrag({
     ref,
@@ -15,5 +15,5 @@ export function DraggableStorageObject(props = {}) {
     },
     svg: true
   });
-  return <StorageObjectSvg ref={ref} {...props} />;
+  return <StorageObjectSvg ref={ref} width={width} height={height} {...rest} />;
 }

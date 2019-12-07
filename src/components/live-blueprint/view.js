@@ -8,20 +8,24 @@ const SplitBlueprintContainer = styled(Split)`
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  overflow: auto;
+  flex-grow: 1;
 `;
 
 const BlueprintViewportContainer = styled.div`
   flex-grow: 1;
+  min-height: min-content;
+  display: flex;
 `;
 
 const DetailsContainer = styled.div`
-  max-width: 800px;
+  flex-shrink: 0;
 `;
 
 function LiveBlueprintView() {
   return (
-    <SplitBlueprintContainer>
+    <SplitBlueprintContainer
+      sizes={[50,50]}
+      minSize={300}>
       <BlueprintViewportContainer>
         <Blueprint />
       </BlueprintViewportContainer>

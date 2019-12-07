@@ -33,7 +33,8 @@ module.exports = {
   resolve: {
     extensions: ['*', '.js', '.jsx'],
     alias: {
-      'react-dom': '@hot-loader/react-dom'
+      'react-dom': '@hot-loader/react-dom',
+      react: path.resolve(__dirname, 'node_modules', 'react')
     }
   },
   devServer: {
