@@ -8,10 +8,26 @@ const DetailsPaneRoot = styled.div`
   align-items: stretch;
   padding: 10px;
   flex-grow: 1;
+
+  &:focus {
+    outline: none;
+  }
 `;
 
-function DetailsPaneView({ children }) {
-  return <DetailsPaneRoot>{children}</DetailsPaneRoot>;
+const DetailsContainer = styled.div`
+  flex-shrink: 0;
+  display: flex;
+  min-height: min-content;
+`;
+
+function DetailsPaneView({ children, onClick, onKeyDown }) {
+  return (
+    <DetailsContainer>
+      <DetailsPaneRoot tabIndex={-1} onClick={onClick} onKeyDown={onKeyDown}>
+        {children}
+      </DetailsPaneRoot>
+    </DetailsContainer>
+  );
 }
 
 export default DetailsPaneView;

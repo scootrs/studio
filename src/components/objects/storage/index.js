@@ -8,10 +8,16 @@ export default function StorageObject({ width = 40, height = 40, ...rest }) {
 
 export function DraggableStorageObject({ width = 40, height = 40, ...rest }) {
   const ref = useRef();
+  const type = 'storage';
   useDrag({
     ref,
     data: {
-      type: 'storage'
+      info: {
+        type
+      },
+      config: {
+        type
+      }
     },
     svg: true
   });

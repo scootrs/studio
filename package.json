@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "@monaco-editor/react": "^2.3.0",
+    "monaco-editor": "^0.18.1",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-plumb": "^0.1.0",
@@ -22,6 +23,7 @@
     "babel-loader": "^8.0.6",
     "css-loader": "^3.2.0",
     "html-webpack-plugin": "^3.2.0",
+    "monaco-editor-webpack-plugin": "^1.7.0",
     "react-hot-loader": "^4.12.15",
     "style-loader": "^1.0.0",
     "webpack": "^4.41.0",

@@ -1,11 +1,12 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 module.exports = {
   entry: './src/index.js',
-  mode: 'development',
+  mode: process.env.NODE_ENV || 'development',
   output: {
-    filename: 'main.js',
+    filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist')
   },
   module: {
@@ -34,12 +35,20 @@ module.exports = {
     extensions: ['*', '.js', '.jsx'],
     alias: {
       'react-dom': '@hot-loader/react-dom',
-      react: path.resolve(__dirname, 'node_modules', 'react')
+      react: path.resolve(__dirname, 'node_modules', 'react'),
+      '~components': path.resolve(__dirname, 'src', 'components'),
+      '~hooks': path.resolve(__dirname, 'src', 'hooks'),
+      '~styles': path.resolve(__dirname, 'src', 'styles')
     }
   },
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
     port: 3000
   },
-  plugins: [new HtmlWebpackPlugin({ template: './src/index.html' })]
+  plugins: [
+    new HtmlWebpackPlugin({ template: './src/index.html' }),
+    new MonacoWebpackPlugin({
+      languages: ['javascript', 'typescript']
+    })
+  ]
 };

@@ -1,26 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import View from './view';
-import {
-  initialState,
-  onDropMux,
-  onObjectSelect,
-  LiveBlueprintContextProvider,
-  onClearSelectedObject
-} from './context';
+import { BlueprintContextProvider } from './context';
+import { DetailsPaneContextProvider } from './details-pane/context';
+import Blueprint from './blueprint';
+import DetailsPane from './details-pane';
 
 function LiveBlueprint() {
-  const [state, setState] = useState(initialState);
   return (
-    <LiveBlueprintContextProvider
-      value={{
-        state,
-        onDrop: onDropMux(setState),
-        setCurrent: onObjectSelect(setState),
-        clearCurrent: onClearSelectedObject(setState)
-      }}
-    >
-      <View />
-    </LiveBlueprintContextProvider>
+    <BlueprintContextProvider>
+      <View>
+        <Blueprint />
+        <DetailsPaneContextProvider>
+          <DetailsPane />
+        </DetailsPaneContextProvider>
+      </View>
+    </BlueprintContextProvider>
   );
 }
 

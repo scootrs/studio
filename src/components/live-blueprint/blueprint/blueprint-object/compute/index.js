@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import View from './view';
-import ComputeObject from '../../../../objects/compute';
-import BlueprintContext from '../../../context';
+import ComputeObject from '~components/objects/compute';
+import useBlueprintContext from '~components/live-blueprint/context';
 import { withEndpoints } from 'react-plumb/hoc';
 import uuid from 'uuid/v4';
 
@@ -23,16 +23,19 @@ const endpoints = [
 ];
 
 function ComputeBlueprintObject({ object }) {
-  const { setCurrent } = useContext(BlueprintContext);
+  const {
+    selected,
+    actions: { onSelectObject }
+  } = useBlueprintContext();
 
   const onClick = ev => {
     ev.preventDefault();
     ev.stopPropagation();
-    setCurrent(object);
+    onSelectObject(object);
   };
 
   return (
-    <View id={object.id} selected={object.selected} x={object.x} y={object.y} onClick={onClick}>
+    <View id={object.id} selected={object.id === selected} x={object.x} y={object.y} onClick={onClick}>
       <ComputeObject />
     </View>
   );

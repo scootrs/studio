@@ -1,105 +1,51 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 
-export const initialState = {
-  objects: {},
-  current: {
-    type: null,
-    id: null
-  }
-};
+const BlueprintContext = React.createContext({});
 
-export const onDropMux = setState => object => {
-  switch (object.data.type) {
-    case 'compute':
-      return onDropComputeObject(setState)(object);
+const useBlueprintContext = () => useContext(BlueprintContext);
+export default useBlueprintContext;
 
-    case 'storage':
-      return onDropStorageObject(setState)(object);
+export const BlueprintContextProvider = ({ children }) => {
+  const [selected, setSelected] = useState(null);
+  const onSelectObject = object => setSelected(object !== null ? object.id : null);
 
-    case 'event':
-      return onDropEventObject(setState)(object);
+  const [config, setConfig] = useState({});
+  const setObjectConfig = (id, newConfig) =>
+    setConfig(prev => ({
+      ...prev,
+      [id]: newConfig
+    }));
 
-    default:
-      throw new Error('Unsupported object type: ' + object.data.type);
-  }
-};
-
-export const onDropComputeObject = setState => object =>
-  setState(prev => ({
-    ...prev,
-    objects: {
-      ...prev.objects,
-      [object.id]: object
-    }
-  }));
-
-export const onDropStorageObject = setState => object =>
-  setState(prev => ({
-    ...prev,
-    objects: {
-      ...prev.objects,
-      [object.id]: object
-    }
-  }));
-
-export const onDropEventObject = setState => object =>
-  setState(prev => ({
-    ...prev,
-    objects: {
-      ...prev.objects,
-      [object.id]: object
-    }
-  }));
-
-export const onObjectSelect = setState => object =>
-  setState(prev => ({
-    ...prev,
-    objects:
-      prev.current.id !== null
-        ? {
-            ...prev.objects,
-            [prev.current.id]: {
-              ...prev.objects[prev.current.id],
-              selected: false
-            },
-            [object.id]: {
-              ...prev.objects[object.id],
-              selected: true
-            }
-          }
-        : {
-            ...prev.objects,
-            [object.id]: {
-              ...prev.objects[object.id],
-              selected: true
-            }
-          },
-    current: {
-      type: object.data.type,
-      id: object.id
-    }
-  }));
-
-export const onClearSelectedObject = setState => () =>
-  setState(prev => ({
-    ...prev,
-    objects: {
-      ...prev.objects,
-      [prev.current.id]: {
-        ...prev.objects[prev.current.id],
-        selected: false
+  const [objects, setObjects] = useState({});
+  const onObjectDrop = object => {
+    setObjects(prev => ({
+      ...prev,
+      [object.info.id]: {
+        ...object.info
       }
-    },
-    current: {
-      type: null,
-      id: null
-    }
-  }));
+    }));
+    setConfig(prev => ({
+      ...prev,
+      [object.info.id]: {
+        ...object.config
+      }
+    }));
+  };
 
-const context = React.createContext(initialState);
-
-export const LiveBlueprintContextProvider = context.Provider;
-
-export const LiveBlueprintContextConsumer = context.Consumer;
-
-export default context;
+  return (
+    <BlueprintContext.Provider
+      value={{
+        objects,
+        config,
+        selected,
+        actions: {
+          onObjectDrop,
+          onSelectObject,
+          setObjectConfig
+        }
+      }}
+    >
+      {children}
+    </BlueprintContext.Provider>
+  );
+};

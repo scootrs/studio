@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
-import BlueprintContext from '../../../context';
+import useBlueprintContext from '~components/live-blueprint/context';
 import View from './view';
-import StorageObject from '../../../../objects/storage';
+import StorageObject from '~components/objects/storage';
 import { withEndpoints } from 'react-plumb/hoc';
 
 const endpoints = [
@@ -15,16 +15,19 @@ const endpoints = [
 ];
 
 function StorageBlueprintObject({ object }) {
-  const { setCurrent } = useContext(BlueprintContext);
+  const {
+    selected,
+    actions: { onSelectObject }
+  } = useBlueprintContext();
 
   const onClick = ev => {
     ev.preventDefault();
     ev.stopPropagation();
-    setCurrent(object);
+    onSelectObject(object);
   };
 
   return (
-    <View id={object.id} selected={object.selected} x={object.x} y={object.y} onClick={onClick}>
+    <View id={object.id} selected={object.id === selected} x={object.x} y={object.y} onClick={onClick}>
       <StorageObject />
     </View>
   );

@@ -1,25 +1,33 @@
-import React, { useContext } from 'react';
-import useDrop from '../../../hooks/useDrop';
+import React from 'react';
+import usePlumbContainer from 'react-plumb';
+import uuid from 'uuid/v4';
+import useDrop from '~hooks/useDrop';
+import useBlueprintContext from '~components/live-blueprint/context';
 import BoardView from './view';
 import ComputeBlueprintObject from './blueprint-object/compute';
 import StorageBlueprintObject from './blueprint-object/storage';
 import EventBlueprintObject from './blueprint-object/event';
-import LiveBlueprintContext from '../context';
-import usePlumbContainer from 'react-plumb';
-import uuid from 'uuid/v4';
 
 function Blueprint() {
   const [ref, plumb] = usePlumbContainer();
-  const { state, onDrop, clearCurrent } = useContext(LiveBlueprintContext);
+  const {
+    objects,
+    actions: { onObjectDrop, onSelectObject }
+  } = useBlueprintContext();
 
   useDrop({
     ref,
     onDrop: pkg => {
-      onDrop({
-        id: uuid(),
-        x: pkg.x,
-        y: pkg.y,
-        data: pkg.data
+      onObjectDrop({
+        info: {
+          id: uuid(),
+          x: pkg.x,
+          y: pkg.y,
+          ...pkg.data.info
+        },
+        config: {
+          ...pkg.data.config
+        }
       });
     },
     svg: true
@@ -28,16 +36,14 @@ function Blueprint() {
   const onBlueprintClick = ev => {
     ev.preventDefault();
     ev.stopPropagation();
-    if (state.current.id) {
-      clearCurrent();
-    }
+    onSelectObject(null);
   };
 
   return (
     <BoardView ref={ref} onClick={onBlueprintClick}>
       {plumb(
-        Object.values(state.objects).map(o => {
-          switch (o.data.type) {
+        Object.values(objects).map(o => {
+          switch (o.type) {
             case 'compute':
               return <ComputeBlueprintObject key={o.id} id={o.id} object={o} />;
 

@@ -1,34 +1,70 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import useBlueprintContext from '~components/live-blueprint/context';
+import useDetailsPaneContext from './context';
 import DetailsPaneView from './view';
-import BlueprintContext from '../context';
 import ComputeDetails from './compute-details';
 import StorageDetails from './storage-details';
 import EventDetails from './event-details';
 
-function DetailsPane() {
-  const { state } = useContext(BlueprintContext);
+function Current() {
+  const { selected, config } = useBlueprintContext();
+  if (selected) {
+    let object = config[selected];
 
-  function Current() {
-    switch (state.current.type) {
+    switch (object.type) {
       case 'compute':
-        return <ComputeDetails object={state.objects[state.current.id]} />;
+        return <ComputeDetails object={object} />;
 
       case 'storage':
-        return <StorageDetails object={state.objects[state.current.id]} />;
+        return <StorageDetails object={object} />;
 
       case 'event':
-        return <EventDetails object={state.objects[state.current.id]} />;
+        return <EventDetails object={object} />;
 
       default:
-        return <p>Select an item from the blueprint to view details</p>
+        return <p>Unable to display details for selected type</p>;
     }
+  } else {
+    return <p>Select an item from the blueprint to view details</p>;
+  }
+}
+
+export default function DetailsPane() {
+  const {
+    config,
+    selected,
+    actions: { setObjectConfig }
+  } = useBlueprintContext();
+  const {
+    objectId,
+    saved,
+    actions: { saveWith, init }
+  } = useDetailsPaneContext();
+
+  const onClick = ev => {
+    ev.preventDefault();
+    ev.stopPropagation();
+    ev.target.focus();
+  };
+
+  const onKeyDown = ev => {
+    if (ev.ctrlKey && String.fromCharCode(ev.which).toLowerCase() === 's') {
+      ev.stopPropagation();
+      ev.preventDefault();
+      saveWith(setObjectConfig);
+    }
+  };
+
+  if (selected !== objectId) {
+    if (!saved) {
+      saveWith(setObjectConfig);
+    }
+    init(selected, config[selected]);
   }
 
   return (
-    <DetailsPaneView>
+    <DetailsPaneView onClick={onClick} onKeyDown={onKeyDown}>
       <Current />
     </DetailsPaneView>
   );
 }
-
-export default DetailsPane;
