@@ -19,6 +19,8 @@ const BlueprintViewportContainer = styled.div`
 
 const DetailsContainer = styled.div`
   flex-shrink: 0;
+  display: flex;
+  min-height: min-content;
 `;
 
 function LiveBlueprintView() {

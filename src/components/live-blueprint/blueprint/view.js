@@ -8,8 +8,12 @@ const Blueboard = styled.div`
   flex: 1;
 `;
 
-function BoardView({ children }, ref) {
-  return <Blueboard ref={ref}>{children}</Blueboard>;
+function BoardView({ children, onClick }, ref) {
+  return (
+    <Blueboard ref={ref} onClick={onClick}>
+      {children}
+    </Blueboard>
+  );
 }
 
 export default forwardRef(BoardView);

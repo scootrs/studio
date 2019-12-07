@@ -61,6 +61,8 @@ function useDragSvg({ data, ref, onDragStart, onDragOver, onDragEnd }) {
     document.body.appendChild(clone);
     document.addEventListener('mousemove', svgDragOver);
     document.addEventListener('mouseup', svgDragEnd);
+    ev.preventDefault();
+    ev.stopPropagation();
     onDragStart && onDragStart();
   }
 

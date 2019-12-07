@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import View from './view';
-import { initialState, onDropMux, LiveBlueprintContextProvider } from './context';
+import {
+  initialState,
+  onDropMux,
+  onObjectSelect,
+  LiveBlueprintContextProvider,
+  onClearSelectedObject
+} from './context';
 
 function LiveBlueprint() {
   const [state, setState] = useState(initialState);
@@ -8,7 +14,9 @@ function LiveBlueprint() {
     <LiveBlueprintContextProvider
       value={{
         state,
-        onDrop: onDropMux(setState)
+        onDrop: onDropMux(setState),
+        setCurrent: onObjectSelect(setState),
+        clearCurrent: onClearSelectedObject(setState)
       }}
     >
       <View />

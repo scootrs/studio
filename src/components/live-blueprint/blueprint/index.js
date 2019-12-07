@@ -6,17 +6,17 @@ import StorageBlueprintObject from './blueprint-object/storage';
 import EventBlueprintObject from './blueprint-object/event';
 import LiveBlueprintContext from '../context';
 import usePlumbContainer from 'react-plumb';
+import uuid from 'uuid/v4';
 
-function Board() {
+function Blueprint() {
   const [ref, plumb] = usePlumbContainer();
-  const { state, onDrop } = useContext(LiveBlueprintContext);
-  console.log(state);
+  const { state, onDrop, clearCurrent } = useContext(LiveBlueprintContext);
+
   useDrop({
     ref,
     onDrop: pkg => {
       onDrop({
-        // NOTE: the ID MUST be a String to work with jsPlumb
-        id: Math.floor(Math.random() * 10000000).toString(),
+        id: uuid(),
         x: pkg.x,
         y: pkg.y,
         data: pkg.data
@@ -24,23 +24,33 @@ function Board() {
     },
     svg: true
   });
+
+  const onBlueprintClick = ev => {
+    ev.preventDefault();
+    ev.stopPropagation();
+    if (state.current.id) {
+      clearCurrent();
+    }
+  };
+
   return (
-    <BoardView ref={ref}>
+    <BoardView ref={ref} onClick={onBlueprintClick}>
       {plumb(
-        <>
-          {Object.values(state.computeObjects).map(c => (
-            <ComputeBlueprintObject key={c.id} id={c.id} object={c} />
-          ))}
-          {Object.values(state.storageObjects).map(s => (
-            <StorageBlueprintObject key={s.id} id={s.id} object={s} />
-          ))}
-          {Object.values(state.eventObjects).map(e => (
-            <EventBlueprintObject key={e.id} id={e.id} object={e} />
-          ))}
-        </>
+        Object.values(state.objects).map(o => {
+          switch (o.data.type) {
+            case 'compute':
+              return <ComputeBlueprintObject key={o.id} id={o.id} object={o} />;
+
+            case 'storage':
+              return <StorageBlueprintObject key={o.id} id={o.id} object={o} />;
+
+            case 'event':
+              return <EventBlueprintObject key={o.id} id={o.id} object={o} />;
+          }
+        })
       )}
     </BoardView>
   );
 }
 
-export default Board;
+export default Blueprint;
