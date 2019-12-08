@@ -61,15 +61,15 @@ export const BlueprintContextProvider = ({ children }) => {
       }
     }));
 
-  const setSelectedObjectConfig = config =>
+  const setObjectConfig = (id, config) =>
     setCurrent(prev => ({
       ...prev,
       objects: {
         ...prev.objects,
-        [prev.selected]: {
-          ...prev.objects[prev.selected],
+        [id]: {
+          ...prev.objects[id],
           config: {
-            ...prev.objects[prev.selected].config,
+            ...prev.objects[id].config,
             ...config
           }
         }
@@ -83,7 +83,7 @@ export const BlueprintContextProvider = ({ children }) => {
         actions: {
           setSelected,
           setObject,
-          setSelectedObjectConfig
+          setObjectConfig
         }
       }}
     >

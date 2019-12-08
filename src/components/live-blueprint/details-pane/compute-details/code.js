@@ -20,7 +20,7 @@ export default function ComputeCodeDetailsPanel() {
   const {
     selected,
     objects,
-    actions: { setSelectedObjectConfig }
+    actions: { setObjectConfig }
   } = useBlueprintContext();
 
   const { code, language } = objects[selected].config;
@@ -46,7 +46,7 @@ export default function ComputeCodeDetailsPanel() {
         precondition: null,
         keybindingContext: null,
         run: function(ed) {
-          setSelectedObjectConfig({ code: ed.getValue() });
+          setObjectConfig(document.editor.id, { code: ed.getValue() });
         }
       });
 
@@ -55,18 +55,21 @@ export default function ComputeCodeDetailsPanel() {
         monaco: editor
       };
     }
+    return () => {
+      setObjectConfig(document.editor.id, { code: document.editor.monaco.getValue() });
+      document.editor.id = null;
+    };
+  }, []);
 
+  useEffect(() => {
     document.editor.id = selected;
     document.editor.monaco.setValue(code);
     monaco.editor.setModelLanguage(document.editor.monaco.getModel(), language);
 
     ref.current.appendChild(document.editor.el);
     document.editor.monaco.layout();
+  }, [selected, code, language]);
 
-    return () => {
-      setSelectedObjectConfig({ code: document.editor.monaco.getValue() });
-    };
-  }, []);
   return (
     <CodeDetailsRoot>
       <Editor ref={ref}></Editor>
