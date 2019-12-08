@@ -61,7 +61,15 @@ export const BlueprintContextProvider = ({ children }) => {
       }
     }));
 
-  const setObjectConfig = (id, config) =>
+  const setObjectConfig = (id, config) => {
+    // If any properties on the config object are functions, we need to evaluate them
+    for (const [name, val] of Object.entries(config)) {
+      if (typeof val === 'function') {
+        console.log('Found function');
+        config[name] = val();
+        console.log(config[name]);
+      }
+    }
     setCurrent(prev => ({
       ...prev,
       objects: {
@@ -75,6 +83,7 @@ export const BlueprintContextProvider = ({ children }) => {
         }
       }
     }));
+  };
 
   const setConnection = conn =>
     setCurrent(prev => ({

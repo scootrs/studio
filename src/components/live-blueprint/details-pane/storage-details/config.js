@@ -9,16 +9,22 @@ const ViewRoot = styled.div`
 `;
 
 export default function StorageConfigDetailsPane() {
-  const { selected, objects } = useBlueprintContext();
+  const {
+    selected,
+    objects,
+    actions: { setObjectConfig }
+  } = useBlueprintContext();
 
   const config = objects[selected].config;
 
+  const onChange = ev => setObjectConfig(selected, { [ev.target.name]: ev.target.value });
+
   return (
     <ViewRoot>
-      <TextInput label="ID" id="id" value={config.id} onChange={() => {}} />
-      <TextInput label="Table Name" id="tableName" value={config.table} onChange={() => {}} />
-      <TextInput label="Primary Key Name" id="primaryKeyName" value={config.primary.name} onChange={() => {}} />
-      <Select label={'Primary Key Data Type'} value={config.primary.type} onChange={() => {}}>
+      <TextInput label="ID" name="id" value={config.id} onChange={onChange} />
+      <TextInput label="Table Name" name="table" value={config.table} onChange={onChange} />
+      <TextInput label="Primary Key Name" name="primaryName" value={config.primaryName} onChange={onChange} />
+      <Select label={'Primary Key Data Type'} name="primaryType" value={config.primaryType} onChange={onChange}>
         <Option value={'S'}>String</Option>
         <Option value={'N'}>Number</Option>
       </Select>

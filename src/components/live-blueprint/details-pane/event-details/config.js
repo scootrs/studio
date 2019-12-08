@@ -9,20 +9,26 @@ const ViewRoot = styled.div`
 `;
 
 export default function EventConfigDetailsPane() {
-  const { selected, objects } = useBlueprintContext();
+  const {
+    selected,
+    objects,
+    actions: { setObjectConfig }
+  } = useBlueprintContext();
 
   const config = objects[selected].config;
 
+  const onChange = ev => setObjectConfig(selected, { [ev.target.name]: ev.target.value });
+
   return (
     <ViewRoot>
-      <TextInput label="ID" id="id" value={config.id} onChange={() => {}} />
-      <Select label={'Method'} value={config.method} onChange={() => {}}>
+      <TextInput label="ID" id="id" name="id" value={config.id} onChange={onChange} />
+      <Select label={'Method'} id="method" name="method" value={config.method} onChange={onChange}>
         <Option value={'GET'}>GET</Option>
         <Option value={'PUT'}>PUT</Option>
         <Option value={'POST'}>POST</Option>
         <Option value={'DELETE'}>DELETE</Option>
       </Select>
-      <TextInput label="Path" id="path" value={config.path} onChange={() => {}} />
+      <TextInput label="Path" id="path" name="path" value={config.path} onChange={onChange} />
     </ViewRoot>
   );
 }

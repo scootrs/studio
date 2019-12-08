@@ -15,7 +15,7 @@ export function DraggableComputeObject({ width = 40, height = 40, ...rest }) {
       config: {
         id: '',
         language: 'javascript',
-        runtime: null,
+        runtime: '',
         vcs: '',
         code: '',
         env: [],

@@ -16,10 +16,8 @@ export function DraggableStorageObject({ width = 40, height = 40, ...rest }) {
         id: '',
         storageType: null,
         table: '',
-        primary: {
-          name: '',
-          type: ''
-        }
+        primaryName: '',
+        primaryType: ''
       }
     },
     svg: true
