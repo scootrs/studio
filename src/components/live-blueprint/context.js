@@ -49,7 +49,7 @@ export const BlueprintContextProvider = ({ children }) => {
   const setSelected = object =>
     setCurrent(prev => ({
       ...prev,
-      selected: object.id
+      selected: object ? object.id : null
     }));
 
   const setObject = object =>

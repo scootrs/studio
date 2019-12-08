@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import * as monaco from 'monaco-editor';
 import useBlueprintContext from '../../context';
@@ -66,7 +66,7 @@ export default function ComputeCodeDetailsPanel() {
     return () => {
       setSelectedObjectConfig({ code: document.editor.monaco.getValue() });
     };
-  }, [ref, selected, code, language]);
+  }, []);
   return (
     <CodeDetailsRoot>
       <Editor ref={ref}></Editor>
