@@ -25,18 +25,18 @@ const endpoints = [
 function ComputeBlueprintObject({ object }) {
   const {
     selected,
-    actions: { onSelectObject }
+    actions: { setSelected }
   } = useBlueprintContext();
 
   const onClick = ev => {
     ev.preventDefault();
     ev.stopPropagation();
-    onSelectObject(object);
+    setSelected(object);
   };
 
   return (
     <View id={object.id} selected={object.id === selected} x={object.x} y={object.y} onClick={onClick}>
-      <ComputeObject />
+      <ComputeObject width={60} height={60} />
     </View>
   );
 }

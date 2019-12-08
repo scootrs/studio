@@ -12,22 +12,17 @@ function Blueprint() {
   const [ref, plumb] = usePlumbContainer();
   const {
     objects,
-    actions: { onObjectDrop, onSelectObject }
+    actions: { setObject, setSelected }
   } = useBlueprintContext();
 
   useDrop({
     ref,
     onDrop: pkg => {
-      onObjectDrop({
-        info: {
-          id: uuid(),
-          x: pkg.x,
-          y: pkg.y,
-          ...pkg.data.info
-        },
-        config: {
-          ...pkg.data.config
-        }
+      setObject({
+        id: uuid(),
+        x: pkg.x,
+        y: pkg.y,
+        ...pkg.data
       });
     },
     svg: true
@@ -36,7 +31,7 @@ function Blueprint() {
   const onBlueprintClick = ev => {
     ev.preventDefault();
     ev.stopPropagation();
-    onSelectObject(null);
+    setSelected(null);
   };
 
   return (

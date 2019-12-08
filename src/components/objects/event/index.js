@@ -8,15 +8,15 @@ export default function EventObject({ width = 40, height = 40, ...rest }) {
 
 export function DraggableEventObject({ width = 40, height = 40, ...rest }) {
   const ref = useRef();
-  const type = 'event';
   useDrag({
     ref,
     data: {
-      info: {
-        type
-      },
+      type: 'event',
       config: {
-        type
+        id: '',
+        eventType: null,
+        path: '',
+        method: ''
       }
     },
     svg: true

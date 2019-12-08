@@ -8,18 +8,15 @@ export default function ComputeObject({ width = 40, height = 40, ...rest }) {
 
 export function DraggableComputeObject({ width = 40, height = 40, ...rest }) {
   const ref = useRef();
-  const type = 'compute';
   useDrag({
     ref,
     data: {
-      info: {
-        type
-      },
+      type: 'compute',
       config: {
-        id: null,
-        type,
+        id: '',
+        language: 'javascript',
         runtime: null,
-        vcs: null,
+        vcs: '',
         code: '',
         env: [],
         tags: []

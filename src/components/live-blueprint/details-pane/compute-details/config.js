@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { TextInput } from '~styles/input';
+import { TextInput, Select, Option } from '~styles/input';
+import useBlueprintContext from '../../context';
 
 const ViewRoot = styled.div`
   display: flex;
@@ -8,9 +9,16 @@ const ViewRoot = styled.div`
 `;
 
 export default function ComputeConfigDetailsPane() {
+  const { selected, objects } = useBlueprintContext();
+
+  const config = objects[selected].config;
+
   return (
     <ViewRoot>
-      <TextInput />
+      <TextInput label={'ID'} value={config.id} onChange={() => {}} />
+      <Select label={'Runtime'}>
+        <Option value={'nodejs-12.x'}>Node.js | 12.x</Option>
+      </Select>
     </ViewRoot>
   );
 }

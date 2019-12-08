@@ -1,47 +1,89 @@
 import React, { useState, useContext } from 'react';
 
-const BlueprintContext = React.createContext({});
+/**
+ * Represents the structure of the state of the blueprint context.
+ *
+ * The `objects` object is formatted as follows:
+ *
+ * ```js
+ * [id]: {
+ *     id: '',
+ *     type: '',
+ *     x: 0,
+ *     y: 0,
+ *     config: {
+ *         // Type specific configuration
+ *     }
+ * }
+ * ```
+ *
+ * The `connections` object is structured as follows:
+ *
+ * ```js
+ * [id]: {
+ *     id: '',
+ *     source: '',
+ *     target: '',
+ *     allows: [],
+ *     config: {
+ *         // Future connection specific configurations
+ *     }
+ * }
+ * ```
+ *
+ */
+const state = {
+  objects: {},
+  connections: {},
+  selected: ''
+};
+
+const BlueprintContext = React.createContext(state);
 
 const useBlueprintContext = () => useContext(BlueprintContext);
 export default useBlueprintContext;
 
 export const BlueprintContextProvider = ({ children }) => {
-  const [selected, setSelected] = useState(null);
-  const onSelectObject = object => setSelected(object !== null ? object.id : null);
+  const [current, setCurrent] = useState(state);
 
-  const [config, setConfig] = useState({});
-  const setObjectConfig = (id, newConfig) =>
-    setConfig(prev => ({
+  const setSelected = object =>
+    setCurrent(prev => ({
       ...prev,
-      [id]: newConfig
+      selected: object.id
     }));
 
-  const [objects, setObjects] = useState({});
-  const onObjectDrop = object => {
-    setObjects(prev => ({
+  const setObject = object =>
+    setCurrent(prev => ({
       ...prev,
-      [object.info.id]: {
-        ...object.info
+      objects: {
+        ...prev.objects,
+        [object.id]: object
       }
     }));
-    setConfig(prev => ({
+
+  const setSelectedObjectConfig = config =>
+    setCurrent(prev => ({
       ...prev,
-      [object.info.id]: {
-        ...object.config
+      objects: {
+        ...prev.objects,
+        [prev.selected]: {
+          ...prev.objects[prev.selected],
+          config: {
+            ...prev.objects[prev.selected].config,
+            ...config
+          }
+        }
       }
     }));
-  };
 
   return (
     <BlueprintContext.Provider
       value={{
-        objects,
-        config,
-        selected,
+        ...current,
         actions: {
-          onObjectDrop,
-          onSelectObject,
-          setObjectConfig
+          setSelected,
+          setObject,
+          setSelectedObjectConfig
         }
       }}
     >

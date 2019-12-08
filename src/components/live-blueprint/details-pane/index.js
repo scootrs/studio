@@ -1,25 +1,21 @@
 import React from 'react';
-import useBlueprintContext from '~components/live-blueprint/context';
-import useDetailsPaneContext from './context';
+import useBlueprintContext from '../context';
 import DetailsPaneView from './view';
 import ComputeDetails from './compute-details';
 import StorageDetails from './storage-details';
 import EventDetails from './event-details';
 
-function Current() {
-  const { selected, config } = useBlueprintContext();
-  if (selected) {
-    let object = config[selected];
-
-    switch (object.type) {
+function Current({ type }) {
+  if (type) {
+    switch (type) {
       case 'compute':
-        return <ComputeDetails object={object} />;
+        return <ComputeDetails />;
 
       case 'storage':
-        return <StorageDetails object={object} />;
+        return <StorageDetails />;
 
       case 'event':
-        return <EventDetails object={object} />;
+        return <EventDetails />;
 
       default:
         return <p>Unable to display details for selected type</p>;
@@ -30,16 +26,9 @@ function Current() {
 }
 
 export default function DetailsPane() {
-  const {
-    config,
-    selected,
-    actions: { setObjectConfig }
-  } = useBlueprintContext();
-  const {
-    objectId,
-    saved,
-    actions: { saveWith, init }
-  } = useDetailsPaneContext();
+  const { objects, selected } = useBlueprintContext();
+
+  const type = selected ? objects[selected].type : null;
 
   const onClick = ev => {
     ev.preventDefault();
@@ -51,20 +40,12 @@ export default function DetailsPane() {
     if (ev.ctrlKey && String.fromCharCode(ev.which).toLowerCase() === 's') {
       ev.stopPropagation();
       ev.preventDefault();
-      saveWith(setObjectConfig);
     }
   };
 
-  if (selected !== objectId) {
-    if (!saved) {
-      saveWith(setObjectConfig);
-    }
-    init(selected, config[selected]);
-  }
-
   return (
     <DetailsPaneView onClick={onClick} onKeyDown={onKeyDown}>
-      <Current />
+      <Current type={type} />
     </DetailsPaneView>
   );
 }

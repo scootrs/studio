@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import * as monaco from 'monaco-editor';
-import useDetailsPaneContext from '../context';
+import useBlueprintContext from '../../context';
 
 const CodeDetailsRoot = styled.div`
   display: flex;
@@ -18,10 +18,12 @@ const Editor = styled.div`
 
 export default function ComputeCodeDetailsPanel() {
   const {
-    objectId,
-    config: { code },
-    actions: { setConfig }
-  } = useDetailsPaneContext();
+    selected,
+    objects,
+    actions: { setSelectedObjectConfig }
+  } = useBlueprintContext();
+
+  const { code, language } = objects[selected].config;
 
   const ref = useRef();
   useEffect(() => {
@@ -32,8 +34,6 @@ export default function ComputeCodeDetailsPanel() {
       el.style.position = 'relative';
 
       let editor = monaco.editor.create(el, {
-        value: code,
-        language: 'javascript',
         minimap: {
           enabled: false
         }
@@ -46,34 +46,27 @@ export default function ComputeCodeDetailsPanel() {
         precondition: null,
         keybindingContext: null,
         run: function(ed) {
-          setConfig(prev => ({
-            ...prev,
-            code: ed.getValue()
-          }));
+          setSelectedObjectConfig({ code: ed.getValue() });
         }
       });
 
       document.editor = {
-        id: objectId,
         el,
         monaco: editor
       };
     }
 
+    document.editor.id = selected;
     document.editor.monaco.setValue(code);
+    monaco.editor.setModelLanguage(document.editor.monaco.getModel(), language);
 
     ref.current.appendChild(document.editor.el);
     document.editor.monaco.layout();
 
     return () => {
-      setConfig(prev => {
-        return {
-          ...prev,
-          code: document.editor.monaco.getValue()
-        };
-      });
+      setSelectedObjectConfig({ code: document.editor.monaco.getValue() });
     };
-  }, [ref, code]);
+  }, [ref, selected, code, language]);
   return (
     <CodeDetailsRoot>
       <Editor ref={ref}></Editor>

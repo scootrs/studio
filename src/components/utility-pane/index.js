@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import View from './view';
 import { DraggableObject } from '../objects';
 
-const types = ['compute', 'storage', 'event'];
+const types = ['event', 'compute', 'storage'];
 
 const ObjectContainer = styled.div`
   margin: 5px;
