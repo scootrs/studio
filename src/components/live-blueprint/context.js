@@ -76,6 +76,15 @@ export const BlueprintContextProvider = ({ children }) => {
       }
     }));
 
+  const setConnection = conn =>
+    setCurrent(prev => ({
+      ...prev,
+      connections: {
+        ...prev.connections,
+        [conn.id]: conn
+      }
+    }));
+
   return (
     <BlueprintContext.Provider
       value={{
@@ -83,7 +92,8 @@ export const BlueprintContextProvider = ({ children }) => {
         actions: {
           setSelected,
           setObject,
-          setObjectConfig
+          setObjectConfig,
+          setConnection
         }
       }}
     >

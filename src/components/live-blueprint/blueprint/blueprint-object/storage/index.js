@@ -3,13 +3,14 @@ import useBlueprintContext from '~components/live-blueprint/context';
 import View from './view';
 import StorageObject from '~components/objects/storage';
 import { withEndpoints } from 'react-plumb/hoc';
+import uuid from 'uuid/v4';
 
 const endpoints = [
   {
     connector: 'Flowchart',
     anchor: 'Left',
     isTarget: true,
-    uuid: Math.floor(Math.random() * 100).toString(),
+    uuid: uuid(),
     scope: 'storage'
   }
 ];

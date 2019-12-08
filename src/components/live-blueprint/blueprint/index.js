@@ -9,11 +9,16 @@ import StorageBlueprintObject from './blueprint-object/storage';
 import EventBlueprintObject from './blueprint-object/event';
 
 function Blueprint() {
-  const [ref, plumb] = usePlumbContainer();
   const {
     objects,
-    actions: { setObject, setSelected }
+    connections,
+    actions: { setObject, setSelected, setConnection }
   } = useBlueprintContext();
+
+  const [ref, plumb] = usePlumbContainer({
+    onConnect: conn => setConnection(conn),
+    connections: Object.values(connections)
+  });
 
   useDrop({
     ref,
