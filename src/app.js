@@ -1,6 +1,6 @@
 import { hot } from 'react-hot-loader/root';
 import styled, { ThemeProvider } from 'styled-components';
-import theme from './theme';
+import theme from './styles/theme';
 import Header from './components/header';
 import UtilityPane from './components/utility-pane';
 import React from 'react';

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const View = styled.div`
-  border: ${({ selected, theme }) => `2px solid ${selected ? theme.colors.secondary.main : 'transparent'}`};
+  border: ${({ selected, theme }) => `5px solid ${selected ? theme.colors.secondary.main : 'transparent'}`};
   position: absolute;
   left: ${({ x }) => x}px;
   top: ${({ y }) => y}px;

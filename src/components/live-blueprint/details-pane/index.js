@@ -4,6 +4,7 @@ import DetailsPaneView from './view';
 import ComputeDetails from './compute-details';
 import StorageDetails from './storage-details';
 import EventDetails from './event-details';
+import ConnectionDetails from './connection-details';
 
 function Current({ type }) {
   if (type) {
@@ -17,6 +18,9 @@ function Current({ type }) {
       case 'event':
         return <EventDetails />;
 
+      case 'connection':
+        return <ConnectionDetails />;
+
       default:
         return <p>Unable to display details for selected type</p>;
     }
@@ -26,9 +30,7 @@ function Current({ type }) {
 }
 
 export default function DetailsPane() {
-  const { objects, selected } = useBlueprintContext();
-
-  const type = selected ? objects[selected].type : null;
+  const { selected } = useBlueprintContext();
 
   const onClick = ev => {
     ev.preventDefault();
@@ -45,7 +47,7 @@ export default function DetailsPane() {
 
   return (
     <DetailsPaneView onClick={onClick} onKeyDown={onKeyDown}>
-      <Current type={type} />
+      <Current type={selected && selected.type} />
     </DetailsPaneView>
   );
 }

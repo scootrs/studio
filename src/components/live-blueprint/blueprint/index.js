@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import usePlumbContainer from 'react-plumb';
 import uuid from 'uuid/v4';
 import useDrop from '~hooks/useDrop';
 import useBlueprintContext from '~components/live-blueprint/context';
+import theme from '~styles/theme';
 import BoardView from './view';
 import ComputeBlueprintObject from './blueprint-object/compute';
 import StorageBlueprintObject from './blueprint-object/storage';
@@ -10,20 +11,65 @@ import EventBlueprintObject from './blueprint-object/event';
 
 function Blueprint() {
   const {
+    selected,
     objects,
     connections,
-    actions: { setObject, setSelected, setConnection }
+    actions: { addObject, setSelected, addConnection, removeConnection }
   } = useBlueprintContext();
 
+  console.log(objects);
+  console.log(connections);
+
+  const selectedConnectionRef = useRef(null);
+
+  const highlightSelectedConnection = () => {
+    if (selectedConnectionRef.current !== null) {
+      selectedConnectionRef.current.setPaintStyle({ stroke: theme.colors.secondary.main });
+      selectedConnectionRef.current.endpoints.forEach(e => e.setPaintStyle({ fill: theme.colors.secondary.main }));
+    }
+  };
+
+  const unhighlightSelectedConection = jsPlumbCon => {
+    if (selectedConnectionRef.current !== null) {
+      selectedConnectionRef.current.setPaintStyle({ stroke: theme.colors.backgrounds.medium });
+      selectedConnectionRef.current.endpoints.forEach(e => e.setPaintStyle({ fill: theme.colors.backgrounds.medium }));
+    }
+  };
+
   const [ref, plumb] = usePlumbContainer({
-    onConnect: conn => setConnection(conn),
+    stopEvents: true,
+    onConnect: (conn, jsPlumbConn) => {
+      selectedConnectionRef.current = jsPlumbConn;
+      highlightSelectedConnection();
+      addConnection({
+        type: 'connection',
+        config: {
+          id: '',
+          allows: ''
+        },
+        ...conn
+      });
+    },
+    onDisconnect: conn => {
+      unhighlightSelectedConection();
+      removeConnection(conn);
+    },
+    connectionHandlers: {
+      onClick: (conn, jsPlumbConn) => {
+        unhighlightSelectedConection();
+        selectedConnectionRef.current = jsPlumbConn;
+        highlightSelectedConnection();
+        setSelected(connections[conn.id]);
+      }
+    },
     connections: Object.values(connections)
   });
 
   useDrop({
     ref,
     onDrop: pkg => {
-      setObject({
+      unhighlightSelectedConection();
+      addObject({
         id: uuid(),
         x: pkg.x,
         y: pkg.y,
@@ -36,7 +82,14 @@ function Blueprint() {
   const onBlueprintClick = ev => {
     ev.preventDefault();
     ev.stopPropagation();
-    setSelected(null);
+    if (selectedConnectionRef.current) {
+      unhighlightSelectedConection();
+      selectedConnectionRef.current = null;
+    }
+    if (selected && !ev.didSetSelected) {
+      setSelected(null);
+    }
+    ev.didSetSelected = false;
   };
 
   return (

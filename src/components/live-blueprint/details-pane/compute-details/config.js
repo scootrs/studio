@@ -10,20 +10,17 @@ const ViewRoot = styled.div`
 
 export default function ComputeConfigDetailsPane() {
   const {
-    selected,
-    objects,
-    actions: { setObjectConfig }
+    selected: { config },
+    actions: { setSelectedObjectConfig }
   } = useBlueprintContext();
-
-  const config = objects[selected].config;
 
   return (
     <ViewRoot>
-      <TextInput label={'ID'} value={config.id} onChange={ev => setObjectConfig(selected, { id: ev.target.value })} />
+      <TextInput label={'ID'} value={config.id} onChange={ev => setSelectedObjectConfig({ id: ev.target.value })} />
       <Select
         label={'Runtime'}
         value={config.runtime}
-        onChange={ev => setObjectConfig(selected, { runtime: ev.target.value })}
+        onChange={ev => setSelectedObjectConfig({ runtime: ev.target.value })}
       >
         <Option value={''}>Select Runtime</Option>
         <Option value={'nodejs@12.x'}>Node.js | 12.x</Option>

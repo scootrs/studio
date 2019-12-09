@@ -10,14 +10,11 @@ const ViewRoot = styled.div`
 
 export default function EventConfigDetailsPane() {
   const {
-    selected,
-    objects,
-    actions: { setObjectConfig }
+    selected: { config },
+    actions: { setSelectedObjectConfig }
   } = useBlueprintContext();
 
-  const config = objects[selected].config;
-
-  const onChange = ev => setObjectConfig(selected, { [ev.target.name]: ev.target.value });
+  const onChange = ev => setSelectedObjectConfig({ [ev.target.name]: ev.target.value });
 
   return (
     <ViewRoot>

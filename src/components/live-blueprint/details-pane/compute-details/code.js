@@ -19,11 +19,10 @@ const Editor = styled.div`
 export default function ComputeCodeDetailsPanel() {
   const {
     selected,
-    objects,
     actions: { setObjectConfig }
   } = useBlueprintContext();
 
-  const { code, language } = objects[selected].config;
+  const { code, language } = selected.config;
 
   const ref = useRef();
   useEffect(() => {
@@ -62,7 +61,7 @@ export default function ComputeCodeDetailsPanel() {
   }, []);
 
   useEffect(() => {
-    document.editor.id = selected;
+    document.editor.id = selected.id;
     document.editor.monaco.setValue(code);
     monaco.editor.setModelLanguage(document.editor.monaco.getModel(), language);
 
