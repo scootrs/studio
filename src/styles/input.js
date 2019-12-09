@@ -24,3 +24,7 @@ export const Select = styled(({ id, name, label, value, onChange, children }) =>
 export const Option = styled(({ value, children }) => {
   return <option value={value}>{children}</option>;
 })``;
+
+export const Button = styled.button`
+  margin: 5px;
+`;

@@ -2,9 +2,9 @@ import { hot } from 'react-hot-loader/root';
 import styled, { ThemeProvider } from 'styled-components';
 import theme from './styles/theme';
 import Header from './components/header';
-import UtilityPane from './components/utility-pane';
+import UtilityBar from './components/utility-bar';
 import React from 'react';
-import LiveBlueprint from './components/live-blueprint';
+import Workspace from './components/workspace';
 
 const Main = styled.main`
   display: flex;
@@ -18,8 +18,8 @@ function App() {
     <ThemeProvider theme={theme}>
       <Header />
       <Main>
-        <UtilityPane />
-        <LiveBlueprint />
+        <UtilityBar />
+        <Workspace />
       </Main>
     </ThemeProvider>
   );
