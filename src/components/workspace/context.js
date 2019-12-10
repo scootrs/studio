@@ -136,7 +136,12 @@ export const WorkspaceContextProvider = ({ children }) => {
 
   const pack = () => ({
     objects: Object.values(current.objects).map(o => ({ type: o.type, config: { ...o.config } })),
-    connections: Object.values(current.connections).map(c => ({ type: c.type, config: { ...c.config } })),
+    connections: Object.values(current.connections).map(c => ({
+      type: `${current.objects[c.source.id].type}-${current.objects[c.target.id].type}`,
+      source: current.objects[c.source.id].config.id,
+      target: current.objects[c.target.id].config.id,
+      config: { ...c.config }
+    })),
     provider: current.provider,
     application: { ...current.application }
   });
