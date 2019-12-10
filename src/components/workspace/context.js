@@ -39,7 +39,8 @@ const state = {
   provider: '',
   application: {
     id: '',
-    name: ''
+    name: '',
+    region: ''
   },
   objects: {},
   connections: {},
@@ -140,6 +141,15 @@ export const WorkspaceContextProvider = ({ children }) => {
       provider: provider
     }));
 
+  const setApplicationConfig = config =>
+    setCurrent(prev => ({
+      ...prev,
+      application: {
+        ...prev.application,
+        ...config
+      }
+    }));
+
   const pack = () => ({
     objects: Object.values(current.objects).map(o => ({ type: o.type, config: { ...o.config } })),
     connections: Object.values(current.connections).map(c => ({
@@ -165,6 +175,7 @@ export const WorkspaceContextProvider = ({ children }) => {
           setSelectedConnectionConfig,
           removeConnection,
           setProvider,
+          setApplicationConfig,
           pack
         }
       }}

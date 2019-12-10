@@ -17,11 +17,12 @@ const ToolbarViewActions = styled.div`
   margin-left: auto;
 `;
 
-export default function ToolbarView({ children }) {
+export default function ToolbarView({ children, actions }) {
   return (
     <ToolbarViewRoot>
+      {children}
       <ToolbarViewActions>
-        {children}
+        {actions}
       </ToolbarViewActions>
     </ToolbarViewRoot>
   );
