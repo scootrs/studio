@@ -77,7 +77,7 @@ export default function BlueprintCanvas() {
     svg: true
   });
 
-  const onBlueprintClick = ev => {
+  const onBlueprintDoubleClick = ev => {
     ev.preventDefault();
     ev.stopPropagation();
     if (selectedConnectionRef.current) {
@@ -91,7 +91,7 @@ export default function BlueprintCanvas() {
   };
 
   return (
-    <BlueprintCanvasView ref={ref} onClick={onBlueprintClick}>
+    <BlueprintCanvasView ref={ref} onDoubleClick={onBlueprintDoubleClick}>
       {plumb(
         Object.values(objects).map(o => {
           switch (o.type) {
