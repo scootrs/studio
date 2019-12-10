@@ -14,10 +14,10 @@ const Canvas = styled.div`
   flex: 1;
 `;
 
-function BlueprintCanvasView({ children, onDoubleClick }, ref) {
+function BlueprintCanvasView({ children, onClick, onDoubleClick }, ref) {
   return (
     <CanvasRoot>
-      <Canvas ref={ref} onDoubleClick={onDoubleClick}>
+      <Canvas ref={ref} onClick={onClick} onDoubleClick={onDoubleClick}>
         {children}
       </Canvas>
     </CanvasRoot>

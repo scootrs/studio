@@ -77,6 +77,15 @@ export default function BlueprintCanvas() {
     svg: true
   });
 
+  const onBlueprintClick = ev => {
+    if (ev.didSetSelected) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      unhighlightSelectedConection();
+    }
+    ev.didSetSelected = false;
+  };
+
   const onBlueprintDoubleClick = ev => {
     ev.preventDefault();
     ev.stopPropagation();
@@ -91,7 +100,7 @@ export default function BlueprintCanvas() {
   };
 
   return (
-    <BlueprintCanvasView ref={ref} onDoubleClick={onBlueprintDoubleClick}>
+    <BlueprintCanvasView ref={ref} onClick={onBlueprintClick} onDoubleClick={onBlueprintDoubleClick}>
       {plumb(
         Object.values(objects).map(o => {
           switch (o.type) {

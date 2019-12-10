@@ -21,10 +21,6 @@ export default function ToolbarView({ children }) {
   return (
     <ToolbarViewRoot>
       <ToolbarViewActions>
-        <Select>
-          <Option value="">Select a provider</Option>
-          <Option value="aws">AWS</Option>
-        </Select>
         {children}
       </ToolbarViewActions>
     </ToolbarViewRoot>

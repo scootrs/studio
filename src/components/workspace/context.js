@@ -134,6 +134,12 @@ export const WorkspaceContextProvider = ({ children }) => {
       };
     });
 
+  const setProvider = provider =>
+    setCurrent(prev => ({
+      ...prev,
+      provider: provider
+    }));
+
   const pack = () => ({
     objects: Object.values(current.objects).map(o => ({ type: o.type, config: { ...o.config } })),
     connections: Object.values(current.connections).map(c => ({
@@ -158,6 +164,7 @@ export const WorkspaceContextProvider = ({ children }) => {
           addConnection,
           setSelectedConnectionConfig,
           removeConnection,
+          setProvider,
           pack
         }
       }}
