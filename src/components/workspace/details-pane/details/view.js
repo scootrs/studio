@@ -13,8 +13,6 @@ const DetailsViewHeader = styled.div`
   display: flex;
   align-items: center;
   padding: ${({ theme }) => theme.spacing.medium};
-  border-bottom: 2px solid ${({ theme }) => theme.colors.backgrounds.light};
-  margin-bottom: 2px;
 `;
 
 const HeaderIcon = styled.div``;

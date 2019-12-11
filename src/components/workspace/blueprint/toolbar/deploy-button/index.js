@@ -5,11 +5,13 @@ import DeployButtonView from './view';
 
 export default function DeployButton() {
   const {
-    actions: { pack }
+    actions: { pack, setPending }
   } = useWorkspaceContext();
 
   const onDeploy = async () => {
+    setPending(true);
     let response = await axios.post('http://localhost:3030/api/v0/deploy', pack());
+    setPending(false);
     console.log(response);
   };
 

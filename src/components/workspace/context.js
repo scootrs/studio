@@ -43,7 +43,8 @@ const state = {
   },
   objects: {},
   connections: {},
-  selected: ''
+  selected: '',
+  pending: false
 };
 
 const WorkspaceContext = React.createContext(state);
@@ -149,6 +150,12 @@ export const WorkspaceContextProvider = ({ children }) => {
       }
     }));
 
+  const setPending = val =>
+    setCurrent(prev => ({
+      ...prev,
+      pending: val
+    }));
+
   const pack = () => ({
     objects: Object.values(current.objects).map(o => ({ type: o.type, config: { ...o.config } })),
     connections: Object.values(current.connections).map(c => ({
@@ -175,6 +182,7 @@ export const WorkspaceContextProvider = ({ children }) => {
           removeConnection,
           setProvider,
           setApplicationConfig,
+          setPending,
           pack
         }
       }}
