@@ -1,31 +1,33 @@
 import React from 'react';
 import useWorkspaceContext from '~components/workspace/context';
 import DetailsPaneView from './view';
-import ComputeDetails from './compute-details';
-import StorageDetails from './storage-details';
-import EventDetails from './event-details';
-import ConnectionDetails from './connection-details';
+import Details from './details';
+import useComputeDetails from './details/compute';
+import useStorageDetails from './details/storage';
+import useEventDetails from './details/event';
+import useConnectionDetails from './details/connection';
+import MustSelectPane from './none-selected';
 
 function Current({ type }) {
   if (type) {
     switch (type) {
       case 'compute':
-        return <ComputeDetails />;
+        return <Details details={useComputeDetails()} />;
 
       case 'storage':
-        return <StorageDetails />;
+        return <Details details={useStorageDetails()} />;
 
       case 'event':
-        return <EventDetails />;
+        return <Details details={useEventDetails()} />;
 
       case 'connection':
-        return <ConnectionDetails />;
+        return <Details details={useConnectionDetails()} />;
 
       default:
         return <p>Unable to display details for selected type</p>;
     }
   } else {
-    return <p>Select an item from the blueprint to view details</p>;
+    return <MustSelectPane />;
   }
 }
 

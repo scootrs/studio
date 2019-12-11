@@ -58,6 +58,7 @@ function useDragSvg({ data, ref, onDragStart, onDragOver, onDragEnd }) {
     pos.offsetY = ev.offsetY;
     clone.style.left = pos.x + 'px';
     clone.style.top = pos.y + 'px';
+    clone.style.stroke = 'black';
     document.body.appendChild(clone);
     document.addEventListener('mousemove', svgDragOver);
     document.addEventListener('mouseup', svgDragEnd);

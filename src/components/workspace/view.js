@@ -10,14 +10,14 @@ const SplitBlueprintContainer = styled(Split)`
   flex-grow: 1;
 `;
 
-function LiveBlueprintView({ children }) {
+function LiveBlueprintView({ children, onDrag }) {
   const gutterStyle = () => ({
     width: '3px',
-    backgroundColor: theme.colors.backgrounds.main
+    backgroundColor: theme.colors.backgrounds.light
   });
 
   return (
-    <SplitBlueprintContainer minSize={300} gutterStyle={gutterStyle}>
+    <SplitBlueprintContainer minSize={[500, 300]} gutterStyle={gutterStyle} onDrag={onDrag} onDragEnd={onDrag}>
       {children}
     </SplitBlueprintContainer>
   );

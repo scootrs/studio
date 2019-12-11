@@ -38,8 +38,7 @@ import React, { useState, useContext } from 'react';
 const state = {
   provider: '',
   application: {
-    id: '',
-    name: '',
+    name: 'UnnamedApplication',
     region: ''
   },
   objects: {},

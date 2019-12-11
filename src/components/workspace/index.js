@@ -5,9 +5,13 @@ import Blueprint from './blueprint';
 import DetailsPane from './details-pane';
 
 export default function Workspace() {
+  const onDrag = () => {
+    document.dispatchEvent(new Event('split-resize'));
+  };
+
   return (
     <WorkspaceContextProvider>
-      <View>
+      <View onDrag={onDrag}>
         <Blueprint />
         <DetailsPane />
       </View>

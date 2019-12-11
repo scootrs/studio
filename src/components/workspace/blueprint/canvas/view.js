@@ -11,12 +11,13 @@ const Canvas = styled.div`
   position: relative;
   overflow: auto;
   display: flex;
-  flex: 1;
+  flex-grow: 1;
 `;
 
-function BlueprintCanvasView({ children, onClick, onDoubleClick }, ref) {
+function BlueprintCanvasView({ children, onClick, onDoubleClick, UtilityBar}, ref) {
   return (
     <CanvasRoot>
+      <UtilityBar />
       <Canvas ref={ref} onClick={onClick} onDoubleClick={onDoubleClick}>
         {children}
       </Canvas>

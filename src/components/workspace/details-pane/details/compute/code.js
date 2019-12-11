@@ -26,6 +26,9 @@ export default function ComputeCodeDetailsPanel() {
 
   const ref = useRef();
   useEffect(() => {
+    function resize() {
+      document.editor.monaco.layout();
+    }
     if (!document.editor) {
       let el = document.createElement('div');
       el.style.width = '99%';
@@ -53,9 +56,12 @@ export default function ComputeCodeDetailsPanel() {
         el,
         monaco: editor
       };
+
+      document.addEventListener('split-resize', resize);
     }
     return () => {
       setObjectConfig(document.editor.id, { code: document.editor.monaco.getValue() });
+      document.removeEventListener('split-resize', resize);
       document.editor.id = null;
     };
   }, []);

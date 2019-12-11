@@ -3,6 +3,7 @@ import usePlumbContainer from 'react-plumb';
 import uuid from 'uuid/v4';
 import useDrop from '~hooks/useDrop';
 import useWorkspaceContext from '~components/workspace/context';
+import UtilityBar from './utility-bar';
 import theme from '~styles/theme';
 import BlueprintCanvasView from './view';
 import ComputeBlueprintObject from './blueprint-object/compute';
@@ -42,7 +43,7 @@ export default function BlueprintCanvas() {
       addConnection({
         type: 'connection',
         config: {
-          id: '',
+          id: 'UnnamedConnection',
           allows: ''
         },
         ...conn
@@ -100,7 +101,12 @@ export default function BlueprintCanvas() {
   };
 
   return (
-    <BlueprintCanvasView ref={ref} onClick={onBlueprintClick} onDoubleClick={onBlueprintDoubleClick}>
+    <BlueprintCanvasView
+      ref={ref}
+      onClick={onBlueprintClick}
+      onDoubleClick={onBlueprintDoubleClick}
+      UtilityBar={UtilityBar}
+    >
       {plumb(
         Object.values(objects).map(o => {
           switch (o.type) {

@@ -3,11 +3,11 @@
     "module": "commonjs",
     "target": "es2017",
     "allowSyntheticDefaultImports": false,
-    "baseUrl": "./src",
+    "baseUrl": "./",
     "paths": {
-      "~components/*": ["./components"],
-      "~hooks/*": ["./hooks"],
-      "~styles/*": ["./styles"]
+      "~components/*": ["src/components"],
+      "~hooks/*": ["src/hooks"],
+      "~styles/*": ["src/styles"]
     }
   },
   "exclude": ["node_modules", "dist"]
