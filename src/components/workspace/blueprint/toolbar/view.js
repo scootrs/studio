@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Select, Option, Button } from '~styles/input';
 
 const ToolbarViewRoot = styled.div`
   display: flex;
@@ -8,7 +7,9 @@ const ToolbarViewRoot = styled.div`
   flex-shrink: 0;
 
   background-color: ${({ theme }) => theme.colors.backgrounds.light};
+  box-shadow: -1px 1px 2px ${({ theme }) => theme.colors.backgrounds.medium}
   padding: 10px;
+  z-index: 2;
 `;
 
 const ToolbarViewActions = styled.div`
@@ -21,9 +22,7 @@ export default function ToolbarView({ children, actions }) {
   return (
     <ToolbarViewRoot>
       {children}
-      <ToolbarViewActions>
-        {actions}
-      </ToolbarViewActions>
+      <ToolbarViewActions>{actions}</ToolbarViewActions>
     </ToolbarViewRoot>
   );
 }

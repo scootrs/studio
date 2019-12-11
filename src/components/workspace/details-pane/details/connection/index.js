@@ -9,7 +9,7 @@ export default function useConnectionDetails() {
   const onChange = ev => setSelectedConnectionConfig({ [ev.target.name]: ev.target.value });
 
   return {
-    type: 'event',
+    type: 'connection',
     title: {
       value: config.id,
       name: 'id',

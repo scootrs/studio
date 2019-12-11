@@ -7,7 +7,7 @@ const Bar = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  background-color: ${({ theme }) => theme.colors.backgrounds.dark};
+  background-color: ${({ theme }) => theme.colors.backgrounds.light};
   color: ${({ theme }) => theme.colors.fonts.light};
   min-width: 60px;
   flex-shrink: 0;
