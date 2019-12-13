@@ -67,12 +67,17 @@ const InputLabel = styled.label.attrs(({ htmlFor }) => ({
   padding-bottom: 2px;
 `;
 
-const TextInput = styled.input.attrs(({ type, name, value, onChange }) => ({
+const TextInput = styled.input.attrs(({ name, value, onChange }) => ({
   type: 'text',
   name,
   value,
-  onChange
-}))``;
+  onChange,
+  readOnly: onChange === undefined || onChange === null
+}))`
+  padding: 2px;
+  width: 60%;
+  ${({ readOnly }) => (readOnly ? 'border: none;' : '')}
+`;
 
 const Select = styled.select.attrs(({ name, value, onChange }) => ({
   name,

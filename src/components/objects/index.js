@@ -48,7 +48,8 @@ function DraggableSvg({ type, data = {}, Svg, ...rest }) {
       type,
       config: {
         ...data
-      }
+      },
+      monitor: {}
     }
   });
   return <Svg ref={ref} {...rest} />;

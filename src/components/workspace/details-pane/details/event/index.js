@@ -2,9 +2,11 @@ import useWorkspaceContext from '~components/workspace/context';
 
 export default function useEventDetails() {
   const {
-    selected: { config },
+    selected: { config, monitor },
     actions: { setSelectedObjectConfig }
   } = useWorkspaceContext();
+
+  console.log('In event details:', monitor);
 
   const onChange = ev => setSelectedObjectConfig({ [ev.target.name]: ev.target.value });
 
@@ -57,6 +59,22 @@ export default function useEventDetails() {
                     value: 'DELETE'
                   }
                 ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        title: 'Monitor',
+        sections: [
+          {
+            title: 'Deployment Information',
+            inputs: [
+              {
+                type: 'text',
+                label: 'URL',
+                name: 'url',
+                value: monitor.url
               }
             ]
           }

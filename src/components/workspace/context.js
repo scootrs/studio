@@ -14,6 +14,9 @@ import React, { useState, useContext } from 'react';
  *     config: {
  *         id: '',
  *         // Type specific configuration
+ *     },
+ *     monitor: {
+ *         // Type specific monitoring information
  *     }
  * }
  * ```
@@ -156,6 +159,22 @@ export const WorkspaceContextProvider = ({ children }) => {
       pending: val
     }));
 
+  const setMonitoring = monitors =>
+    setCurrent(prev => {
+      let objects = { ...prev.objects };
+      monitors.forEach(m => {
+        objects[m.id] = {
+          ...objects[m.id],
+          monitor: m
+        };
+      });
+      return {
+        ...prev,
+        objects,
+        selected: objects[prev.selected.id]
+      };
+    });
+
   const pack = () => ({
     objects: Object.values(current.objects).map(o => ({ type: o.type, config: { ...o.config } })),
     connections: Object.values(current.connections).map(c => ({
@@ -183,6 +202,7 @@ export const WorkspaceContextProvider = ({ children }) => {
           setProvider,
           setApplicationConfig,
           setPending,
+          setMonitoring,
           pack
         }
       }}
