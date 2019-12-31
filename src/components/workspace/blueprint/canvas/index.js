@@ -8,7 +8,8 @@ import theme from '~styles/theme';
 import BlueprintCanvasView from './view';
 import ComputeBlueprintObject from './blueprint-object/compute';
 import StorageBlueprintObject from './blueprint-object/storage';
-import EventBlueprintObject from './blueprint-object/event';
+import EventExternalBlueprintObject from './blueprint-object/event/external';
+import EventInternalBlueprintObject from './blueprint-object/event/internal';
 
 export default function BlueprintCanvas() {
   const {
@@ -27,11 +28,24 @@ export default function BlueprintCanvas() {
     }
   };
 
-  const unhighlightSelectedConection = jsPlumbCon => {
+  const unhighlightSelectedConection = () => {
     if (selectedConnectionRef.current !== null) {
       selectedConnectionRef.current.setPaintStyle({ stroke: theme.colors.backgrounds.medium });
       selectedConnectionRef.current.endpoints.forEach(e => e.setPaintStyle({ fill: theme.colors.backgrounds.medium }));
     }
+  };
+
+  const determineConnectionType = conn => {
+    let source = objects[conn.source.id];
+    let target = objects[conn.target.id];
+
+    // If the source is any kind of event, we are dealing with a trigger that the user does not have to configure
+    if (source.type === 'event-external' || source.type === 'event-internal') return 'trigger';
+
+    // The only other kind of source is `compute`, so now we need to determine the target type to get our connection
+    // type
+    if (target.type === 'event-internal') return 'compute-to-event-internal';
+    else return 'compute-to-storage';
   };
 
   const [ref, plumb] = usePlumbContainer({
@@ -41,7 +55,7 @@ export default function BlueprintCanvas() {
       selectedConnectionRef.current = jsPlumbConn;
       highlightSelectedConnection();
       addConnection({
-        type: 'connection',
+        type: determineConnectionType(conn),
         config: {
           id: 'UnnamedConnection',
           allows: ''
@@ -116,8 +130,11 @@ export default function BlueprintCanvas() {
             case 'storage':
               return <StorageBlueprintObject key={o.id} id={o.id} object={o} />;
 
-            case 'event':
-              return <EventBlueprintObject key={o.id} id={o.id} object={o} />;
+            case 'event-external':
+              return <EventExternalBlueprintObject key={o.id} id={o.id} object={o} />;
+
+            case 'event-internal':
+              return <EventInternalBlueprintObject key={o.id} id={o.id} object={o} />;
           }
         })
       )}

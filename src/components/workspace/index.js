@@ -3,27 +3,23 @@ import View from './view';
 import { WorkspaceContextProvider } from './context';
 import Blueprint from './blueprint';
 import DetailsPane from './details-pane';
-import useServerSideEvents from './subscriber';
-
-const ServerSideEventListener = ({ children }) => {
-  useServerSideEvents('http://localhost:3030/subscribe');
-
-  return children;
-};
+import { ServerSentEventListener } from './subscriber';
 
 export default function Workspace() {
   const onDrag = () => {
     document.dispatchEvent(new Event('split-resize'));
   };
 
+  const sseUrl = 'http://localhost:3030/subscribe';
+
   return (
     <WorkspaceContextProvider>
-      <ServerSideEventListener>
+      <ServerSentEventListener url={sseUrl}>
         <View onDrag={onDrag}>
           <Blueprint />
           <DetailsPane />
         </View>
-      </ServerSideEventListener>
+      </ServerSentEventListener>
     </WorkspaceContextProvider>
   );
 }

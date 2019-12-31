@@ -1,8 +1,8 @@
 import React from 'react';
 import { withEndpoints } from 'react-plumb/hoc';
 import uuid from 'uuid/v4';
+import useBlueprintContext from '~components/workspace/context';
 import Object from '~components/objects';
-import useWorkspaceContext from '~components/workspace/context';
 import commonEndpointOptions from '~components/workspace/blueprint/canvas/blueprint-object/common';
 import View from './view';
 
@@ -12,7 +12,7 @@ const endpoints = [
     anchor: [1, 0.5, 1, 0, 6, 0],
     isSource: true,
     uuid: uuid(),
-    scope: 'storage event-internal',
+    scope: 'compute',
     endpoint: ['Dot', { radius: 5 }]
   },
   {
@@ -20,16 +20,16 @@ const endpoints = [
     anchor: [0, 0.5, -1, 0, -6, 0],
     isTarget: true,
     uuid: uuid(),
-    scope: 'compute',
+    scope: 'event-internal',
     endpoint: ['Dot', { radius: 5 }]
   }
 ];
 
-function ComputeBlueprintObject({ object }) {
+function EventInternalBlueprintObject({ object }) {
   const {
     selected,
     actions: { setSelected }
-  } = useWorkspaceContext();
+  } = useBlueprintContext();
 
   const onClick = ev => {
     ev.didSetSelected = true;
@@ -38,9 +38,9 @@ function ComputeBlueprintObject({ object }) {
 
   return (
     <View id={object.id} selected={selected && selected.id === object.id} x={object.x} y={object.y} onClick={onClick}>
-      <Object type="compute" width={60} height={60} />
+      <Object type="event-internal" width={60} height={60} />
     </View>
   );
 }
 
-export default withEndpoints(endpoints, commonEndpointOptions)(ComputeBlueprintObject);
+export default withEndpoints(endpoints, commonEndpointOptions)(EventInternalBlueprintObject);

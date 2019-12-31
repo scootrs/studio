@@ -7,9 +7,8 @@ const ToolbarViewRoot = styled.div`
   align-self: stretch;
   flex-shrink: 0;
 
-  background-color: ${({ theme }) => theme.colors.backgrounds.light};
-  box-shadow: -1px 1px 2px ${({ theme }) => theme.colors.backgrounds.medium}
-  z-index: 2;
+  background-color: ${({ theme }) => theme.colors.backgrounds.main};
+  border-bottom: 2px solid ${({ theme }) => theme.colors.backgrounds.light};
 `;
 
 const ToolbarViewMain = styled.div`

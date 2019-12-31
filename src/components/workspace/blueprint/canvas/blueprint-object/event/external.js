@@ -17,7 +17,7 @@ const endpoints = [
   }
 ];
 
-function EventBlueprintObject({ object }) {
+function EventExternalBlueprintObject({ object }) {
   const {
     selected,
     actions: { setSelected }
@@ -30,9 +30,9 @@ function EventBlueprintObject({ object }) {
 
   return (
     <View id={object.id} selected={selected && selected.id === object.id} x={object.x} y={object.y} onClick={onClick}>
-      <Object type="event" width={60} height={60} />
+      <Object type="event-external" width={60} height={60} />
     </View>
   );
 }
 
-export default withEndpoints(endpoints, commonEndpointOptions)(EventBlueprintObject);
+export default withEndpoints(endpoints, commonEndpointOptions)(EventExternalBlueprintObject);

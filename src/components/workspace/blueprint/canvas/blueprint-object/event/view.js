@@ -7,6 +7,11 @@ const View = styled.div`
   left: ${({ x }) => x}px;
   top: ${({ y }) => y}px;
   display: flex;
+  cursor: pointer;
+
+  &:active {
+    cursor: move;
+  }
 `;
 
 function EventBlueprintObjectView({ id, selected, x, y, onClick, children }) {

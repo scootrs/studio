@@ -4,17 +4,27 @@ import ObjectComputeSvg from './object-compute.svg';
 import ObjectComputeSvgWhite from './object-compute-white.svg';
 import ObjectStorageSvg from './object-storage.svg';
 import ObjectStorageSvgWhite from './object-storage-white.svg';
-import ObjectEventSvg from './object-event.svg';
-import ObjectEventSvgWhite from './object-event-white.svg';
+import ObjectEventExternalSvg from './object-event-external.svg';
+import ObjectEventExternalWhiteSvg from './object-event-external-white.svg';
+import ObjectEventInternalSvg from './object-event-internal.svg';
+import ObjectEventInternalWhiteSvg from './object-event-internal-white.svg';
+import withTooltip from '~styles/tooltip';
+import styled from 'styled-components';
 
-export default function Object({ ...rest }) {
+const ObjectComponentContainer = styled.div``;
+
+function ObjectComponent({ ...rest }) {
   const props = {
     width: 40,
     height: 40,
     className: '',
     ...rest
   };
-  return <Svg {...props} />;
+  return (
+    <ObjectComponentContainer>
+      <Svg {...props} />
+    </ObjectComponentContainer>
+  );
 }
 
 function Svg({ type, invert = false, draggable = false, ...rest }) {
@@ -29,10 +39,15 @@ function Svg({ type, invert = false, draggable = false, ...rest }) {
       if (draggable) return <DraggableSvg type={type} Svg={StorageSvg} {...rest} />;
       return <StorageSvg {...rest} />;
 
-    case 'event':
-      const EventSvg = invert ? ObjectEventSvgWhite : ObjectEventSvg;
-      if (draggable) return <DraggableSvg type={type} Svg={EventSvg} {...rest} />;
-      return <EventSvg {...rest} />;
+    case 'event-external':
+      const EventExternalSvg = invert ? ObjectEventExternalWhiteSvg : ObjectEventExternalSvg;
+      if (draggable) return <DraggableSvg type={type} Svg={EventExternalSvg} {...rest} />;
+      return <EventExternalSvg {...rest} />;
+
+    case 'event-internal':
+      const EventInternalSvg = invert ? ObjectEventInternalWhiteSvg : ObjectEventInternalSvg;
+      if (draggable) return <DraggableSvg type={type} Svg={EventInternalSvg} {...rest} />;
+      return <EventInternalSvg {...rest} />;
 
     default:
       console.warn('Failed to render object type ' + type);
@@ -54,3 +69,5 @@ function DraggableSvg({ type, data = {}, Svg, ...rest }) {
   });
   return <Svg ref={ref} {...rest} />;
 }
+
+export default withTooltip(ObjectComponent);

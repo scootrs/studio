@@ -4,6 +4,7 @@ import theme from './styles/theme';
 import Header from './components/header';
 import React from 'react';
 import Workspace from './components/workspace';
+import 'react-tippy/dist/tippy.css'
 
 const Main = styled.main`
   display: flex;

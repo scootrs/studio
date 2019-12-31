@@ -6,12 +6,10 @@ export default function useEventDetails() {
     actions: { setSelectedObjectConfig }
   } = useWorkspaceContext();
 
-  console.log('In event details:', monitor);
-
   const onChange = ev => setSelectedObjectConfig({ [ev.target.name]: ev.target.value });
 
   return {
-    type: 'event',
+    type: 'event-external',
     title: {
       value: config.id,
       name: 'id',

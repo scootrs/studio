@@ -4,7 +4,8 @@ import DetailsPaneView from './view';
 import Details from './details';
 import useComputeDetails from './details/compute';
 import useStorageDetails from './details/storage';
-import useEventDetails from './details/event';
+import useExternalEventDetails from './details/event-external';
+import useInternalEventDetails from './details/event-internal';
 import useConnectionDetails from './details/connection';
 import MustSelectPane from './none-selected';
 
@@ -17,8 +18,11 @@ function Current({ type }) {
       case 'storage':
         return <Details details={useStorageDetails()} />;
 
-      case 'event':
-        return <Details details={useEventDetails()} />;
+      case 'event-external':
+        return <Details details={useExternalEventDetails()} />;
+
+      case 'event-internal':
+        return <Details details={useInternalEventDetails()} />;
 
       case 'connection':
         return <Details details={useConnectionDetails()} />;

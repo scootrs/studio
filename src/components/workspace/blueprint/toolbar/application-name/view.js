@@ -8,11 +8,17 @@ const TextInput = styled.input.attrs(({ name, value, onChange }) => ({
   onChange
 }))`
   font-size: ${({ theme }) => theme.fonts.sizes.subtitle};
-  background-color: inherit;
-  border: none;
+  border: 1px solid transparent;
+  padding: 3px;
+
+  &:hover,
+  &:focus {
+    box-shadow: 0px 0px 2px ${({ theme }) => theme.colors.primary.main};
+    border: 1px solid ${({ theme }) => theme.colors.primary.main};
+  }
 
   &:focus {
-    background-color: white;
+    outline: none;
   }
 `;
 
