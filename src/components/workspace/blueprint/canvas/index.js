@@ -23,15 +23,27 @@ export default function BlueprintCanvas() {
 
   const highlightSelectedConnection = () => {
     if (selectedConnectionRef.current !== null) {
-      selectedConnectionRef.current.setPaintStyle({ stroke: theme.colors.secondary.main });
-      selectedConnectionRef.current.endpoints.forEach(e => e.setPaintStyle({ fill: theme.colors.secondary.main }));
+      try {
+        selectedConnectionRef.current.setPaintStyle({ stroke: theme.colors.secondary.main });
+        selectedConnectionRef.current.endpoints.forEach(e => e.setPaintStyle({ fill: theme.colors.secondary.main }));
+      } catch (err) {
+        console.warn('Failed to highlight: ' + err.message);
+        selectedConnectionRef.current = null;
+      }
     }
   };
 
   const unhighlightSelectedConection = () => {
     if (selectedConnectionRef.current !== null) {
-      selectedConnectionRef.current.setPaintStyle({ stroke: theme.colors.backgrounds.medium });
-      selectedConnectionRef.current.endpoints.forEach(e => e.setPaintStyle({ fill: theme.colors.backgrounds.medium }));
+      try {
+        selectedConnectionRef.current.setPaintStyle({ stroke: theme.colors.backgrounds.medium });
+        selectedConnectionRef.current.endpoints.forEach(e =>
+          e.setPaintStyle({ fill: theme.colors.backgrounds.medium })
+        );
+      } catch (err) {
+        console.warn('Failed to unhighlight: ' + err.message);
+        selectedConnectionRef.current = null;
+      }
     }
   };
 
@@ -127,6 +139,7 @@ export default function BlueprintCanvas() {
   };
 
   const onRemove = id => {
+    unhighlightSelectedConection();
     removeObject(id);
   };
 
