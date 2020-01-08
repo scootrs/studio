@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { withEndpoints } from 'react-plumb/hoc';
 import uuid from 'uuid/v4';
 import useBlueprintContext from '~components/workspace/context';
@@ -18,7 +18,8 @@ const endpoints = [
   }
 ];
 
-function StorageBlueprintObject({ object }) {
+function StorageBlueprintObject({ object, onRemove }) {
+  const ref = useRef();
   const {
     selected,
     actions: { setSelected }
@@ -26,11 +27,26 @@ function StorageBlueprintObject({ object }) {
 
   const onClick = ev => {
     ev.didSetSelected = true;
+    ref.current.focus();
     setSelected(object);
   };
 
+  const onKeyPress = ev => {
+    if (ev.key === 'Delete') {
+      onRemove(object);
+    }
+  };
+
   return (
-    <View id={object.id} selected={selected && selected.id === object.id} x={object.x} y={object.y} onClick={onClick}>
+    <View
+      ref={ref}
+      id={object.id}
+      selected={selected && selected.id === object.id}
+      x={object.x}
+      y={object.y}
+      onClick={onClick}
+      onKeyPress={onKeyPress}
+    >
       <Object type="storage" width={60} height={60} />
     </View>
   );

@@ -151,13 +151,13 @@ export default function BlueprintCanvas() {
               return <ComputeBlueprintObject key={o.id} id={o.id} object={o} onRemove={onRemove} />;
 
             case 'storage':
-              return <StorageBlueprintObject key={o.id} id={o.id} object={o} />;
+              return <StorageBlueprintObject key={o.id} id={o.id} object={o} onRemove={onRemove} />;
 
             case 'event-external':
-              return <EventExternalBlueprintObject key={o.id} id={o.id} object={o} />;
+              return <EventExternalBlueprintObject key={o.id} id={o.id} object={o} onRemove={onRemove} />;
 
             case 'event-internal':
-              return <EventInternalBlueprintObject key={o.id} id={o.id} object={o} />;
+              return <EventInternalBlueprintObject key={o.id} id={o.id} object={o} onRemove={onRemove} />;
           }
         })
       )}

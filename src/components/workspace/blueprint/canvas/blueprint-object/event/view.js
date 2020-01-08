@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import styled from 'styled-components';
 
 const View = styled.div`
@@ -9,17 +9,21 @@ const View = styled.div`
   display: flex;
   cursor: pointer;
 
+  &:focus {
+    outline: none;
+  }
+
   &:active {
     cursor: move;
   }
 `;
 
-function EventBlueprintObjectView({ id, selected, x, y, onClick, children }) {
+function EventBlueprintObjectView({ id, selected, x, y, onClick, onKeyPress, children }, ref) {
   return (
-    <View id={id} selected={selected} x={x} y={y} onClick={onClick}>
+    <View ref={ref} id={id} tabIndex={-1} selected={selected} x={x} y={y} onClick={onClick} onKeyPress={onKeyPress}>
       {children}
     </View>
   );
 }
 
-export default EventBlueprintObjectView;
+export default forwardRef(EventBlueprintObjectView);
