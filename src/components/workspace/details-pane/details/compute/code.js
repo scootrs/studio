@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import * as monaco from 'monaco-editor';
 import useWorkspaceContext from '~components/workspace/context';
+import templates from '~templates';
 
 const CodeDetailsRoot = styled.div`
   display: flex;
@@ -68,7 +69,7 @@ export default function ComputeCodeDetailsPanel() {
 
   useEffect(() => {
     document.editor.id = selected.id;
-    document.editor.monaco.setValue(code);
+    document.editor.monaco.setValue(code && code !== '' ? code : templates[language]);
     monaco.editor.setModelLanguage(document.editor.monaco.getModel(), language);
 
     ref.current.appendChild(document.editor.el);
