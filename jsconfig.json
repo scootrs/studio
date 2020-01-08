@@ -2,13 +2,13 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es2017",
-    "allowSyntheticDefaultImports": false,
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
-      "~components/*": ["src/components"],
-      "~hooks/*": ["src/hooks"],
+      "~components/*": ["src/components/*"],
+      "~hooks/*": ["src/hooks/*"],
       "~styles/*": ["src/styles"],
-      "~templates/*": ["src/templates"]
+      "~templates/*": ["src/templates/*"],
+      "~contexts/*": ["src/contexts/*"]
     }
   },
   "exclude": ["node_modules", "dist"]

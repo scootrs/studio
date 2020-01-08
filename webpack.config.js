@@ -39,7 +39,8 @@ module.exports = {
       '~components': path.resolve(__dirname, 'src', 'components'),
       '~hooks': path.resolve(__dirname, 'src', 'hooks'),
       '~styles': path.resolve(__dirname, 'src', 'styles'),
-      '~templates': path.resolve(__dirname, 'src', 'templates')
+      '~templates': path.resolve(__dirname, 'src', 'templates'),
+      '~contexts': path.resolve(__dirname, 'src', 'contexts')
     }
   },
   devServer: {
