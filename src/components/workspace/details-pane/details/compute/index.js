@@ -1,6 +1,7 @@
 import React from 'react';
 import useWorkspaceContext from '~components/workspace/context';
 import Code from './code';
+import { validateName } from '../validation';
 
 export default function useComputeDetails() {
   const {
@@ -8,12 +9,17 @@ export default function useComputeDetails() {
     actions: { setSelectedObjectConfig }
   } = useWorkspaceContext();
 
+  const [error, caption] = validateName(config.id);
+
   return {
     type: 'compute',
     title: {
       value: config.id,
       name: 'id',
-      onChange: ev => setSelectedObjectConfig({ id: ev.target.value })
+      onChange: ev => setSelectedObjectConfig({ id: ev.target.value }),
+      error,
+      caption,
+      placeholder: 'UnnamedCompute'
     },
     tabs: [
       {

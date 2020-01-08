@@ -14,12 +14,10 @@ export default function Workspace() {
 
   return (
     <WorkspaceContextProvider>
-      <ServerSentEventListener url={sseUrl}>
-        <View onDrag={onDrag}>
-          <Blueprint />
-          <DetailsPane />
-        </View>
-      </ServerSentEventListener>
+      <View onDrag={onDrag}>
+        <Blueprint />
+        <DetailsPane />
+      </View>
     </WorkspaceContextProvider>
   );
 }

@@ -1,4 +1,5 @@
 import useWorkspaceContext from '~components/workspace/context';
+import { validateName } from '../validation';
 
 export default function useInternalEventDetails() {
   const {
@@ -8,12 +9,17 @@ export default function useInternalEventDetails() {
 
   const onChange = ev => setSelectedObjectConfig({ [ev.target.name]: ev.target.value });
 
+  const [error, caption] = validateName(config.id);
+
   return {
     type: 'event-internal',
     title: {
       value: config.id,
+      placeholder: 'UnnamedInternalEvent',
       name: 'id',
-      onChange
+      onChange,
+      error,
+      caption
     },
     tabs: [
       {

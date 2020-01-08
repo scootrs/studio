@@ -1,4 +1,5 @@
 import useWorkspaceContext from '~components/workspace/context';
+import { validateName } from '../validation';
 
 export default function useConnectionDetails() {
   const {
@@ -8,29 +9,34 @@ export default function useConnectionDetails() {
 
   const onChange = ev => setSelectedConnectionConfig({ [ev.target.name]: ev.target.value });
 
+  const [error, caption] = validateName(config.id);
+
   return {
-    type: 'connection',
+    type: config.type,
     title: {
       value: config.id,
+      placeholder: 'UnnamedConnection',
       name: 'id',
-      onChange
+      onChange,
+      error,
+      caption
     },
     tabs: [
       {
         title: 'Configuration',
         sections: [
           {
-            title: 'General',
+            title: 'Permissions',
             inputs: [
               {
                 type: 'select',
-                label: 'Allowed Methods',
+                label: 'Allowed Actions',
                 name: 'allows',
                 value: config.allows,
                 onChange,
                 options: [
                   {
-                    name: 'Please select a method',
+                    name: 'Please select an action',
                     value: ''
                   },
                   {

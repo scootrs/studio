@@ -1,4 +1,5 @@
 import useWorkspaceContext from '~components/workspace/context';
+import { validateName } from '../validation';
 
 export default function useEventDetails() {
   const {
@@ -8,12 +9,17 @@ export default function useEventDetails() {
 
   const onChange = ev => setSelectedObjectConfig({ [ev.target.name]: ev.target.value });
 
+  const [error, caption] = validateName(config.id);
+
   return {
     type: 'event-external',
     title: {
       value: config.id,
+      placeholder: 'UnnamedExternalEvent',
       name: 'id',
-      onChange
+      onChange,
+      error,
+      caption
     },
     tabs: [
       {

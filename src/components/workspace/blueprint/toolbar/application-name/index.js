@@ -10,5 +10,12 @@ export default function ApplicationName() {
 
   const onChange = ev => setApplicationConfig({ name: ev.target.value });
 
-  return <ApplicationNameView value={name} onChange={onChange} />;
+  let error = false;
+  let caption = '';
+  if (name !== '' && !/(^[a-z0-9]+$)/gim.test(name)) {
+    error = true;
+    caption = 'Name must only contain alphanumeric characters';
+  }
+
+  return <ApplicationNameView value={name} onChange={onChange} error={error} caption={caption} />;
 }

@@ -17,21 +17,33 @@ const DetailsViewHeader = styled.div`
 
 const HeaderIcon = styled.div``;
 
+const HeaderTitleContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 const HeaderTitle = styled.input.attrs(({ name, value, onChange }) => ({ type: 'text', name, value, onChange }))`
   font-size: ${({ theme }) => theme.fonts.sizes.subtitle};
   padding: 3px;
-  border: 1px solid transparent;
+  border: 1px solid ${({ error }) => (error ? 'red' : 'transparent')};
   padding: 3px;
 
   &:hover,
   &:focus {
-    box-shadow: 0px 0px 2px ${({ theme }) => theme.colors.primary.main};
-    border: 1px solid ${({ theme }) => theme.colors.primary.main};
+    box-shadow: 0px 0px 2px ${({ theme, error }) => (error ? 'red' : theme.colors.primary.main)};
+    border: 1px solid ${({ theme, error }) => (error ? 'red' : theme.colors.primary.main)};
   }
 
   &:focus {
     outline: none;
   }
+`;
+
+const HeaderTitleCaption = styled.span`
+  font-size: 0.7em;
+  height: 0.7em;
+  margin-top: 2px;
+  color: ${({ error }) => (error ? 'red' : 'inherit')};
 `;
 
 const DetailsViewBody = styled.div`
@@ -143,7 +155,16 @@ export default function DetailsView({ details, onRootKeyPress }) {
     <DetailsViewRoot onKeyPress={onRootKeyPress}>
       <DetailsViewHeader>
         <HeaderIcon type={details.type} />
-        <HeaderTitle name={details.title.name} value={details.title.value} onChange={details.title.onChange} />
+        <HeaderTitleContainer>
+          <HeaderTitle
+            name={details.title.name}
+            error={details.title.error}
+            value={details.title.value}
+            onChange={details.title.onChange}
+            placeholder={details.title.placeholder}
+          />
+          <HeaderTitleCaption error={details.title.error}>{details.title.caption}</HeaderTitleCaption>
+        </HeaderTitleContainer>
       </DetailsViewHeader>
       <DetailsViewBody>
         <FlexTabs>

@@ -1,6 +1,18 @@
 import React, { useState, useContext } from 'react';
 
 /**
+ * If we split up our context:
+ * - SessionContext
+ * - AppContext
+ * - ObjectContext
+ * - ConnectionContext
+ * - SelectionContext
+ * - ErrorContext
+ * - NotificationContext
+ * - FooterContext
+ */
+
+/**
  * Represents the structure of the state of the blueprint context.
  *
  * The `objects` object is formatted as follows:
@@ -41,7 +53,7 @@ import React, { useState, useContext } from 'react';
 const state = {
   provider: '',
   application: {
-    name: 'UnnamedApplication',
+    name: '',
     region: ''
   },
   objects: {},
@@ -95,14 +107,14 @@ export const WorkspaceContextProvider = ({ children }) => {
 
   const setSelectedObjectConfig = config => current.selected && setObjectConfig(current.selected.id, config);
 
-  const addConnection = conn =>
+  const addConnection = (conn, select = true) =>
     setCurrent(prev => ({
       ...prev,
       connections: {
         ...prev.connections,
         [conn.id]: conn
       },
-      selected: conn
+      selected: select ? conn : prev.selected
     }));
 
   const setConnectionConfig = (id, config) =>

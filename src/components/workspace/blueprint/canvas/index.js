@@ -50,29 +50,41 @@ export default function BlueprintCanvas() {
 
   const [ref, plumb] = usePlumbContainer({
     stopEvents: true,
-    onConnect: (conn, jsPlumbConn) => {
-      unhighlightSelectedConection();
-      selectedConnectionRef.current = jsPlumbConn;
-      highlightSelectedConnection();
-      addConnection({
-        type: determineConnectionType(conn),
-        config: {
-          id: 'UnnamedConnection',
-          allows: ''
+    onConnect: function(conn, jsPlumbConn) {
+      const type = determineConnectionType(conn);
+      let shouldSelect = true;
+      if (type !== 'trigger') {
+        unhighlightSelectedConection();
+        selectedConnectionRef.current = jsPlumbConn;
+        highlightSelectedConnection();
+      } else {
+        shouldSelect = false;
+      }
+      addConnection(
+        {
+          type,
+          config: {
+            id: '',
+            allows: ''
+          },
+          ...conn
         },
-        ...conn
-      });
+        shouldSelect
+      );
     },
     onDisconnect: conn => {
       unhighlightSelectedConection();
       removeConnection(conn);
     },
     connectionHandlers: {
-      onClick: (conn, jsPlumbConn) => {
-        unhighlightSelectedConection();
-        selectedConnectionRef.current = jsPlumbConn;
-        highlightSelectedConnection();
-        setSelected(connections[conn.id]);
+      onClick: function(conn, jsPlumbConn) {
+        const type = determineConnectionType(conn);
+        if (type !== 'trigger') {
+          unhighlightSelectedConection();
+          selectedConnectionRef.current = jsPlumbConn;
+          highlightSelectedConnection();
+          setSelected(connections[conn.id]);
+        }
       }
     },
     connections: Object.values(connections)

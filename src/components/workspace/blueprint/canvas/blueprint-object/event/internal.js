@@ -9,6 +9,10 @@ import View from './view';
 const endpoints = [
   {
     connector: 'Flowchart',
+    connectorStyle: {
+      ...commonEndpointOptions.connectorStyle,
+      dashstyle: '2 2'
+    },
     anchor: [1, 0.5, 1, 0, 6, 0],
     isSource: true,
     uuid: uuid(),

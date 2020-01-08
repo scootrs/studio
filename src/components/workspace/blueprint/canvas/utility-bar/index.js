@@ -8,16 +8,16 @@ const objects = [
   {
     type: 'event-external',
     title: 'External Event',
-    id: 'UnnamedExternalEvent',
+    id: '',
     eventType: null,
     path: '',
     method: ''
   },
-  { type: 'event-internal', title: 'Internal Event', id: 'UnnamedInternalEvent', eventType: null },
+  { type: 'event-internal', title: 'Internal Event', id: '', eventType: null },
   {
     type: 'compute',
     title: 'Compute',
-    id: 'UnnamedCompute',
+    id: '',
     language: 'javascript',
     runtime: '',
     vcs: '',
@@ -28,7 +28,7 @@ const objects = [
   {
     type: 'storage',
     title: 'Storage',
-    id: 'UnnamedStorage',
+    id: '',
     storageType: null,
     table: '',
     primaryName: '',

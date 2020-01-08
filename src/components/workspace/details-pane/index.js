@@ -25,6 +25,8 @@ function Current({ type }) {
         return <Details details={useInternalEventDetails()} />;
 
       case 'connection':
+      case 'compute-to-event-internal':
+      case 'compute-to-storage':
         return <Details details={useConnectionDetails()} />;
 
       default:
