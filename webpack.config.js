@@ -38,7 +38,8 @@ module.exports = {
       react: path.resolve(__dirname, 'node_modules', 'react'),
       '~components': path.resolve(__dirname, 'src', 'components'),
       '~hooks': path.resolve(__dirname, 'src', 'hooks'),
-      '~styles': path.resolve(__dirname, 'src', 'styles')
+      '~styles': path.resolve(__dirname, 'src', 'styles'),
+      '~templates': path.resolve(__dirname, 'src', 'templates')
     }
   },
   devServer: {
