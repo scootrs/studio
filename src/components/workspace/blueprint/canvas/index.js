@@ -117,23 +117,18 @@ export default function BlueprintCanvas() {
   });
 
   const onBlueprintClick = ev => {
-    if (ev.didSetSelected) {
-      ev.preventDefault();
-      ev.stopPropagation();
-      unhighlightSelectedConection();
-    }
-    ev.didSetSelected = false;
-  };
-
-  const onBlueprintDoubleClick = ev => {
     ev.preventDefault();
     ev.stopPropagation();
-    if (selectedConnectionRef.current) {
+    if (ev.didSetSelected) {
       unhighlightSelectedConection();
-      selectedConnectionRef.current = null;
-    }
-    if (selected && !ev.didSetSelected) {
-      setSelected(null);
+    } else {
+      if (selectedConnectionRef.current) {
+        unhighlightSelectedConection();
+        selectedConnectionRef.current = null;
+      }
+      if (selected && !ev.didSetSelected) {
+        setSelected(null);
+      }
     }
     ev.didSetSelected = false;
   };
@@ -147,7 +142,6 @@ export default function BlueprintCanvas() {
     <BlueprintCanvasView
       ref={ref}
       onClick={onBlueprintClick}
-      onDoubleClick={onBlueprintDoubleClick}
       UtilityBar={UtilityBar}
     >
       {plumb(
