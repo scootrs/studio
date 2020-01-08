@@ -107,6 +107,43 @@ export const WorkspaceContextProvider = ({ children }) => {
 
   const setSelectedObjectConfig = config => current.selected && setObjectConfig(current.selected.id, config);
 
+  const removeObject = function(id) {
+    setCurrent(function(prev) {
+      // Remove the object
+      const { [id]: omit, ...objects } = prev.objects;
+
+      // Remove the connections assiciated with the object
+      const connections = {};
+      const removedConnections = [];
+      Object.values(prev.connections).forEach(conn => {
+        if (conn.source.id === id || conn.target.id === id) {
+          removedConnections.push(conn.id);
+        } else {
+          connections[conn.id] = { ...conn };
+        }
+      });
+
+      // Update the selected object reference (if necessary)
+      let selected = prev.selected;
+      if (selected.id === id || removedConnections.includes(selected.id)) {
+        selected = null;
+      } else if (objects[selected.id]) {
+        // Preventing memory leaks by removing the reference to the old object
+        selected = objects[selected.id];
+      } else {
+        // Preventing memory leaks by removing the reference to the old connection
+        selected = connections[selected.id];
+      }
+
+      return {
+        ...prev,
+        objects,
+        connections,
+        selected
+      };
+    });
+  };
+
   const addConnection = (conn, select = true) =>
     setCurrent(prev => ({
       ...prev,
@@ -208,6 +245,7 @@ export const WorkspaceContextProvider = ({ children }) => {
           addObject,
           setObjectConfig,
           setSelectedObjectConfig,
+          removeObject,
           addConnection,
           setSelectedConnectionConfig,
           removeConnection,

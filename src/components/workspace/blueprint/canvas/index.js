@@ -16,7 +16,7 @@ export default function BlueprintCanvas() {
     selected,
     objects,
     connections,
-    actions: { addObject, setSelected, addConnection, removeConnection }
+    actions: { addObject, removeObject, setSelected, addConnection, removeConnection }
   } = useWorkspaceContext();
 
   const selectedConnectionRef = useRef(null);
@@ -126,6 +126,10 @@ export default function BlueprintCanvas() {
     ev.didSetSelected = false;
   };
 
+  const onRemove = id => {
+    removeObject(id);
+  };
+
   return (
     <BlueprintCanvasView
       ref={ref}
@@ -137,7 +141,7 @@ export default function BlueprintCanvas() {
         Object.values(objects).map(o => {
           switch (o.type) {
             case 'compute':
-              return <ComputeBlueprintObject key={o.id} id={o.id} object={o} />;
+              return <ComputeBlueprintObject key={o.id} id={o.id} object={o} onRemove={onRemove} />;
 
             case 'storage':
               return <StorageBlueprintObject key={o.id} id={o.id} object={o} />;
