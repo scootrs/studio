@@ -3,22 +3,16 @@ import { withEndpoints } from 'react-plumb/hoc';
 import uuid from 'uuid/v4';
 import useBlueprintContext from '~components/workspace/context';
 import Object from '~components/objects';
-import commonEndpointOptions from '~components/workspace/blueprint/canvas/blueprint-object/common';
+import { merge } from '~components/workspace/blueprint/canvas/blueprint-object/common';
 import View from './view';
 
 const endpoints = [
-  {
-    connector: 'Flowchart',
-    connectorStyle: {
-      ...commonEndpointOptions.connectorStyle,
-      dashstyle: '2 2'
-    },
-    anchor: [1, 0.5, 1, 0, 6, 0],
+  merge({
     isSource: true,
     uuid: uuid(),
     scope: 'compute',
-    endpoint: ['Dot', { radius: 5 }]
-  }
+    dashed: true
+  })
 ];
 
 function EventExternalBlueprintObject({ object, onRemove }) {
@@ -55,4 +49,4 @@ function EventExternalBlueprintObject({ object, onRemove }) {
   );
 }
 
-export default withEndpoints(endpoints, commonEndpointOptions)(EventExternalBlueprintObject);
+export default withEndpoints(endpoints)(EventExternalBlueprintObject);

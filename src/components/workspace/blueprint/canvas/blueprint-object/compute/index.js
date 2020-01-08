@@ -3,26 +3,20 @@ import { withEndpoints } from 'react-plumb/hoc';
 import uuid from 'uuid/v4';
 import Object from '~components/objects';
 import useWorkspaceContext from '~components/workspace/context';
-import commonEndpointOptions from '~components/workspace/blueprint/canvas/blueprint-object/common';
+import { merge } from '~components/workspace/blueprint/canvas/blueprint-object/common';
 import View from './view';
 
 const endpoints = [
-  {
-    connector: 'Flowchart',
-    anchor: [1, 0.5, 1, 0, 6, 0],
+  merge({
     isSource: true,
     uuid: uuid(),
-    scope: 'storage event-internal',
-    endpoint: ['Dot', { radius: 5 }]
-  },
-  {
-    connector: 'Flowchart',
-    anchor: [0, 0.5, -1, 0, -6, 0],
+    scope: 'storage event-internal'
+  }),
+  merge({
     isTarget: true,
     uuid: uuid(),
-    scope: 'compute',
-    endpoint: ['Dot', { radius: 5 }]
-  }
+    scope: 'compute'
+  })
 ];
 
 function ComputeBlueprintObject({ object, onRemove }) {
@@ -39,10 +33,10 @@ function ComputeBlueprintObject({ object, onRemove }) {
   };
 
   const onKeyPress = ev => {
-    if(ev.key === 'Delete') {
+    if (ev.key === 'Delete') {
       onRemove(object);
     }
-  }
+  };
 
   return (
     <View
@@ -59,4 +53,4 @@ function ComputeBlueprintObject({ object, onRemove }) {
   );
 }
 
-export default withEndpoints(endpoints, commonEndpointOptions)(ComputeBlueprintObject);
+export default withEndpoints(endpoints)(ComputeBlueprintObject);

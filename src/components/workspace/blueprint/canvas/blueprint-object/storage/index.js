@@ -3,19 +3,15 @@ import { withEndpoints } from 'react-plumb/hoc';
 import uuid from 'uuid/v4';
 import useBlueprintContext from '~components/workspace/context';
 import Object from '~components/objects';
-import commonEndpointOptions from '~components/workspace/blueprint/canvas/blueprint-object/common';
+import { merge } from '~components/workspace/blueprint/canvas/blueprint-object/common';
 import View from './view';
 
 const endpoints = [
-  {
-    connector: 'Flowchart',
-    anchor: [0, 0.5, -1, 0, -6, 0],
+  merge({
     isTarget: true,
     uuid: uuid(),
-    scope: 'storage',
-    maxConnections: -1,
-    endpoint: ['Dot', { radius: 5 }]
-  }
+    scope: 'storage'
+  })
 ];
 
 function StorageBlueprintObject({ object, onRemove }) {
@@ -52,4 +48,4 @@ function StorageBlueprintObject({ object, onRemove }) {
   );
 }
 
-export default withEndpoints(endpoints, commonEndpointOptions)(StorageBlueprintObject);
+export default withEndpoints(endpoints)(StorageBlueprintObject);
