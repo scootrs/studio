@@ -71,8 +71,6 @@ function Tooltip({ children, title, position }) {
     setShowing(false);
   };
 
-  console.log(title);
-
   return (
     <TooltipContainer onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       {children}
