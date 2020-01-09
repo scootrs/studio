@@ -1,59 +1,55 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
-const TooltipText = styled.div`
-  visibility: hidden;
-  width: 120px;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  padding: 5px 0;
-  border-radius: 6px;
-  position: absolute;
-  ${({ tooltip }) => _textPosition(tooltip)}
-  z-index: 1;
-
-  &::after {
-    content: '';
-    position: absolute;
-    border-width: 5px;
-    border-style: solid;
-    boder-color: black transparent transparent transparent;
-    ${({ tooltip }) => _arrowPosition(tooltip)}
-  }
+const TooltipContainer = styled.div`
+  position: relative;
 `;
 
-function _textPosition(tooltip) {
+const TooltipText = styled.div`
+  position: absolute;
+  visibility: ${({ showing }) => (showing ? 'visible' : 'hidden')};
+  background-color: ${({ theme }) => theme.colors.backgrounds.dark};
+  color: ${({ theme }) => theme.colors.fonts.light};
+  text-align: center;
+  padding: 5px;
+  border-radius: 3px;
+  ${({ position }) => _textPosition(position)}
+  z-index: 1;
+  font-size: ${({ theme }) => theme.fonts.sizes.small};
+`;
+
+function _textPosition(position) {
   let tooltipTextPosition = null;
-  switch (tooltip) {
+  switch (position) {
     case 'top':
       tooltipTextPosition = `
-        bottom: 100%;
+        bottom: 120%;
         left: 50%;
-        margin-left: calc(-50%);
+        transform: translateX(-50%);
       `;
       break;
 
     case 'right':
       tooltipTextPosition = `
-        width: 120px;
-        top: -5px;
-        left: 105%;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 120%;
       `;
       break;
 
     case 'bottom':
       tooltipTextPosition = `
-        top: 100%;
+        top: 120%;
         left: 50%;
-        margin-left: calc(-50%);
+        transform: translateX(-50%);
       `;
       break;
 
     case 'left':
       tooltipTextPosition = `
-        top: -5px;
-        right: 105%;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 120%;
       `;
       break;
 
@@ -65,68 +61,26 @@ function _textPosition(tooltip) {
   return tooltipTextPosition;
 }
 
-function _arrowPosition(tooltip) {
-  let tooltipArrowPosition = null;
-  switch (tooltip) {
-    case 'top':
-      tooltipArrowPosition = `
-        top: 100%;
-        left: 50%;
-        margin-left: -5px;
-      `;
-      break;
+function Tooltip({ children, title, position }) {
+  const [isShowing, setShowing] = useState(false);
 
-    case 'right':
-      tooltipArrowPosition = `
-        top: 50%;
-        right: 100%;
-        margin-top: -5px;
-      `;
-      break;
+  const onMouseEnter = () => {
+    setShowing(true);
+  };
+  const onMouseLeave = () => {
+    setShowing(false);
+  };
 
-    case 'bottom':
-      tooltipArrowPosition = `
-        bottom: 100%;
-        left: 50%;
-        margin-left: -5px;
-      `;
-      break;
+  console.log(title);
 
-    case 'left':
-      tooltipArrowPosition = `
-        top: 50%;
-        left: 100%;
-        margin-top: -5px;
-      `;
-      break;
-
-    default:
-      throw new Error(
-        'Invalid position for tooltip: ' + position + '. Should be one of "left", "right", "top", or "bottom".'
-      );
-  }
-  return tooltipArrowPosition;
+  return (
+    <TooltipContainer onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+      {children}
+      <TooltipText position={position} showing={isShowing}>
+        {title}
+      </TooltipText>
+    </TooltipContainer>
+  );
 }
 
-function withTooltip(Component) {
-  const TooltipContainer = styled(Component)`
-    position: relative;
-
-    &:hover ${TooltipText} {
-      visibility: show;
-    }
-  `;
-
-  function TooltipComponent({ children, title, ...props }) {
-    return (
-      <TooltipContainer {...props}>
-        {children}
-        <TooltipText>{title}</TooltipText>
-      </TooltipContainer>
-    );
-  }
-
-  return TooltipComponent;
-}
-
-export default withTooltip;
+export default Tooltip;

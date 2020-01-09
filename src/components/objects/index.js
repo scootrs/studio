@@ -8,7 +8,6 @@ import ObjectEventExternalSvg from './object-event-external.svg';
 import ObjectEventExternalWhiteSvg from './object-event-external-white.svg';
 import ObjectEventInternalSvg from './object-event-internal.svg';
 import ObjectEventInternalWhiteSvg from './object-event-internal-white.svg';
-import withTooltip from '~styles/tooltip';
 import styled from 'styled-components';
 
 const ObjectComponentContainer = styled.div``;
@@ -70,4 +69,4 @@ function DraggableSvg({ type, data = {}, Svg, ...rest }) {
   return <Svg ref={ref} {...rest} />;
 }
 
-export default withTooltip(ObjectComponent);
+export default ObjectComponent;

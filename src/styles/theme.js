@@ -30,7 +30,8 @@ export default {
       title: '1.7em',
       subtitle: '1.4em',
       heading: '1.2em',
-      text: '1em'
+      text: '1em',
+      small: '0.7em'
     }
   },
   spacing: {

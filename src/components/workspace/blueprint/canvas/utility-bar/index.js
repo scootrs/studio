@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tooltip } from 'react-tippy';
+import Tooltip from '~styles/tooltip';
 import styled from 'styled-components';
 import View from './view';
 import ObjectComponent from '~components/objects';
