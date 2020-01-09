@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { withEndpoints } from 'react-plumb/hoc';
 import uuid from 'uuid/v4';
 import useBlueprintContext from '~components/workspace/context';
@@ -21,6 +21,8 @@ function StorageBlueprintObject({ object, onRemove }) {
     actions: { setSelected }
   } = useBlueprintContext();
 
+  const isSelected = selected && selected.id === object.id;
+
   const onClick = ev => {
     ev.didSetSelected = true;
     ref.current.focus();
@@ -33,11 +35,17 @@ function StorageBlueprintObject({ object, onRemove }) {
     }
   };
 
+  useEffect(() => {
+    if (isSelected) {
+      ref.current.focus();
+    }
+  }, []);
+
   return (
     <View
       ref={ref}
       id={object.id}
-      selected={selected && selected.id === object.id}
+      selected={isSelected}
       x={object.x}
       y={object.y}
       onClick={onClick}
