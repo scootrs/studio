@@ -1,18 +1,6 @@
 import React, { useState, useContext } from 'react';
 
 /**
- * If we split up our context:
- * - SessionContext
- * - AppContext
- * - ObjectContext
- * - ConnectionContext
- * - SelectionContext
- * - ErrorContext
- * - NotificationContext
- * - FooterContext
- */
-
-/**
  * Represents the structure of the state of the blueprint context.
  *
  * The `objects` object is formatted as follows:
