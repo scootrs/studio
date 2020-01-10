@@ -1,14 +1,14 @@
 import React from 'react';
-import useWorkspaceContext from '~components/workspace/context';
+import { useApplicationContext } from '~contexts/application';
 import ApplicationNameView from './view';
 
 export default function ApplicationName() {
   const {
-    application: { name },
-    actions: { setApplicationConfig }
-  } = useWorkspaceContext();
+    state: { name },
+    actions: { setName }
+  } = useApplicationContext();
 
-  const onChange = ev => setApplicationConfig({ name: ev.target.value });
+  const onChange = ev => setName(ev.target.value);
 
   let error = false;
   let caption = '';

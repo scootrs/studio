@@ -1,12 +1,12 @@
 import React from 'react';
-import useWorkspaceContext from '~components/workspace/context';
+import { useApplicationContext } from '~contexts/application';
 import ProviderSelectView from './view';
 
 export default function ProviderSelect() {
   const {
-    provider,
+    state: { provider },
     actions: { setProvider }
-  } = useWorkspaceContext();
+  } = useApplicationContext();
 
   const onChange = ev => setProvider(ev.target.value);
 

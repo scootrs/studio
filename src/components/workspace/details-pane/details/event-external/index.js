@@ -1,89 +1,58 @@
-import useWorkspaceContext from '~components/workspace/context';
+import { useWorkspaceContext } from '~contexts/workspace';
 import { validateName } from '../validation';
+import useHttpEventDetailTabs from './http';
 
 export default function useEventDetails() {
   const {
-    selected: { config, monitor },
-    actions: { setSelectedObjectConfig }
+    state: { selected },
+    actions: { updateSelectedConfiguration }
   } = useWorkspaceContext();
 
-  const onChange = ev => setSelectedObjectConfig({ [ev.target.name]: ev.target.value });
+  const onChange = ev => updateSelectedConfiguration({ [ev.target.name]: ev.target.value });
 
-  const [error, caption] = validateName(config.id);
+  const [error, caption] = validateName(selected.config.id);
 
   return {
-    type: 'event-external',
-    title: {
-      value: config.id,
-      placeholder: 'UnnamedExternalEvent',
-      name: 'id',
-      onChange,
-      error,
-      caption
-    },
-    tabs: [
-      {
-        title: 'Configuration',
-        sections: [
-          {
-            title: 'General',
-            inputs: [
-              {
-                type: 'text',
-                label: 'URI Path',
-                name: 'path',
-                value: config.path,
-                onChange
-              },
-              {
-                type: 'select',
-                label: 'Method',
-                name: 'method',
-                value: config.method,
-                onChange,
-                options: [
-                  {
-                    name: 'Please select a method',
-                    value: ''
-                  },
-                  {
-                    name: 'GET',
-                    value: 'GET'
-                  },
-                  {
-                    name: 'POST',
-                    value: 'POST'
-                  },
-                  {
-                    name: 'PUT',
-                    value: 'PUT'
-                  },
-                  {
-                    name: 'DELETE',
-                    value: 'DELETE'
-                  }
-                ]
-              }
-            ]
-          }
-        ]
+    type: selected.meta.type,
+    header: {
+      icon: selected.meta.type,
+      title: {
+        value: selected.config.id,
+        placeholder: 'UnnamedExternalEvent',
+        name: 'id',
+        onChange,
+        error,
+        caption
       },
-      {
-        title: 'Monitor',
-        sections: [
-          {
-            title: 'Deployment Information',
-            inputs: [
-              {
-                type: 'text',
-                label: 'URL',
-                name: 'url',
-                value: monitor.url
-              }
-            ]
-          }
-        ]
-      }
-    ]
+      inputs: [
+        {
+          type: 'select',
+          name: 'type',
+          value: selected.config.type,
+          onChange,
+          options: [
+            {
+              name: 'Please select an event type',
+              value: ''
+            },
+            {
+              name: 'HTTP',
+              value: 'http'
+            }
+          ]
+        }
+      ]
+    },
+    tabs: getTabsForType(selected, onChange)
   };
+}
+
+function getTabsForType(selected, onChange) {
+  switch (selected.config.type) {
+    case 'http':
+      return useHttpEventDetailTabs(selected, onChange);
+
+    default:
+      return [];
+  }
 }

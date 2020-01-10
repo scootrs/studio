@@ -1,25 +1,31 @@
-import useWorkspaceContext from '~components/workspace/context';
+import { useWorkspaceContext } from '~contexts/workspace';
 import { validateName } from '../validation';
 
 export default function useConnectionDetails() {
   const {
-    selected: { config },
-    actions: { setSelectedConnectionConfig }
+    state: {
+      selected: { meta, config }
+    },
+    actions: { updateSelectedConfiguration }
   } = useWorkspaceContext();
 
-  const onChange = ev => setSelectedConnectionConfig({ [ev.target.name]: ev.target.value });
+  const onChange = ev => updateSelectedConfiguration({ [ev.target.name]: ev.target.value });
 
   const [error, caption] = validateName(config.id);
 
   return {
-    type: config.type,
-    title: {
-      value: config.id,
-      placeholder: 'UnnamedConnection',
-      name: 'id',
-      onChange,
-      error,
-      caption
+    type: meta.type,
+    header: {
+      icon: meta.type,
+      title: {
+        value: config.id,
+        placeholder: 'UnnamedConnection',
+        name: 'id',
+        onChange,
+        error,
+        caption
+      },
+      inputs: []
     },
     tabs: [
       {

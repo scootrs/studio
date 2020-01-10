@@ -1,25 +1,31 @@
-import useWorkspaceContext from '~components/workspace/context';
+import { useWorkspaceContext } from '~contexts/workspace';
 import { validateName } from '../validation';
 
 export default function useStorageDetails() {
   const {
-    selected: { config },
-    actions: { setSelectedObjectConfig }
+    state: {
+      selected: { meta, config }
+    },
+    actions: { updateSelectedConfiguration }
   } = useWorkspaceContext();
 
-  const onChange = ev => setSelectedObjectConfig({ [ev.target.name]: ev.target.value });
+  const onChange = ev => updateSelectedConfiguration({ [ev.target.name]: ev.target.value });
 
   const [error, caption] = validateName(config.id);
 
   return {
-    type: 'storage',
-    title: {
-      value: config.id,
-      placeholder: 'UnnamedStorage',
-      name: 'id',
-      onChange,
-      error,
-      caption
+    type: meta.type,
+    header: {
+      icon: meta.type,
+      title: {
+        value: config.id,
+        placeholder: 'UnnamedStorage',
+        name: 'id',
+        onChange,
+        error,
+        caption
+      },
+      inputs: []
     },
     tabs: [
       {

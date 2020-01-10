@@ -18,7 +18,7 @@ const View = styled.div`
   }
 `;
 
-function StorageBlueprintObjectView({ id, selected, x, y, onClick, onKeyPress, children }, ref) {
+function BlueprintResourceView({ id, selected, x, y, onClick, children, onKeyPress }, ref) {
   return (
     <View ref={ref} id={id} tabIndex={-1} selected={selected} x={x} y={y} onClick={onClick} onKeyPress={onKeyPress}>
       {children}
@@ -26,4 +26,4 @@ function StorageBlueprintObjectView({ id, selected, x, y, onClick, onKeyPress, c
   );
 }
 
-export default forwardRef(StorageBlueprintObjectView);
+export default forwardRef(BlueprintResourceView);

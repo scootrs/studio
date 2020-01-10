@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import * as monaco from 'monaco-editor';
-import useWorkspaceContext from '~components/workspace/context';
+import { useWorkspaceContext } from '~contexts/workspace';
 import templates from '~templates';
 
 const CodeDetailsRoot = styled.div`
@@ -19,8 +19,8 @@ const Editor = styled.div`
 
 export default function ComputeCodeDetailsPanel() {
   const {
-    selected,
-    actions: { setObjectConfig }
+    state: { selected },
+    actions: { updateResourceConfiguration }
   } = useWorkspaceContext();
 
   const { code, language } = selected.config;
@@ -49,7 +49,7 @@ export default function ComputeCodeDetailsPanel() {
         precondition: null,
         keybindingContext: null,
         run: function(ed) {
-          setObjectConfig(document.editor.id, { code: ed.getValue() });
+          updateResourceConfiguration(document.editor.id, { code: ed.getValue() });
         }
       });
 
@@ -61,7 +61,7 @@ export default function ComputeCodeDetailsPanel() {
       document.addEventListener('split-resize', resize);
     }
     return () => {
-      setObjectConfig(document.editor.id, { code: document.editor.monaco.getValue() });
+      updateResourceConfiguration(document.editor.id, { code: document.editor.monaco.getValue() });
       document.removeEventListener('split-resize', resize);
       document.editor.id = null;
     };

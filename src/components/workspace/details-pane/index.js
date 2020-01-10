@@ -1,5 +1,5 @@
 import React from 'react';
-import useWorkspaceContext from '~components/workspace/context';
+import { useWorkspaceContext } from '~contexts/workspace';
 import DetailsPaneView from './view';
 import Details from './details';
 import useComputeDetails from './details/compute';
@@ -8,25 +8,25 @@ import useExternalEventDetails from './details/event-external';
 import useInternalEventDetails from './details/event-internal';
 import useConnectionDetails from './details/connection';
 import MustSelectPane from './none-selected';
+import { Compute, Storage, EventExternal, EventInternal, Trigger, Reference } from '~types';
 
 function Current({ type }) {
   if (type) {
     switch (type) {
-      case 'compute':
+      case Compute:
         return <Details details={useComputeDetails()} />;
 
-      case 'storage':
+      case Storage:
         return <Details details={useStorageDetails()} />;
 
-      case 'event-external':
+      case EventExternal:
         return <Details details={useExternalEventDetails()} />;
 
-      case 'event-internal':
+      case EventInternal:
         return <Details details={useInternalEventDetails()} />;
 
-      case 'connection':
-      case 'compute-to-event-internal':
-      case 'compute-to-storage':
+      case Trigger:
+      case Reference:
         return <Details details={useConnectionDetails()} />;
 
       default:
@@ -38,7 +38,9 @@ function Current({ type }) {
 }
 
 export default function DetailsPane() {
-  const { selected } = useWorkspaceContext();
+  const {
+    state: { selected }
+  } = useWorkspaceContext();
 
   const onClick = ev => {
     ev.preventDefault();
@@ -55,7 +57,7 @@ export default function DetailsPane() {
 
   return (
     <DetailsPaneView onClick={onClick} onKeyDown={onKeyDown}>
-      <Current type={selected && selected.type} />
+      <Current type={selected && selected.meta.type} />
     </DetailsPaneView>
   );
 }

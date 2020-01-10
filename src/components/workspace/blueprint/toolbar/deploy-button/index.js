@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
-import useWorkspaceContext from '~components/workspace/context';
+import { useApplicationContext } from '~contexts/application';
+import { useWorkspaceContext } from '~contexts/workspace';
 import { useStatusContext } from '~contexts/status';
 import DeployButtonView from './view';
 
@@ -13,12 +14,16 @@ export default function DeployButton() {
     actions: { setWaiting }
   } = useStatusContext();
 
-  const {
-    objects,
-    actions: { pack, setPending, setMonitoring }
-  } = useWorkspaceContext();
+  const appCtx = useApplicationContext();
+
+  const workspaceCtx = useWorkspaceContext();
 
   const onDeploy = async () => {
+    const pkg = {
+      app: appCtx.pack(),
+      ...workspaceCtx.pack()
+    };
+    console.log(pkg);
     setWaiting(true, 'Deploying configuration');
     await sleep(3000);
     setWaiting(true, 'Finishing up');

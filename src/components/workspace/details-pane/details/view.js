@@ -20,6 +20,7 @@ const HeaderIcon = styled.div``;
 const HeaderTitleContainer = styled.div`
   display: flex;
   flex-direction: column;
+  max-width: 100%;
 `;
 
 const HeaderTitle = styled.input.attrs(({ name, value, onChange }) => ({ type: 'text', name, value, onChange }))`
@@ -44,6 +45,12 @@ const HeaderTitleCaption = styled.span`
   height: 0.7em;
   margin-top: 2px;
   color: ${({ error }) => (error ? 'red' : 'inherit')};
+`;
+
+const HeaderRightContent = styled.div`
+  margin-left: auto;
+  display: flex;
+  align-items: center;
 `;
 
 const DetailsViewBody = styled.div`
@@ -113,36 +120,20 @@ const Option = styled.option.attrs(({ value }) => ({
   value
 }))``;
 
-function Input({ type, label, name, value, onChange, options }) {
+function Input({ type, name, value, onChange, options }) {
   switch (type) {
     case 'text':
-      return (
-        <InputRow>
-          <InputLabelCol>
-            <InputLabel htmlFor={name}>{label}</InputLabel>
-          </InputLabelCol>
-          <InputCol>
-            <TextInput name={name} value={value} onChange={onChange} />
-          </InputCol>
-        </InputRow>
-      );
+      return <TextInput name={name} value={value} onChange={onChange} />;
 
     case 'select':
       return (
-        <InputRow>
-          <InputLabelCol>
-            <InputLabel htmlFor={name}>{label}</InputLabel>
-          </InputLabelCol>
-          <InputCol>
-            <Select name={name} value={value} onChange={onChange}>
-              {options.map(option => (
-                <Option key={option.name} value={option.value}>
-                  {option.name}
-                </Option>
-              ))}
-            </Select>
-          </InputCol>
-        </InputRow>
+        <Select name={name} value={value} onChange={onChange}>
+          {options.map(option => (
+            <Option key={option.name} value={option.value}>
+              {option.name}
+            </Option>
+          ))}
+        </Select>
       );
 
     default:
@@ -150,21 +141,46 @@ function Input({ type, label, name, value, onChange, options }) {
   }
 }
 
+function InputTableRow({ type, label, name, value, onChange, options }) {
+  return (
+    <InputRow>
+      <InputLabelCol>
+        <InputLabel htmlFor={name}>{label}</InputLabel>
+      </InputLabelCol>
+      <InputCol>
+        <Input type={type} name={name} value={value} onChange={onChange} options={options} />
+      </InputCol>
+    </InputRow>
+  );
+}
+
 export default function DetailsView({ details, onRootKeyPress }) {
   return (
     <DetailsViewRoot onKeyPress={onRootKeyPress}>
       <DetailsViewHeader>
-        <HeaderIcon type={details.type} />
+        <HeaderIcon type={details.header.type} />
         <HeaderTitleContainer>
           <HeaderTitle
-            name={details.title.name}
-            error={details.title.error}
-            value={details.title.value}
-            onChange={details.title.onChange}
-            placeholder={details.title.placeholder}
+            name={details.header.title.name}
+            error={details.header.title.error}
+            value={details.header.title.value}
+            onChange={details.header.title.onChange}
+            placeholder={details.header.title.placeholder}
           />
-          <HeaderTitleCaption error={details.title.error}>{details.title.caption}</HeaderTitleCaption>
+          <HeaderTitleCaption error={details.header.title.error}>{details.header.title.caption}</HeaderTitleCaption>
         </HeaderTitleContainer>
+        <HeaderRightContent>
+              {details.header.inputs.map(input => (
+                <Input
+                  key={input.name}
+                  type={input.type}
+                  name={input.name}
+                  value={input.value}
+                  onChange={input.onChange}
+                  options={input.options}
+                />
+              ))}
+        </HeaderRightContent>
       </DetailsViewHeader>
       <DetailsViewBody>
         <FlexTabs>
@@ -199,7 +215,7 @@ export default function DetailsView({ details, onRootKeyPress }) {
                             <InputTable>
                               <InputTableBody>
                                 {section.inputs.map(input => (
-                                  <Input
+                                  <InputTableRow
                                     key={input.name}
                                     type={input.type}
                                     label={input.label}

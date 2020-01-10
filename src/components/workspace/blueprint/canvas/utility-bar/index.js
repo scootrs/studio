@@ -2,41 +2,17 @@ import React from 'react';
 import Tooltip from '~styles/tooltip';
 import styled from 'styled-components';
 import View from './view';
-import ObjectComponent from '~components/objects';
+import Resource from '~components/resources';
+import { Compute, Storage, EventInternal, EventExternal } from '~types';
 
-const objects = [
-  {
-    type: 'event-external',
-    title: 'External Event',
-    id: '',
-    eventType: null,
-    path: '',
-    method: ''
-  },
-  { type: 'event-internal', title: 'Internal Event', id: '', eventType: null },
-  {
-    type: 'compute',
-    title: 'Compute',
-    id: '',
-    language: 'javascript',
-    runtime: '',
-    vcs: '',
-    code: '',
-    env: [],
-    tags: []
-  },
-  {
-    type: 'storage',
-    title: 'Storage',
-    id: '',
-    storageType: null,
-    table: '',
-    primaryName: '',
-    primaryType: ''
-  }
+const types = [
+  { type: Compute, title: 'Compute' },
+  { type: Storage, title: 'Storage' },
+  { type: EventExternal, title: 'External Event' },
+  { type: EventInternal, title: 'Internal Event' }
 ];
 
-const ObjectContainer = styled.div`
+const Container = styled.div`
   position: relative;
   margin: 5px;
 
@@ -48,12 +24,12 @@ const ObjectContainer = styled.div`
 function UtilityBar() {
   return (
     <View>
-      {Object.values(objects).map(({ type, title, ...data }) => (
-        <ObjectContainer key={type}>
+      {types.map(({ type, title }) => (
+        <Container key={title}>
           <Tooltip title={title} position="right">
-            <ObjectComponent type={type} draggable={true} data={data} />
+            <Resource type={type} draggable={true} />
           </Tooltip>
-        </ObjectContainer>
+        </Container>
       ))}
     </View>
   );

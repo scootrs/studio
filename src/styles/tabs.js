@@ -26,14 +26,15 @@ const FlexTabPanelContainer = styled.div`
 
 export const FlexTabs = styled(({ children }) => {
   let childrenArray = React.Children.toArray(children);
-  const [selected, setSelected] = useState((childrenArray.length && childrenArray[0].props.name) || null);
+  const [selected, setSelected] = useState();
+  const defaultSelected = !selected ? (childrenArray.length && childrenArray[0].props.name) || null : selected;
   return (
     <>
       <FlexTabTitleList>
         {childrenArray.map(child => (
           <FlexTabTitle
             key={child.props.name}
-            selected={selected === child.props.name}
+            selected={defaultSelected === child.props.name}
             onClick={ev => {
               ev.preventDefault();
               ev.stopPropagation();
@@ -44,7 +45,7 @@ export const FlexTabs = styled(({ children }) => {
           </FlexTabTitle>
         ))}
       </FlexTabTitleList>
-      <FlexTabPanelContainer>{childrenArray.filter(child => child.props.name === selected)}</FlexTabPanelContainer>
+      <FlexTabPanelContainer>{childrenArray.filter(child => child.props.name === defaultSelected)}</FlexTabPanelContainer>
     </>
   );
 })`

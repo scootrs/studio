@@ -1,4 +1,3 @@
-import { hot } from 'react-hot-loader/root';
 import styled, { ThemeProvider } from 'styled-components';
 import theme from './styles/theme';
 import Header from './components/header';
@@ -29,4 +28,4 @@ function App() {
   );
 }
 
-export default hot(App);
+export default App;

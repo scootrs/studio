@@ -34,13 +34,15 @@ module.exports = {
   resolve: {
     extensions: ['*', '.js', '.jsx'],
     alias: {
-      'react-dom': '@hot-loader/react-dom',
       react: path.resolve(__dirname, 'node_modules', 'react'),
       '~components': path.resolve(__dirname, 'src', 'components'),
       '~hooks': path.resolve(__dirname, 'src', 'hooks'),
       '~styles': path.resolve(__dirname, 'src', 'styles'),
       '~templates': path.resolve(__dirname, 'src', 'templates'),
-      '~contexts': path.resolve(__dirname, 'src', 'contexts')
+      '~contexts': path.resolve(__dirname, 'src', 'contexts'),
+      '~resources': path.resolve(__dirname, 'src', 'resources'),
+      '~connections': path.resolve(__dirname, 'src', 'connections'),
+      '~types': path.resolve(__dirname, 'src', 'types')
     }
   },
   devServer: {

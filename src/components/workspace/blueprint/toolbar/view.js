@@ -23,11 +23,10 @@ export const ToolbarViewActions = styled.div`
   margin-left: auto;
 `;
 
-export default function ToolbarView({ children, Loader }) {
+export default function ToolbarView({ children }) {
   return (
     <ToolbarViewRoot>
       <ToolbarViewMain>{children}</ToolbarViewMain>
-      <Loader />
     </ToolbarViewRoot>
   );
 }
