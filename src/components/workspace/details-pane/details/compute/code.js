@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import * as monaco from 'monaco-editor';
 import { useWorkspaceContext } from '~contexts/workspace';
 import templates from '~templates';
+import { detectLanguageFromRuntime } from './language';
 
 const CodeDetailsRoot = styled.div`
   display: flex;
@@ -23,7 +24,7 @@ export default function ComputeCodeDetailsPanel() {
     actions: { updateResourceConfiguration }
   } = useWorkspaceContext();
 
-  const { code, language } = selected.config;
+  const { code, runtime } = selected.config;
 
   const ref = useRef();
   useEffect(() => {
@@ -68,13 +69,20 @@ export default function ComputeCodeDetailsPanel() {
   }, []);
 
   useEffect(() => {
-    document.editor.id = selected.id;
-    document.editor.monaco.setValue(code && code !== '' ? code : templates[language]);
-    monaco.editor.setModelLanguage(document.editor.monaco.getModel(), language);
+    document.editor.id = selected.meta.id;
+    let editorCode = code || '';
+    if (runtime && runtime !== '') {
+      let language = detectLanguageFromRuntime(runtime);
+      monaco.editor.setModelLanguage(document.editor.monaco.getModel(), language);
+      if (editorCode === '') {
+        editorCode = templates[language];
+      }
+    }
+    document.editor.monaco.setValue(editorCode);
 
     ref.current.appendChild(document.editor.el);
     document.editor.monaco.layout();
-  }, [selected, code, language]);
+  }, [selected, code, runtime]);
 
   return (
     <CodeDetailsRoot>
