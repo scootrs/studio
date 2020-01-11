@@ -13,7 +13,7 @@ export default function useComputeDetails() {
 
   const [error, caption] = validateName(config.id);
 
-  const onChange = ev => updateSelectedConfiguration({ [ev.target.name]: ev.target.value })
+  const onChange = ev => updateSelectedConfiguration({ [ev.target.name]: ev.target.value });
 
   return {
     type: meta.type,
@@ -48,6 +48,10 @@ export default function useComputeDetails() {
     },
     tabs: [
       {
+        title: 'Code',
+        component: <Code />
+      },
+      {
         title: 'Configuration',
         sections: [
           {
@@ -55,10 +59,6 @@ export default function useComputeDetails() {
             inputs: []
           }
         ]
-      },
-      {
-        title: 'Code',
-        component: <Code />
       }
     ]
   };
