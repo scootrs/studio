@@ -121,10 +121,14 @@ export function WorkspaceContextProvider({ children }) {
     updateResourceConfiguration: function(id, config) {
       setState(function(prev) {
         const resources = mergeResourceConfiguration(prev, id, config);
+        let selected = prev.selected;
+        if(selected && resources[selected.meta.id]) {
+          selected = resources[selected.meta.id];
+        }
         return {
           ...prev,
           resources,
-          selected: resources[prev.selected.meta.id] ? resources[prev.selected.meta.id] : prev.selected
+          selected
         };
       });
     },
@@ -191,10 +195,14 @@ export function WorkspaceContextProvider({ children }) {
     updateConnectionConfiguration: function(id, config) {
       setState(function(prev) {
         const connections = mergeConnectionConfiguration(prev, id, config);
+        let selected = prev.selected;
+        if(selected && connections[selected.meta.id]) {
+          selected = connections[selected.meta.id];
+        }
         return {
           ...prev,
           connections,
-          selected: connections[prev.selected.meta.id] ? connections[prev.selected.meta.id] : prev.selected
+          selected
         };
       });
     },
