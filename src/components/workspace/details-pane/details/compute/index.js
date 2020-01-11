@@ -13,6 +13,8 @@ export default function useComputeDetails() {
 
   const [error, caption] = validateName(config.id);
 
+  const onChange = ev => updateSelectedConfiguration({ [ev.target.name]: ev.target.value })
+
   return {
     type: meta.type,
     header: {
@@ -20,7 +22,7 @@ export default function useComputeDetails() {
       title: {
         value: config.id,
         name: 'id',
-        onChange: ev => updateSelectedConfiguration({ id: ev.target.value }),
+        onChange,
         error,
         caption,
         placeholder: 'UnnamedCompute'
@@ -30,7 +32,7 @@ export default function useComputeDetails() {
           type: 'select',
           name: 'runtime',
           value: config.runtime,
-          onChange: ev => updateSelectedConfiguration({ runtime: ev.target.value }),
+          onChange,
           options: [
             {
               name: 'Please select a runtime',
