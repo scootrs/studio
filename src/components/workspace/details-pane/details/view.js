@@ -25,17 +25,17 @@ const HeaderTitleContainer = styled.div`
 
 const HeaderTitle = styled.input.attrs(({ name, value, onChange }) => ({ type: 'text', name, value, onChange }))`
   font-size: ${({ theme }) => theme.fonts.sizes.subtitle};
+  border: 2px solid ${({ error }) => (error ? 'red' : 'transparent')};
   padding: 3px;
-  border: 1px solid ${({ error }) => (error ? 'red' : 'transparent')};
-  padding: 3px;
+  border-radius: 3px;
 
-  &:hover,
-  &:focus {
-    box-shadow: 0px 0px 2px ${({ theme, error }) => (error ? 'red' : theme.colors.primary.main)};
-    border: 1px solid ${({ theme, error }) => (error ? 'red' : theme.colors.primary.main)};
+  &:hover {
+    border: 2px solid ${({ theme, error }) => (error ? 'red' : theme.colors.backgrounds.light)};
   }
 
   &:focus {
+    box-shadow: 0px 0px 2px ${({ theme, error }) => (error ? 'red' : theme.colors.primary.main)};
+    border: 2px solid ${({ theme, error }) => (error ? 'red' : theme.colors.primary.main)} !important;
     outline: none;
   }
 `;
@@ -170,16 +170,16 @@ export default function DetailsView({ details, onRootKeyPress }) {
           <HeaderTitleCaption error={details.header.title.error}>{details.header.title.caption}</HeaderTitleCaption>
         </HeaderTitleContainer>
         <HeaderRightContent>
-              {details.header.inputs.map(input => (
-                <Input
-                  key={input.name}
-                  type={input.type}
-                  name={input.name}
-                  value={input.value}
-                  onChange={input.onChange}
-                  options={input.options}
-                />
-              ))}
+          {details.header.inputs.map(input => (
+            <Input
+              key={input.name}
+              type={input.type}
+              name={input.name}
+              value={input.value}
+              onChange={input.onChange}
+              options={input.options}
+            />
+          ))}
         </HeaderRightContent>
       </DetailsViewHeader>
       <DetailsViewBody>
