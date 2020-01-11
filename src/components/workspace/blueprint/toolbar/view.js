@@ -21,6 +21,10 @@ export const ToolbarViewActions = styled.div`
   display: flex;
   align-items: center;
   margin-left: auto;
+
+  * {
+    margin: 0px 4px;
+  }
 `;
 
 export default function ToolbarView({ children }) {
