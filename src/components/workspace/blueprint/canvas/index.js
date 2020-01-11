@@ -65,7 +65,7 @@ export default function BlueprintCanvas() {
       } else {
         shouldSelect = false;
       }
-      let newConnection = createConnectionWithType(type, resources[conn.source.id], resources[conn.target.id], conn);
+      let newConnection = createConnectionWithType(type, conn);
       addConnection(newConnection, shouldSelect);
     },
 

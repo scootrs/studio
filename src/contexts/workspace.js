@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Compute, EventInternal, EventExternal, Trigger, Reference } from '~types';
+import { Compute, Storage, EventInternal, EventExternal, Trigger, Reference } from '~types';
 
 const WorkspaceContext = React.createContext();
 
@@ -261,7 +261,7 @@ export function WorkspaceContextProvider({ children }) {
         default:
           throw new Error(
             'Failed to pack resources for deployment: A resource with an invalid type "' +
-              resource.meta.type +
+              resource.meta.type.toString() +
               '" was encountered during packing. This indicates state corruption occurring elsewhere in the context.'
           );
       }
@@ -271,11 +271,19 @@ export function WorkspaceContextProvider({ children }) {
     Object.values(state.connections).forEach(function(connection) {
       switch (connection.meta.type) {
         case Trigger:
-          pkg.triggers.push(connection.config);
+          pkg.triggers.push({
+            ...connection.config,
+            source: state.resources[connection.meta.source.id].config.id,
+            target: state.resources[connection.meta.target.id].config.id
+          });
           break;
 
         case Reference:
-          pkg.references.push(connection.config);
+          pkg.references.push({
+            ...connection.config,
+            source: state.resources[connection.meta.source.id].config.id,
+            target: state.resources[connection.meta.target.id].config.id
+          });
           break;
 
         default:
