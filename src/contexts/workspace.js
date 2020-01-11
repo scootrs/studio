@@ -142,7 +142,7 @@ export function WorkspaceContextProvider({ children }) {
         const connections = {};
         const removedConnections = [];
         Object.values(prev.connections).forEach(conn => {
-          if (conn.config.source.meta.id === id || conn.config.target.meta.id === id) {
+          if (conn.meta.source.id === id || conn.meta.target.id === id) {
             removedConnections.push(conn.meta.id);
           } else {
             connections[conn.meta.id] = { ...conn };
