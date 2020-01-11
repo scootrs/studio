@@ -1,6 +1,7 @@
 import { useWorkspaceContext } from '~contexts/workspace';
 import { validateName } from '../validation';
 import useHttpEventDetailTabs from './http';
+import { getDefaultsForType } from './defaults';
 
 export default function useEventDetails() {
   const {
@@ -9,6 +10,21 @@ export default function useEventDetails() {
   } = useWorkspaceContext();
 
   const onChange = ev => updateSelectedConfiguration({ [ev.target.name]: ev.target.value });
+
+  /**
+   * Updates the default configuration for the external event based on the type.
+   *
+   * We have to do this to prevent React from warning us about uncontrolled vs. controlled elements.
+   *
+   * @param {Event} ev The change event on the input element.
+   */
+  const onTypeChange = function(ev) {
+    let defaults = getDefaultsForType(ev.target.value);
+    updateSelectedConfiguration({
+      [ev.target.name]: ev.target.value,
+      ...defaults
+    });
+  };
 
   const [error, caption] = validateName(selected.config.id);
 
@@ -29,7 +45,7 @@ export default function useEventDetails() {
           type: 'select',
           name: 'type',
           value: selected.config.type,
-          onChange,
+          onChange: onTypeChange,
           options: [
             {
               name: 'Please select an event type',
