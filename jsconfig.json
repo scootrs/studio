@@ -11,7 +11,8 @@
       "~contexts/*": ["src/contexts/*"],
       "~resources/*": ["src/resources/*"],
       "~connections/*": ["src/connections/*"],
-      "~types": ["src/types.js"]
+      "~types": ["src/types.js"],
+      "~api/*": ["src/api/*"]
     }
   },
   "exclude": ["node_modules", "dist"]
