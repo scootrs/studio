@@ -32,9 +32,11 @@ export function ApplicationContextProvider({ children }) {
 
   const pack = function() {
     return {
-      name,
-      provider,
-      region
+      app: {
+        name,
+        provider,
+        region
+      }
     };
   };
 
