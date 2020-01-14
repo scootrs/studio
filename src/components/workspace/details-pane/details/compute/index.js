@@ -40,7 +40,7 @@ export default function useComputeDetails() {
             },
             {
               name: 'Node.js | 12.x',
-              value: 'nodejs@12.x'
+              value: 'nodejs12.x'
             }
           ]
         }
