@@ -42,7 +42,8 @@ module.exports = {
       '~contexts': path.resolve(__dirname, 'src', 'contexts'),
       '~resources': path.resolve(__dirname, 'src', 'resources'),
       '~connections': path.resolve(__dirname, 'src', 'connections'),
-      '~types': path.resolve(__dirname, 'src', 'types')
+      '~types': path.resolve(__dirname, 'src', 'types'),
+      '~api': path.resolve(__dirname, 'src', 'api')
     }
   },
   devServer: {
