@@ -1,4 +1,4 @@
-export function useDocumentStorageDetailTabs({ config }, onChange) {
+export function useKeyValueDetailTabs({ config }, onChange) {
   return [
     {
       title: 'Configuration',
@@ -8,23 +8,23 @@ export function useDocumentStorageDetailTabs({ config }, onChange) {
           inputs: [
             {
               type: 'text',
-              label: 'Table Name',
-              name: 'table',
-              value: config.table,
+              label: 'Collection Name',
+              name: 'collection',
+              value: config.collection,
               onChange
             },
             {
               type: 'text',
               label: 'Primary Key Name',
-              name: 'primaryName',
-              value: config.primaryName,
+              name: 'keyName',
+              value: config.keyName,
               onChange
             },
             {
               type: 'select',
               label: 'Primary Key Type',
-              name: 'primaryType',
-              value: config.primaryType,
+              name: 'keyType',
+              value: config.keyType,
               onChange,
               options: [
                 {

@@ -1,7 +1,7 @@
 import { useWorkspaceContext } from '~contexts/workspace';
 import { validateName } from '../validation';
 import { getDefaultsForType } from './defaults';
-import { useDocumentStorageDetailTabs } from './document';
+import { useKeyValueDetailTabs } from './key-value';
 
 export default function useStorageDetails() {
   const {
@@ -30,6 +30,8 @@ export default function useStorageDetails() {
 
   const [error, caption] = validateName(config.id);
 
+  
+
   return {
     type: meta.type,
     header: {
@@ -54,8 +56,8 @@ export default function useStorageDetails() {
               value: ''
             },
             {
-              name: 'Document',
-              value: 'document'
+              name: 'Key-Value',
+              value: 'keyval'
             }
           ]
         }
@@ -67,8 +69,8 @@ export default function useStorageDetails() {
 
 function getTabsForType(selected, onChange) {
   switch (selected.config.type) {
-    case 'document':
-      return useDocumentStorageDetailTabs(selected, onChange);
+    case 'keyval':
+      return useKeyValueDetailTabs(selected, onChange);
 
     default:
       return [];

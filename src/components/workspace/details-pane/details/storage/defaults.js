@@ -1,13 +1,13 @@
-const documentDefaults = {
-  table: '',
-  primaryName: '',
-  primaryType: ''
+const keyValDefaults = {
+  collection: '',
+  keyName: '',
+  keyType: ''
 };
 
 export function getDefaultsForType(type) {
   switch (type) {
-    case 'document':
-      return documentDefaults;
+    case 'keyval':
+      return keyValDefaults;
 
     case '':
       return {};
