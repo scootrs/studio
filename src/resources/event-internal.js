@@ -14,7 +14,9 @@ export function createInternalEventResource(x, y, config) {
     },
     config: {
       id: '',
-      type: ''
+      type: '',
+      broker: '',
+      name: ''
     }
   };
 }

@@ -30,7 +30,20 @@ export default function useInternalEventDetails() {
     tabs: [
       {
         title: 'Configuration',
-        sections: []
+        sections: [
+          {
+            title: 'General',
+            inputs:[
+              {
+                type: 'text',
+                label: 'Topic Name',
+                name: 'name',
+                value: config.name,
+                onChange
+              }
+            ]
+          }
+        ]
       },
       {
         title: 'Monitor',
