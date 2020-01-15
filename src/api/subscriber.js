@@ -18,13 +18,13 @@ export default function useServerSentEvents(baseUrl) {
 
   function onDeployDone(event) {
     const data = JSON.parse(event.data);
-    setWaiting(false);
+    setWaiting(false, data.message);
     console.log(data);
   }
 
   function onDeployError(event) {
     const data = JSON.parse(event.data);
-    setWaiting(false);
+    setWaiting(false, data.message);
     console.error(data);
   }
 
