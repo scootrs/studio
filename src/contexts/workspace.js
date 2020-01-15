@@ -1,5 +1,14 @@
 import React, { useContext, useState } from 'react';
-import { Compute, Storage, EventInternal, EventExternal, Trigger, Reference } from '~types';
+import {
+  Compute,
+  Storage,
+  EventInternal,
+  EventExternal,
+  Trigger,
+  Reference,
+  serializeType,
+  deserializeType
+} from '~types';
 
 const WorkspaceContext = React.createContext();
 
@@ -122,7 +131,7 @@ export function WorkspaceContextProvider({ children }) {
       setState(function(prev) {
         const resources = mergeResourceConfiguration(prev, id, config);
         let selected = prev.selected;
-        if(selected && resources[selected.meta.id]) {
+        if (selected && resources[selected.meta.id]) {
           selected = resources[selected.meta.id];
         }
         return {
@@ -196,7 +205,7 @@ export function WorkspaceContextProvider({ children }) {
       setState(function(prev) {
         const connections = mergeConnectionConfiguration(prev, id, config);
         let selected = prev.selected;
-        if(selected && connections[selected.meta.id]) {
+        if (selected && connections[selected.meta.id]) {
           selected = connections[selected.meta.id];
         }
         return {
@@ -280,7 +289,8 @@ export function WorkspaceContextProvider({ children }) {
 
         case Reference:
           pkg.references.push({
-            ...connection.config,
+            id: connection.config.id,
+            allows: [connection.config.allows],
             source: state.resources[connection.meta.source.id].config.id,
             target: state.resources[connection.meta.target.id].config.id
           });
@@ -298,12 +308,86 @@ export function WorkspaceContextProvider({ children }) {
     return pkg;
   };
 
+  const serialize = function() {
+    const resources = Array.from(Object.values(state.resources)).map(function(res) {
+      return {
+        ...res,
+        meta: {
+          ...res.meta,
+          type: serializeType(res.meta.type)
+        }
+      };
+    });
+
+    const connections = Array.from(Object.values(state.connections)).map(function(conn) {
+      return {
+        ...conn,
+        meta: {
+          ...conn.meta,
+          type: serializeType(conn.meta.type)
+        }
+      };
+    });
+
+    let selected = null;
+    if (state.selected) {
+      selected = state.selected.meta.id;
+    }
+
+    return JSON.stringify({
+      resources,
+      connections,
+      selected
+    });
+  };
+
+  const deserialize = function(serialized) {
+    const serial = JSON.parse(serialized);
+    const connections = serial.connections.reduce(function(acc, curr) {
+      curr.meta.type = deserializeType(curr.meta.type);
+      acc[curr.meta.id] = curr;
+      return acc;
+    }, {});
+    const resources = serial.resources.reduce(function(acc, curr) {
+      curr.meta.type = deserializeType(curr.meta.type);
+      acc[curr.meta.id] = curr;
+      return acc;
+    }, {});
+    let selected = null;
+    if (serial.selected) {
+      selected = connections[selected] || resources[selected];
+    }
+
+    console.log(connections);
+    console.log(resources);
+
+    return {
+      connections,
+      resources,
+      selected
+    };
+  };
+
+  const save = function() {
+    window.localStorage.setItem('workspace-context', serialize(state));
+  };
+
+  const load = function() {
+    const val = window.localStorage.getItem('workspace-context');
+    if (val) {
+      const deser = deserialize(val);
+      setState(deser);
+    }
+  };
+
   return (
     <WorkspaceContext.Provider
       value={{
         state,
         actions,
-        pack
+        pack,
+        load,
+        save
       }}
     >
       {children}

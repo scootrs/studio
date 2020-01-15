@@ -40,12 +40,35 @@ export function ApplicationContextProvider({ children }) {
     };
   };
 
+  const save = function() {
+    window.localStorage.setItem(
+      'application-context',
+      JSON.stringify({
+        name,
+        provider,
+        region
+      })
+    );
+  };
+
+  const load = function() {
+    const val = window.localStorage.getItem('application-context');
+    if (val) {
+      const deser = JSON.parse(val);
+      setName(deser.name);
+      setProvider(deser.provider);
+      setRegion(deser.region);
+    }
+  };
+
   return (
     <ApplicationContext.Provider
       value={{
         state,
         actions,
-        pack
+        pack,
+        save,
+        load
       }}
     >
       {children}

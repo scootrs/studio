@@ -1,5 +1,6 @@
 import uuid from 'uuid/v4';
 import { EventExternal } from '~types';
+import { createExternalEventEndpoints } from './endpoints';
 
 export function createExternalEventResource(x, y) {
   return {
@@ -8,7 +9,8 @@ export function createExternalEventResource(x, y) {
       type: EventExternal,
       name: 'External Event',
       x,
-      y
+      y,
+      endpoints: createExternalEventEndpoints()
     },
     config: {
       id: '',

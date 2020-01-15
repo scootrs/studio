@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import App from './app';
+import AppProviders from './providers';
 import theme from './styles/theme';
 
 const root = document.createElement('div');
@@ -13,4 +14,9 @@ root.style.width = '100%';
 root.style.fontFamily = theme.fonts.main;
 document.body.appendChild(root);
 
-render(<App />, root);
+render(
+  <AppProviders>
+    <App />
+  </AppProviders>,
+  root
+);

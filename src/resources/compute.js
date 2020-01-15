@@ -1,5 +1,6 @@
 import uuid from 'uuid/v4';
 import { Compute } from '~types';
+import { createComputeEndpoints } from './endpoints';
 
 export function createComputeResource(x, y) {
   return {
@@ -8,7 +9,8 @@ export function createComputeResource(x, y) {
       type: Compute,
       name: 'Compute',
       x,
-      y
+      y,
+      endpoints: createComputeEndpoints()
     },
     config: {
       id: '',

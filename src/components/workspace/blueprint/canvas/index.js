@@ -9,7 +9,6 @@ import { createConnectionWithType } from '~connections/';
 import UtilityBar from './utility-bar';
 import BlueprintCanvasView from './view';
 import BlueprintResource from './blueprint-resource';
-import { createEndpointsForType } from './blueprint-resource/endpoints';
 
 export default function BlueprintCanvas() {
   const {
@@ -136,7 +135,7 @@ export default function BlueprintCanvas() {
             id={r.meta.id}
             resource={r}
             onRemove={onRemove}
-            endpoints={createEndpointsForType(r.meta.type)}
+            endpoints={r.meta.endpoints}
           />
         ))
       )}

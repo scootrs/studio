@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useWorkspaceContext } from '~contexts/workspace';
 import View from './view';
-import { WorkspaceContextProvider } from '~contexts/workspace';
-import { ApplicationContextProvider } from '~contexts/application';
 import Blueprint from './blueprint';
 import DetailsPane from './details-pane';
 
@@ -10,14 +9,15 @@ export default function Workspace() {
     document.dispatchEvent(new Event('split-resize'));
   };
 
+  const ctx = useWorkspaceContext();
+  useEffect(function() {
+    ctx.load();
+  }, []);
+
   return (
-    <ApplicationContextProvider>
-      <WorkspaceContextProvider>
-        <View onDrag={onDrag}>
-          <Blueprint />
-          <DetailsPane />
-        </View>
-      </WorkspaceContextProvider>
-    </ApplicationContextProvider>
+    <View onDrag={onDrag}>
+      <Blueprint />
+      <DetailsPane />
+    </View>
   );
 }

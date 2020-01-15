@@ -1,5 +1,6 @@
 import uuid from 'uuid/v4';
 import { EventInternal } from '~types';
+import { createInternalEventEndpoints } from './endpoints';
 
 export function createInternalEventResource(x, y, config) {
   return {
@@ -8,7 +9,8 @@ export function createInternalEventResource(x, y, config) {
       type: EventInternal,
       name: 'Internal Event',
       x,
-      y
+      y,
+      endpoints: createInternalEventEndpoints()
     },
     config: {
       id: '',

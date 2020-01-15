@@ -32,7 +32,7 @@ function merge(options) {
   };
 }
 
-function createComputeEndpoints() {
+export function createComputeEndpoints() {
   return [
     merge({
       isSource: true,
@@ -47,7 +47,7 @@ function createComputeEndpoints() {
   ];
 }
 
-function createStorageEndpoints() {
+export function createStorageEndpoints() {
   return [
     merge({
       isTarget: true,
@@ -57,7 +57,7 @@ function createStorageEndpoints() {
   ];
 }
 
-function createExternalEventEndpoints() {
+export function createExternalEventEndpoints() {
   return [
     merge({
       isSource: true,
@@ -68,7 +68,7 @@ function createExternalEventEndpoints() {
   ];
 }
 
-function createInternalEventEndpoints() {
+export function createInternalEventEndpoints() {
   return [
     merge({
       isSource: true,

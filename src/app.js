@@ -1,10 +1,8 @@
-import styled, { ThemeProvider } from 'styled-components';
-import theme from './styles/theme';
+import React from 'react';
+import styled from 'styled-components';
 import Header from './components/header';
 import Footer from './components/footer';
-import React from 'react';
 import Workspace from './components/workspace';
-import { StatusContextProvider } from './contexts/status';
 import { ServerSentEventListener } from '~api/subscriber';
 import 'react-tippy/dist/tippy.css';
 
@@ -19,17 +17,13 @@ const Main = styled.main`
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <StatusContextProvider>
-        <ServerSentEventListener baseUrl={studioServicesBaseUrl}>
-          <Header />
-          <Main>
-            <Workspace />
-          </Main>
-          <Footer />
-        </ServerSentEventListener>
-      </StatusContextProvider>
-    </ThemeProvider>
+    <ServerSentEventListener baseUrl={studioServicesBaseUrl}>
+      <Header />
+      <Main>
+        <Workspace />
+      </Main>
+      <Footer />
+    </ServerSentEventListener>
   );
 }
 
