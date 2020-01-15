@@ -12,9 +12,12 @@ const Canvas = styled.div`
   overflow: auto;
   display: flex;
   flex-grow: 1;
+  background-size: 10px 10px;
+  background-image: linear-gradient(to right, ${({ theme }) => theme.colors.backgrounds.light} 1px, transparent 1px),
+    linear-gradient(to bottom, ${({ theme }) => theme.colors.backgrounds.light} 1px, transparent 1px);
 `;
 
-function BlueprintCanvasView({ children, onClick, onDoubleClick, UtilityBar}, ref) {
+function BlueprintCanvasView({ children, onClick, onDoubleClick, UtilityBar }, ref) {
   return (
     <CanvasRoot>
       <UtilityBar />

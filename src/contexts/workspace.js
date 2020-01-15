@@ -142,6 +142,31 @@ export function WorkspaceContextProvider({ children }) {
       });
     },
 
+    updateResourcePosition: function(id, x, y) {
+      setState(function(prev) {
+        const resources = {
+          ...prev.resources,
+          [id]: {
+            ...prev.resources[id],
+            meta: {
+              ...prev.resources[id].meta,
+              x,
+              y
+            }
+          }
+        };
+        let selected = prev.selected;
+        if (selected && resources[selected.meta.id]) {
+          selected = resources[selected.meta.id];
+        }
+        return {
+          ...prev,
+          resources,
+          selected
+        };
+      });
+    },
+
     removeResource: function(id) {
       setState(function(prev) {
         // Remove the resource

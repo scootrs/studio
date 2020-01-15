@@ -13,7 +13,7 @@ import BlueprintResource from './blueprint-resource';
 export default function BlueprintCanvas() {
   const {
     state: { selected, resources, connections },
-    actions: { addResource, removeResource, setSelected, addConnection, removeConnection }
+    actions: { addResource, updateResourcePosition, removeResource, setSelected, addConnection, removeConnection }
   } = useWorkspaceContext();
 
   const selectedRef = useRef(null);
@@ -87,11 +87,18 @@ export default function BlueprintCanvas() {
       }
     },
 
+    onDragStop: function(id, x, y) {
+      updateResourcePosition(id, x, y);
+    },
+
     // Specified the property path to the jsPlumb information for our connections
     connectionPropPath: 'meta',
 
     // Keep track of our connections on rerenders
-    connections: Object.values(connections)
+    connections: Object.values(connections),
+
+    // Drag by 10 pixels
+    dragGrid: [10, 10]
   });
 
   useDrop({
