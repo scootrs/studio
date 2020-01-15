@@ -383,9 +383,6 @@ export function WorkspaceContextProvider({ children }) {
       selected = connections[selected] || resources[selected];
     }
 
-    console.log(connections);
-    console.log(resources);
-
     return {
       connections,
       resources,
