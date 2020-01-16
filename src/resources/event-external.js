@@ -15,6 +15,10 @@ export function createExternalEventResource(x, y) {
     config: {
       id: '',
       type: ''
+    },
+    deployment: {
+      url: '',
+      method: ''
     }
   };
 }

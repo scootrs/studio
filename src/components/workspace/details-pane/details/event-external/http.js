@@ -1,4 +1,4 @@
-function useHttpEventDetailTabs({ config = {}, monitor = {} }, onChange) {
+function useHttpEventDetailTabs({ config = {}, deployment = {} }, onChange) {
   return [
     {
       title: 'Configuration',
@@ -47,16 +47,16 @@ function useHttpEventDetailTabs({ config = {}, monitor = {} }, onChange) {
       ]
     },
     {
-      title: 'Monitor',
+      title: 'Deployment',
       sections: [
         {
-          title: 'Deployment Information',
+          title: 'General Information',
           inputs: [
             {
               type: 'text',
               label: 'URL',
               name: 'url',
-              value: monitor.url
+              value: deployment.url
             }
           ]
         }

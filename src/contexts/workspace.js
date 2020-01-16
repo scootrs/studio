@@ -58,6 +58,147 @@ export function WorkspaceContextProvider({ children }) {
     connections: {}
   });
 
+  const pack = function() {
+    const pkg = {
+      compute: [],
+      storage: [],
+      events: {
+        internal: [],
+        external: []
+      },
+      triggers: [],
+      references: []
+    };
+
+    // Pack the resources according to their types
+    Object.values(state.resources).forEach(function(resource) {
+      switch (resource.meta.type) {
+        case Compute:
+          pkg.compute.push(resource.config);
+          break;
+
+        case Storage:
+          pkg.storage.push(resource.config);
+          break;
+
+        case EventInternal:
+          pkg.events.internal.push(resource.config);
+
+        case EventExternal:
+          pkg.events.external.push(resource.config);
+          break;
+
+        default:
+          throw new Error(
+            'Failed to pack resources for deployment: A resource with an invalid type "' +
+              resource.meta.type.toString() +
+              '" was encountered during packing. This indicates state corruption occurring elsewhere in the context.'
+          );
+      }
+    });
+
+    // Pack the connections according to their types
+    Object.values(state.connections).forEach(function(connection) {
+      switch (connection.meta.type) {
+        case Trigger:
+          pkg.triggers.push({
+            ...connection.config,
+            source: state.resources[connection.meta.source.id].config.id,
+            target: state.resources[connection.meta.target.id].config.id
+          });
+          break;
+
+        case Reference:
+          pkg.references.push({
+            id: connection.config.id,
+            allows: [connection.config.allows],
+            source: state.resources[connection.meta.source.id].config.id,
+            target: state.resources[connection.meta.target.id].config.id
+          });
+          break;
+
+        default:
+          throw new Error(
+            'Failed to pack connections for deployment: A connection with an invalid type "' +
+              connection.meta.type +
+              '" was encountered during packing. This indicates state corruption occurring elsewhere in the context.'
+          );
+      }
+    });
+
+    return pkg;
+  };
+
+  const serialize = function(state) {
+    const resources = Array.from(Object.values(state.resources)).map(function(res) {
+      return {
+        ...res,
+        meta: {
+          ...res.meta,
+          type: serializeType(res.meta.type)
+        }
+      };
+    });
+
+    const connections = Array.from(Object.values(state.connections)).map(function(conn) {
+      return {
+        ...conn,
+        meta: {
+          ...conn.meta,
+          type: serializeType(conn.meta.type)
+        }
+      };
+    });
+
+    let selected = null;
+    if (state.selected) {
+      selected = state.selected.meta.id;
+    }
+
+    return JSON.stringify({
+      resources,
+      connections,
+      selected
+    });
+  };
+
+  const deserialize = function(serialized) {
+    const serial = JSON.parse(serialized);
+    const connections = serial.connections.reduce(function(acc, curr) {
+      curr.meta.type = deserializeType(curr.meta.type);
+      acc[curr.meta.id] = curr;
+      return acc;
+    }, {});
+    const resources = serial.resources.reduce(function(acc, curr) {
+      curr.meta.type = deserializeType(curr.meta.type);
+      acc[curr.meta.id] = curr;
+      return acc;
+    }, {});
+    let selected = null;
+    if (serial.selected) {
+      selected = connections[selected] || resources[selected];
+    }
+
+    return {
+      connections,
+      resources,
+      selected
+    };
+  };
+
+  const save = function(s) {
+    if(!s) s = state;
+    window.localStorage.setItem('workspace-context', serialize(s));
+  };
+
+  const load = function() {
+    const val = window.localStorage.getItem('workspace-context');
+    if (val) {
+      const deser = deserialize(val);
+      setState(deser);
+    }
+  };
+
   const actions = {
     setSelected: function(val) {
       setState(function(prev) {
@@ -259,146 +400,32 @@ export function WorkspaceContextProvider({ children }) {
       });
     },
 
-    mergeDeploymentResults: function(results) {}
-  };
-
-  const pack = function() {
-    const pkg = {
-      compute: [],
-      storage: [],
-      events: {
-        internal: [],
-        external: []
-      },
-      triggers: [],
-      references: []
-    };
-
-    // Pack the resources according to their types
-    Object.values(state.resources).forEach(function(resource) {
-      switch (resource.meta.type) {
-        case Compute:
-          pkg.compute.push(resource.config);
-          break;
-
-        case Storage:
-          pkg.storage.push(resource.config);
-          break;
-
-        case EventInternal:
-          pkg.events.internal.push(resource.config);
-
-        case EventExternal:
-          pkg.events.external.push(resource.config);
-          break;
-
-        default:
-          throw new Error(
-            'Failed to pack resources for deployment: A resource with an invalid type "' +
-              resource.meta.type.toString() +
-              '" was encountered during packing. This indicates state corruption occurring elsewhere in the context.'
-          );
-      }
-    });
-
-    // Pack the connections according to their types
-    Object.values(state.connections).forEach(function(connection) {
-      switch (connection.meta.type) {
-        case Trigger:
-          pkg.triggers.push({
-            ...connection.config,
-            source: state.resources[connection.meta.source.id].config.id,
-            target: state.resources[connection.meta.target.id].config.id
-          });
-          break;
-
-        case Reference:
-          pkg.references.push({
-            id: connection.config.id,
-            allows: [connection.config.allows],
-            source: state.resources[connection.meta.source.id].config.id,
-            target: state.resources[connection.meta.target.id].config.id
-          });
-          break;
-
-        default:
-          throw new Error(
-            'Failed to pack connections for deployment: A connection with an invalid type "' +
-              connection.meta.type +
-              '" was encountered during packing. This indicates state corruption occurring elsewhere in the context.'
-          );
-      }
-    });
-
-    return pkg;
-  };
-
-  const serialize = function() {
-    const resources = Array.from(Object.values(state.resources)).map(function(res) {
-      return {
-        ...res,
-        meta: {
-          ...res.meta,
-          type: serializeType(res.meta.type)
+    mergeDeploymentResults: function(results) {
+      setState(function(prev) {
+        // For now, we are only going to worry about getting the event urls
+        const resources = {
+          ...prev.resources
+        };
+        for (let r of Array.from(Object.values(resources))) {
+          let event = results.events.external.find(e => e.id === r.config.id);
+          if (event) {
+            // We are dealing with an event. Capture the live URL and the HTTP method used on the endpoint
+            resources[r.meta.id] = {
+              ...resources[r.meta.id],
+              deployment: {
+                url: event.url,
+                method: event.method
+              }
+            };
+          }
         }
-      };
-    });
-
-    const connections = Array.from(Object.values(state.connections)).map(function(conn) {
-      return {
-        ...conn,
-        meta: {
-          ...conn.meta,
-          type: serializeType(conn.meta.type)
-        }
-      };
-    });
-
-    let selected = null;
-    if (state.selected) {
-      selected = state.selected.meta.id;
-    }
-
-    return JSON.stringify({
-      resources,
-      connections,
-      selected
-    });
-  };
-
-  const deserialize = function(serialized) {
-    const serial = JSON.parse(serialized);
-    const connections = serial.connections.reduce(function(acc, curr) {
-      curr.meta.type = deserializeType(curr.meta.type);
-      acc[curr.meta.id] = curr;
-      return acc;
-    }, {});
-    const resources = serial.resources.reduce(function(acc, curr) {
-      curr.meta.type = deserializeType(curr.meta.type);
-      acc[curr.meta.id] = curr;
-      return acc;
-    }, {});
-    let selected = null;
-    if (serial.selected) {
-      selected = connections[selected] || resources[selected];
-    }
-
-    return {
-      connections,
-      resources,
-      selected
-    };
-  };
-
-  const save = function() {
-    window.localStorage.setItem('workspace-context', serialize(state));
-  };
-
-  const load = function() {
-    const val = window.localStorage.getItem('workspace-context');
-    if (val) {
-      const deser = deserialize(val);
-      setState(deser);
+        const next = {
+          ...prev,
+          resources
+        };
+        save(next);
+        return next;
+      });
     }
   };
 

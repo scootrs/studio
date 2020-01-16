@@ -5,11 +5,16 @@
 import { useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useStatusContext } from '~contexts/status';
+import { useWorkspaceContext } from '~contexts/workspace';
 
 export default function useServerSentEvents(baseUrl) {
   const {
     actions: { setWaiting }
   } = useStatusContext();
+
+  const {
+    actions: { mergeDeploymentResults }
+  } = useWorkspaceContext();
 
   function onDeployProgress(event) {
     const data = JSON.parse(event.data);
@@ -20,6 +25,7 @@ export default function useServerSentEvents(baseUrl) {
     const data = JSON.parse(event.data);
     setWaiting(false, data.message);
     console.log(data);
+    mergeDeploymentResults(data.results);
   }
 
   function onDeployError(event) {
@@ -49,7 +55,9 @@ export default function useServerSentEvents(baseUrl) {
         addEventListeners(ref.current);
       }
       return function() {
-        removeEventListeners(ref.current);
+        if (ref.current !== null) {
+          removeEventListeners(ref.current);
+        }
       };
     },
     [addEventListeners, removeEventListeners]
@@ -72,8 +80,10 @@ export default function useServerSentEvents(baseUrl) {
         });
       }
       return function() {
-        ref.current.close();
-        ref.current = null;
+        if (ref.current) {
+          ref.current.close();
+          ref.current = null;
+        }
       };
     },
     [ref]
