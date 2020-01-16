@@ -56,7 +56,43 @@ export default function useComputeDetails() {
         sections: [
           {
             title: 'General',
-            inputs: []
+            inputs: [
+              {
+                type: 'tabular',
+                name: 'environment',
+                label: 'Environment Variables',
+                columns: [
+                  {
+                    type: 'text',
+                    label: 'Name',
+                    name: 'name',
+                    value: ''
+                  },
+                  {
+                    type: 'text',
+                    label: 'Value',
+                    name: 'value',
+                    value: ''
+                  }
+                ],
+                rows: config.environment,
+                onAddRow: function(row) {
+                  updateSelectedConfiguration({ environment: [...config.environment, row] });
+                },
+                onRemoveRow: function(row) {
+                  updateSelectedConfiguration({
+                    environment: config.environment.filter(function(e) {
+                      return e.name !== row.name;
+                    })
+                  });
+                },
+                onUpdateRow: function(row, value) {
+                  const enviroment = [...config.environment];
+                  enviroment[row] = value;
+                  updateSelectedConfiguration({ environment });
+                }
+              }
+            ]
           }
         ]
       }

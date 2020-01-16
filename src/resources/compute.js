@@ -10,7 +10,16 @@ export function createComputeResource(x, y) {
       name: 'Compute',
       x,
       y,
-      endpoints: createComputeEndpoints()
+      endpoints: createComputeEndpoints(),
+      isValid: false,
+      errors: {
+        id: '',
+        runtime: '',
+        vcs: '',
+        code: '',
+        environment: '',
+        tags: ''
+      }
     },
     config: {
       id: '',

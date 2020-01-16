@@ -1,6 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FlexTabs, FlexTabPanel } from '~styles/tabs';
+import TabularInput from './tabular-input';
+import { Input, InputLabel } from './input';
+import { InputTable, InputTableBody, InputRow, InputLabelCol, InputCol } from './input-table';
 
 const DetailsViewRoot = styled.div`
   display: flex;
@@ -77,83 +80,6 @@ const DetailsSectionBody = styled.div`
   padding: ${({ theme }) => theme.spacing.small};
 `;
 
-const InputTable = styled.table``;
-
-const InputTableBody = styled.tbody``;
-
-const InputRow = styled.tr`
-  margin-bottom: ${({ theme }) => theme.spacing.small};
-`;
-
-const InputLabelCol = styled.td`
-  white-space: pre;
-`;
-const InputCol = styled.td`
-  width: 100%;
-`;
-
-const InputLabel = styled.label.attrs(({ htmlFor }) => ({
-  htmlFor
-}))`
-  padding-bottom: 2px;
-`;
-
-const TextInput = styled.input.attrs(({ name, value, onChange }) => ({
-  type: 'text',
-  name,
-  value,
-  onChange,
-  readOnly: onChange === undefined || onChange === null
-}))`
-  padding: 2px;
-  width: 60%;
-  ${({ readOnly }) => (readOnly ? 'border: none;' : '')}
-`;
-
-const Select = styled.select.attrs(({ name, value, onChange }) => ({
-  name,
-  value,
-  onChange
-}))``;
-
-const Option = styled.option.attrs(({ value }) => ({
-  value
-}))``;
-
-function Input({ type, name, value, onChange, options }) {
-  switch (type) {
-    case 'text':
-      return <TextInput name={name} value={value} onChange={onChange} />;
-
-    case 'select':
-      return (
-        <Select name={name} value={value} onChange={onChange}>
-          {options.map(option => (
-            <Option key={option.name} value={option.value}>
-              {option.name}
-            </Option>
-          ))}
-        </Select>
-      );
-
-    default:
-      console.warn('Got unsupported detail input type: ' + type);
-  }
-}
-
-function InputTableRow({ type, label, name, value, onChange, options }) {
-  return (
-    <InputRow>
-      <InputLabelCol>
-        <InputLabel htmlFor={name}>{label}</InputLabel>
-      </InputLabelCol>
-      <InputCol>
-        <Input type={type} name={name} value={value} onChange={onChange} options={options} />
-      </InputCol>
-    </InputRow>
-  );
-}
-
 export default function DetailsView({ details, onRootKeyPress }) {
   return (
     <DetailsViewRoot onKeyPress={onRootKeyPress}>
@@ -215,15 +141,30 @@ export default function DetailsView({ details, onRootKeyPress }) {
                             <InputTable>
                               <InputTableBody>
                                 {section.inputs.map(input => (
-                                  <InputTableRow
-                                    key={input.name}
-                                    type={input.type}
-                                    label={input.label}
-                                    name={input.name}
-                                    value={input.value}
-                                    onChange={input.onChange}
-                                    options={input.options}
-                                  />
+                                  <InputRow key={input.name}>
+                                    <InputLabelCol>
+                                      <InputLabel htmlFor={input.name}>{input.label}</InputLabel>
+                                    </InputLabelCol>
+                                    <InputCol>
+                                      {input.type === 'tabular' ? (
+                                        <TabularInput
+                                          columns={input.columns}
+                                          rows={input.rows}
+                                          onAddRow={input.onAddRow}
+                                          onRemoveRow={input.onRemoveRow}
+                                          onUpdateRow={input.onUpdateRow}
+                                        />
+                                      ) : (
+                                        <Input
+                                          type={input.type}
+                                          name={input.name}
+                                          value={input.value}
+                                          onChange={input.onChange}
+                                          options={input.options}
+                                        />
+                                      )}
+                                    </InputCol>
+                                  </InputRow>
                                 ))}
                               </InputTableBody>
                             </InputTable>
