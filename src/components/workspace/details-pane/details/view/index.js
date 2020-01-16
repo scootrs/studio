@@ -77,7 +77,6 @@ const DetailsSectionTitle = styled.div`
 const DetailsSectionBody = styled.div`
   display: flex;
   flex-direction: column;
-  padding: ${({ theme }) => theme.spacing.small};
 `;
 
 export default function DetailsView({ details, onRootKeyPress }) {

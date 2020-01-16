@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 
-export const InputTable = styled.table``;
+export const InputTable = styled.table`
+  border-collapse: collapse;
+  border-spacing: 0px;
+`;
 
 export const InputTableBody = styled.tbody``;
 
@@ -10,12 +13,16 @@ export const InputRow = styled.tr`
 `;
 
 export const InputLabelCol = styled.td`
-  white-space: pre;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 3px;
+  padding: 5px;
+  min-width: 150px;
+  max-width: 150px;
+  width: 150px;
+  border-right: 1px solid ${({ theme }) => theme.colors.backgrounds.light};
 `;
 export const InputCol = styled.td`
   width: 100%;
+  padding: 0px 5px;
 `;

@@ -9,8 +9,15 @@ const TextInput = styled.input.attrs(({ name, value, onChange }) => ({
   readOnly: onChange === undefined || onChange === null
 }))`
   padding: 2px;
-  width: 60%;
-  ${({ readOnly }) => (readOnly ? 'border: none;' : '')}
+  width: 98%;
+  ${({ readOnly }) =>
+    readOnly
+      ? `
+    border: none; 
+    &:focus { 
+      outline: none; 
+    }`
+      : ''}
 `;
 
 const Select = styled.select.attrs(({ name, value, onChange }) => ({

@@ -4,7 +4,10 @@ import { Input } from './input';
 
 const TabularInputTable = styled.table``;
 
-const TabularInputTableHead = styled.thead``;
+const TabularInputTableHead = styled.thead`
+  font-size: 0.7em;
+  width: 100%;
+`;
 
 const TabularInputTableHeadCell = styled.th`
   text-align: left;
@@ -12,9 +15,15 @@ const TabularInputTableHeadCell = styled.th`
 
 const TabularInputTableBody = styled.tbody``;
 
-const TabularInputTableRow = styled.tr``;
+const TabularInputTableRow = styled.tr`
+  width: 100%;
+`;
 
-const TabularInputTableCell = styled.td``;
+const TabularInputTableCell = styled.td`
+  input[type='text'] {
+    width: auto !important;
+  }
+`;
 
 const TabularInputTableFoot = styled.tfoot``;
 
