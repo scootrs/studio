@@ -24,32 +24,24 @@ export default function useServerSentEvents(baseUrl) {
   function onDeploymentSuccess(event) {
     const data = JSON.parse(event.data);
     setWaiting(false, data.message);
-    console.log(data);
     mergeDeploymentResults(data.results);
   }
 
   function onDeploymentFailure(event) {
     const data = JSON.parse(event.data);
     setWaiting(false, data.message + ': ' + data.details);
-    console.error(data);
-  }
-
-  function onDeploymentFinish(event) {
-    console.log(event);
   }
 
   function addEventListeners(source) {
     source.addEventListener('deployment:progress', onDeploymentProgress);
     source.addEventListener('deployment:success', onDeploymentSuccess);
     source.addEventListener('deployment:failure', onDeploymentFailure);
-    source.addEventListener('deployment:finish', onDeploymentFinish);
   }
 
   function removeEventListeners(source) {
     source.removeEventListener('deployment:progress', onDeploymentProgress);
     source.removeEventListener('deployment:success', onDeploymentSuccess);
     source.removeEventListener('deployment:failure', onDeploymentFailure);
-    source.removeEventListener('deployment:finish', onDeploymentFinish);
   }
 
   const ref = useRef(null);
@@ -90,6 +82,7 @@ export default function useServerSentEvents(baseUrl) {
       }
       return function() {
         if (ref.current) {
+          removeEventListeners(ref.current);
           ref.current.close();
           ref.current = null;
         }
