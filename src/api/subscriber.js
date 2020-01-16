@@ -16,34 +16,40 @@ export default function useServerSentEvents(baseUrl) {
     actions: { mergeDeploymentResults }
   } = useWorkspaceContext();
 
-  function onDeployProgress(event) {
+  function onDeploymentProgress(event) {
     const data = JSON.parse(event.data);
     setWaiting(true, data.message);
   }
 
-  function onDeployDone(event) {
+  function onDeploymentSuccess(event) {
     const data = JSON.parse(event.data);
     setWaiting(false, data.message);
     console.log(data);
     mergeDeploymentResults(data.results);
   }
 
-  function onDeployError(event) {
+  function onDeploymentFailure(event) {
     const data = JSON.parse(event.data);
     setWaiting(false, data.message);
     console.error(data);
   }
 
+  function onDeploymentFinish(event) {
+    console.log(event);
+  }
+
   function addEventListeners(source) {
-    source.addEventListener('deploy:progress', onDeployProgress);
-    source.addEventListener('deploy:done', onDeployDone);
-    source.addEventListener('deploy:error', onDeployError);
+    source.addEventListener('deployment:progress', onDeploymentProgress);
+    source.addEventListener('deployment:success', onDeploymentSuccess);
+    source.addEventListener('deployment:failure', onDeploymentFailure);
+    source.addEventListener('deployment:finish', onDeploymentFinish);
   }
 
   function removeEventListeners(source) {
-    source.removeEventListener('deploy:progress', onDeployProgress);
-    source.removeEventListener('deploy:done', onDeployDone);
-    source.removeEventListener('deploy:error', onDeployError);
+    source.removeEventListener('deployment:progress', onDeploymentProgress);
+    source.removeEventListener('deployment:success', onDeploymentSuccess);
+    source.removeEventListener('deployment:failure', onDeploymentFailure);
+    source.removeEventListener('deployment:finish', onDeploymentFinish);
   }
 
   const ref = useRef(null);
@@ -67,7 +73,10 @@ export default function useServerSentEvents(baseUrl) {
   useEffect(
     function() {
       async function subscribe() {
+        // We subscribe first so that we can get the session information (in case we don't already have it)
         await axios.get(baseUrl + '/subscribe', { withCredentials: true });
+        
+        // Once we have the session information we can start listening for events
         ref.current = new EventSource(baseUrl + '/listen', { withCredentials: true });
       }
       if (ref.current === null) {
