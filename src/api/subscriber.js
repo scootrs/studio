@@ -30,7 +30,7 @@ export default function useServerSentEvents(baseUrl) {
 
   function onDeploymentFailure(event) {
     const data = JSON.parse(event.data);
-    setWaiting(false, data.message);
+    setWaiting(false, data.message + ': ' + data.details);
     console.error(data);
   }
 
@@ -75,7 +75,7 @@ export default function useServerSentEvents(baseUrl) {
       async function subscribe() {
         // We subscribe first so that we can get the session information (in case we don't already have it)
         await axios.get(baseUrl + '/subscribe', { withCredentials: true });
-        
+
         // Once we have the session information we can start listening for events
         ref.current = new EventSource(baseUrl + '/listen', { withCredentials: true });
       }
