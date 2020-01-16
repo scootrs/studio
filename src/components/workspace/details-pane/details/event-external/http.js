@@ -26,19 +26,19 @@ function useHttpEventDetailTabs({ config = {}, deployment = {} }, onChange) {
                 },
                 {
                   name: 'GET',
-                  value: 'GET'
+                  value: 'get'
                 },
                 {
                   name: 'POST',
-                  value: 'POST'
+                  value: 'post'
                 },
                 {
                   name: 'PUT',
-                  value: 'PUT'
+                  value: 'put'
                 },
                 {
                   name: 'DELETE',
-                  value: 'DELETE'
+                  value: 'delete'
                 }
               ]
             }
