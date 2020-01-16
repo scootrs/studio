@@ -34,6 +34,7 @@ function BlueprintResource({ resource, onRemove }) {
     <View
       ref={ref}
       id={resource.meta.id}
+      name={resource.config.id}
       selected={isSelected}
       x={resource.meta.x}
       y={resource.meta.y}

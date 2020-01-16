@@ -18,10 +18,25 @@ const View = styled.div`
   }
 `;
 
-function BlueprintResourceView({ id, selected, x, y, onClick, children, onKeyPress }, ref) {
+const InnerContaier = styled.div`
+  position: relative;
+`;
+
+const TitleSpan = styled.span`
+  position: absolute;
+  left: calc(50%);
+  transform: translateX(-50%);
+  top: -17px;
+  font-size: 0.7em;
+`;
+
+function BlueprintResourceView({ id, name, selected, x, y, onClick, children, onKeyPress }, ref) {
   return (
     <View ref={ref} id={id} tabIndex={-1} selected={selected} x={x} y={y} onClick={onClick} onKeyPress={onKeyPress}>
-      {children}
+      <InnerContaier>
+        <TitleSpan>{name}</TitleSpan>
+        {children}
+      </InnerContaier>
     </View>
   );
 }
