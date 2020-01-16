@@ -44,10 +44,6 @@ export default function useInternalEventDetails() {
             ]
           }
         ]
-      },
-      {
-        title: 'Monitor',
-        sections: []
       }
     ]
   };
