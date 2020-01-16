@@ -83,6 +83,7 @@ export function WorkspaceContextProvider({ children }) {
 
         case EventInternal:
           pkg.events.internal.push(resource.config);
+          break;
 
         case EventExternal:
           pkg.events.external.push(resource.config);
