@@ -9,6 +9,7 @@ const View = styled.div`
   top: ${({ y }) => y}px;
   display: flex;
   cursor: pointer;
+  user-select: none;
 
   &:focus {
     outline: none;
