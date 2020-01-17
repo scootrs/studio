@@ -28,9 +28,9 @@ export function createComputeResource(x, y) {
       isValid: false,
       fields: {
         id: 'Resource ID is required',
-        runtime: 'Runtime has not been selected',
+        runtime: '',
         vcs: '',
-        code: 'Missing code content',
+        code: '',
         environment: '',
         tags: ''
       }
