@@ -5,6 +5,7 @@ import { useApplicationContext } from '~contexts/application';
 import { useWorkspaceContext } from '~contexts/workspace';
 import { useStatusContext } from '~contexts/status';
 import { Button } from '~styles/input/button';
+import Spinner from '~styles/spinner';
 
 const StyledDeployButton = styled(Button)`
   font-weight: bold;
@@ -12,6 +13,7 @@ const StyledDeployButton = styled(Button)`
   border-color: ${({ theme }) => theme.colors.primary.main}
   background-color: ${({ theme }) => theme.colors.primary.main};
   padding: 3px 8px;
+  width: 80px;
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.primary.light};
@@ -21,6 +23,7 @@ const StyledDeployButton = styled(Button)`
 
 export default function DeployButton() {
   const {
+    state: { isWaiting },
     actions: { setWaiting }
   } = useStatusContext();
 
@@ -38,7 +41,9 @@ export default function DeployButton() {
       return setWaiting(false, workspacePackResult.error);
     }
     const pkg = {
-      ...appPackResult.package,
+      app: {
+        ...appPackResult.package
+      },
       ...workspacePackResult.package
     };
     console.log(pkg);
@@ -52,5 +57,9 @@ export default function DeployButton() {
     }
   };
 
-  return <StyledDeployButton onClick={onDeploy}>Deploy</StyledDeployButton>;
+  return (
+    <StyledDeployButton disabled={isWaiting} onClick={onDeploy}>
+      {isWaiting ? <Spinner /> : 'Deploy'}
+    </StyledDeployButton>
+  );
 }

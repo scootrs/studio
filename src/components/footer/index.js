@@ -4,7 +4,7 @@ import { useStatusContext } from '~contexts/status';
 
 function Footer() {
   const context = useStatusContext();
-  return <View showSpinner={context.isWaiting} statusMessage={context.statusMessage} />;
+  return <View showSpinner={context.state.isWaiting} statusMessage={context.state.statusMessage} />;
 }
 
 export default Footer;

@@ -23,7 +23,7 @@ export function StatusContextProvider({ children }) {
   return (
     <StatusContext.Provider
       value={{
-        ...state,
+        state,
         actions: {
           setWaiting
         }
