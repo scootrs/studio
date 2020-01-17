@@ -17,7 +17,7 @@ function LiveBlueprintView({ children, onDrag }) {
   });
 
   return (
-    <SplitBlueprintContainer minSize={[500, 300]} gutterStyle={gutterStyle} onDrag={onDrag} onDragEnd={onDrag}>
+    <SplitBlueprintContainer minSize={[720, 300]} gutterStyle={gutterStyle} onDrag={onDrag} onDragEnd={onDrag}>
       {children}
     </SplitBlueprintContainer>
   );
