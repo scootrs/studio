@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
-import { Input } from './input';
+import { TextInput } from './text';
+import { SelectInput } from './select';
 
 const TabularInputTable = styled.table``;
 
@@ -29,7 +30,7 @@ const TabularInputTableFoot = styled.tfoot``;
 
 const TabularCellButton = styled.button``;
 
-function TabularInput({ columns, rows, onAddRow, onRemoveRow, onUpdateRow }) {
+export function TabularInput({ columns, rows, onAddRow, onRemoveRow, onUpdateRow }) {
   const ref = useRef();
   const defaultState = Object.values(columns).reduce(function(acc, cur) {
     acc[cur.name] = cur.value;
@@ -73,6 +74,19 @@ function TabularInput({ columns, rows, onAddRow, onRemoveRow, onUpdateRow }) {
     };
   };
 
+  function renderInput(input) {
+    switch (input.type) {
+      case 'text':
+        return <TextInput key={input.name} {...input} />;
+
+      case 'select':
+        return <SelectInput key={input.name} {...input} />;
+
+      default:
+        return <></>;
+    }
+  }
+
   return (
     <TabularInputTable>
       <TabularInputTableHead>
@@ -90,14 +104,14 @@ function TabularInput({ columns, rows, onAddRow, onRemoveRow, onUpdateRow }) {
               {Object.entries(row).map(function([prop, val], i) {
                 return (
                   <TabularInputTableCell key={prop}>
-                    <Input
-                      type={columns[i].type}
-                      name={prop}
-                      value={val}
-                      placeholder={columns[i].placeholder}
-                      options={columns[i].options}
-                      onChange={onRowChange(i)}
-                    />
+                    {renderInput({
+                      type: columns[i].type,
+                      name: prop,
+                      value: val,
+                      placeholder: columns[i].placeholder,
+                      options: columns[i].options,
+                      onChange: onRowChange(i)
+                    })}
                   </TabularInputTableCell>
                 );
               })}
@@ -113,15 +127,15 @@ function TabularInput({ columns, rows, onAddRow, onRemoveRow, onUpdateRow }) {
           {columns.map(function(col, i) {
             return (
               <TabularInputTableCell key={col.name}>
-                <Input
-                  id={i === 0 ? 'first' : ''}
-                  type={col.type}
-                  name={col.name}
-                  value={state[col.name]}
-                  placeholder={col.placeholder}
-                  onChange={onChange}
-                  onKeyDown={i === columns.length - 1 ? onFooterLastCellKeyDown : null}
-                />
+                {renderInput({
+                  id: i === 0 ? 'first' : '',
+                  type: col.type,
+                  name: col.name,
+                  value: state[col.name],
+                  placeholder: col.placeholder,
+                  onChange: onChange,
+                  onKeyDown: i === columns.length - 1 ? onFooterLastCellKeyDown : null
+                })}
               </TabularInputTableCell>
             );
           })}
@@ -133,5 +147,3 @@ function TabularInput({ columns, rows, onAddRow, onRemoveRow, onUpdateRow }) {
     </TabularInputTable>
   );
 }
-
-export default TabularInput;

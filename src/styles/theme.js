@@ -8,7 +8,7 @@ export default {
     },
     secondary: {
       main: '#EABF2A',
-      dark: '#9A770',
+      dark: '#9A7700',
       medium: '#C29A0E',
       light: '#FAD553'
     },
@@ -22,6 +22,9 @@ export default {
       dark: '#373737',
       medium: '#575757',
       light: '#efefef'
+    },
+    alerts: {
+      warning: '#C29A0E'
     }
   },
   fonts: {

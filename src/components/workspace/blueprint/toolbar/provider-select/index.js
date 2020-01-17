@@ -1,6 +1,6 @@
 import React from 'react';
 import { useApplicationContext } from '~contexts/application';
-import ProviderSelectView from './view';
+import { SelectInput } from '~styles/input/select';
 
 export default function ProviderSelect() {
   const {
@@ -10,5 +10,16 @@ export default function ProviderSelect() {
 
   const onChange = ev => setProvider(ev.target.value);
 
-  return <ProviderSelectView value={provider} onChange={onChange} />;
+  const options = [
+    {
+      name: 'Select a provider',
+      value: ''
+    },
+    {
+      name: 'AWS',
+      value: 'aws'
+    }
+  ];
+
+  return <SelectInput value={provider.value} onChange={onChange} options={options} />;
 }

@@ -23,7 +23,7 @@ export function useWorkspaceContext() {
   return context;
 }
 
-function mergeResourceConfiguration(prev, id, config) {
+function mergeResourceWithPreviousState(prev, id, config, validationFields = {}) {
   const resources = {
     ...prev.resources,
     [id]: {
@@ -31,13 +31,24 @@ function mergeResourceConfiguration(prev, id, config) {
       config: {
         ...prev.resources[id].config,
         ...config
+      },
+      validation: {
+        fields: {
+          ...prev.resources[id].validation.fields,
+          ...validationFields
+        }
       }
     }
   };
+  resources[id].validation.isValid = Object.values(resources[id].validation.fields).reduce(function(result, field) {
+    if (!result) return result;
+    if (field === '') return true;
+    return false;
+  }, true);
   return resources;
 }
 
-function mergeConnectionConfiguration(prev, id, config) {
+function mergeConnectionWithPreviousState(prev, id, config, validationFields = {}) {
   const connections = {
     ...prev.connections,
     [id]: {
@@ -45,9 +56,19 @@ function mergeConnectionConfiguration(prev, id, config) {
       config: {
         ...prev.connections[id].config,
         ...config
+      },
+      validation: {
+        fields: {
+          ...prev.connections[id].validation.fields,
+          ...validationFields
+        }
       }
     }
   };
+  connections[id].validation.isValid = Object.values(connections[id].validation.fields).reduce(function(result, field) {
+    if (!result) return result;
+    if (field === '') return true;
+  }, true);
   return connections;
 }
 
@@ -167,11 +188,15 @@ export function WorkspaceContextProvider({ children }) {
     const serial = JSON.parse(serialized);
     const connections = serial.connections.reduce(function(acc, curr) {
       curr.meta.type = deserializeType(curr.meta.type);
+      if (!curr.validation) curr.validation = {};
+      if (!curr.validation.fields) curr.validation.fields = {};
       acc[curr.meta.id] = curr;
       return acc;
     }, {});
     const resources = serial.resources.reduce(function(acc, curr) {
       curr.meta.type = deserializeType(curr.meta.type);
+      if (!curr.validation) curr.validation = {};
+      if (!curr.validation.fields) curr.validation.fields = {};
       acc[curr.meta.id] = curr;
       return acc;
     }, {});
@@ -188,7 +213,7 @@ export function WorkspaceContextProvider({ children }) {
   };
 
   const save = function(s) {
-    if(!s) s = state;
+    if (!s) s = state;
     window.localStorage.setItem('workspace-context', serialize(s));
   };
 
@@ -218,19 +243,19 @@ export function WorkspaceContextProvider({ children }) {
       });
     },
 
-    updateSelectedConfiguration: function(config) {
+    updateSelectedConfiguration: function(config, validation = {}) {
       setState(function(prev) {
         if (prev.selected) {
           const id = prev.selected.meta.id;
           if (prev.resources[id]) {
-            const resources = mergeResourceConfiguration(prev, id, config);
+            const resources = mergeResourceWithPreviousState(prev, id, config, validation);
             return {
               ...prev,
               resources,
               selected: resources[id]
             };
           } else if (prev.connections[id]) {
-            const connections = mergeConnectionConfiguration(prev, id, config);
+            const connections = mergeConnectionWithPreviousState(prev, id, config, validation);
             return {
               ...prev,
               connections,
@@ -248,11 +273,6 @@ export function WorkspaceContextProvider({ children }) {
           return prev;
         }
       });
-      if (state.selected) {
-        const id = state.selected.meta.id;
-        if (state.resources[id]) return actions.updateResourceConfiguration(id, config);
-        if (state.connections[id]) return actions.updateConnectionConfiguration(id, config);
-      }
     },
 
     addResource: function(resource) {
@@ -269,9 +289,16 @@ export function WorkspaceContextProvider({ children }) {
       });
     },
 
-    updateResourceConfiguration: function(id, config) {
+    updateResourceConfiguration: function(id, config, validation = {}) {
       setState(function(prev) {
-        const resources = mergeResourceConfiguration(prev, id, config);
+        // There is an edge case where the Monaco Code editor unmounts and attempts to update the state of a resource
+        // that has been removed. This happens if the resource being removed was selected and the editor was visible.
+        // To prevent this, we need to make sure the ID we are attempting to update is still in our list of resources.
+        // If it isn't, then we skip the state update.
+        if (!prev.resources[id]) return prev;
+
+        // The resource still exists, carry on
+        const resources = mergeResourceWithPreviousState(prev, id, config, validation);
         let selected = prev.selected;
         if (selected && resources[selected.meta.id]) {
           selected = resources[selected.meta.id];
@@ -310,6 +337,7 @@ export function WorkspaceContextProvider({ children }) {
     },
 
     removeResource: function(id) {
+      console.log('removeResource', id);
       setState(function(prev) {
         // Remove the resource
         const { [id]: omit, ...resources } = prev.resources;
@@ -368,9 +396,9 @@ export function WorkspaceContextProvider({ children }) {
       });
     },
 
-    updateConnectionConfiguration: function(id, config) {
+    updateConnectionConfiguration: function(id, config, validation = {}) {
       setState(function(prev) {
-        const connections = mergeConnectionConfiguration(prev, id, config);
+        const connections = mergeConnectionWithPreviousState(prev, id, config, validation);
         let selected = prev.selected;
         if (selected && connections[selected.meta.id]) {
           selected = connections[selected.meta.id];

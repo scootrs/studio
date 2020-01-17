@@ -1,8 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FlexTabs, FlexTabPanel } from '~styles/tabs';
-import TabularInput from './tabular-input';
-import { Input, InputLabel } from './input';
+import { HeaderTitleContainer, HeaderTitleInput, HeaderIcon, HeaderRightContent } from './header';
+import { DetailsViewHeader, DetailsViewBody, DetailsSection, DetailsSectionTitle, DetailsSectionBody } from './body';
+import { TabularInput } from '~styles/input/tabular';
+import { InputLabel } from '~styles/input/label';
+import { ValidatedTextInput } from '~styles/input/text-validated';
+import { SelectInput } from '~styles/input/select';
+import { TextInput } from '~styles/input/text';
 import { InputTable, InputTableBody, InputRow, InputLabelCol, InputCol } from './input-table';
 
 const DetailsViewRoot = styled.div`
@@ -12,72 +17,24 @@ const DetailsViewRoot = styled.div`
   width: 100%;
 `;
 
-const DetailsViewHeader = styled.div`
-  display: flex;
-  align-items: center;
-  padding: ${({ theme }) => theme.spacing.medium};
-`;
+function renderInput(input) {
+  switch (input.type) {
+    case 'validated-text':
+      return <ValidatedTextInput key={input.name} {...input} />;
 
-const HeaderIcon = styled.div``;
+    case 'text':
+      return <TextInput key={input.name} {...input} />;
 
-const HeaderTitleContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  max-width: 100%;
-`;
+    case 'select':
+      return <SelectInput key={input.name} {...input} />;
 
-const HeaderTitle = styled.input.attrs(({ name, value, onChange }) => ({ type: 'text', name, value, onChange }))`
-  font-size: ${({ theme }) => theme.fonts.sizes.subtitle};
-  border: 2px solid ${({ error }) => (error ? 'red' : 'transparent')};
-  padding: 3px;
-  border-radius: 3px;
+    case 'tabular':
+      return <TabularInput key={input.name} {...input} />;
 
-  &:hover {
-    border: 2px solid ${({ theme, error }) => (error ? 'red' : theme.colors.backgrounds.light)};
+    default:
+      return <></>;
   }
-
-  &:focus {
-    box-shadow: 0px 0px 2px ${({ theme, error }) => (error ? 'red' : theme.colors.primary.main)};
-    border: 2px solid ${({ theme, error }) => (error ? 'red' : theme.colors.primary.main)} !important;
-    outline: none;
-  }
-`;
-
-const HeaderTitleCaption = styled.span`
-  font-size: 0.7em;
-  height: 0.7em;
-  margin-top: 2px;
-  color: ${({ error }) => (error ? 'red' : 'inherit')};
-`;
-
-const HeaderRightContent = styled.div`
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-`;
-
-const DetailsViewBody = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  align-items: stretch;
-`;
-
-const DetailsSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  width: 100%;
-`;
-const DetailsSectionTitle = styled.div`
-  padding: ${({ theme }) => theme.spacing.small}
-  background-color: ${({ theme }) => theme.colors.backgrounds.light};
-`;
-
-const DetailsSectionBody = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+}
 
 export default function DetailsView({ details, onRootKeyPress }) {
   return (
@@ -85,27 +42,9 @@ export default function DetailsView({ details, onRootKeyPress }) {
       <DetailsViewHeader>
         <HeaderIcon type={details.header.type} />
         <HeaderTitleContainer>
-          <HeaderTitle
-            name={details.header.title.name}
-            error={details.header.title.error}
-            value={details.header.title.value}
-            onChange={details.header.title.onChange}
-            placeholder={details.header.title.placeholder}
-          />
-          <HeaderTitleCaption error={details.header.title.error}>{details.header.title.caption}</HeaderTitleCaption>
+          <HeaderTitleInput borderless={true} {...details.header.title} />
         </HeaderTitleContainer>
-        <HeaderRightContent>
-          {details.header.inputs.map(input => (
-            <Input
-              key={input.name}
-              type={input.type}
-              name={input.name}
-              value={input.value}
-              onChange={input.onChange}
-              options={input.options}
-            />
-          ))}
-        </HeaderRightContent>
+        <HeaderRightContent>{details.header.inputs.map(renderInput)}</HeaderRightContent>
       </DetailsViewHeader>
       <DetailsViewBody>
         <FlexTabs>
@@ -144,25 +83,7 @@ export default function DetailsView({ details, onRootKeyPress }) {
                                     <InputLabelCol>
                                       <InputLabel htmlFor={input.name}>{input.label}</InputLabel>
                                     </InputLabelCol>
-                                    <InputCol>
-                                      {input.type === 'tabular' ? (
-                                        <TabularInput
-                                          columns={input.columns}
-                                          rows={input.rows}
-                                          onAddRow={input.onAddRow}
-                                          onRemoveRow={input.onRemoveRow}
-                                          onUpdateRow={input.onUpdateRow}
-                                        />
-                                      ) : (
-                                        <Input
-                                          type={input.type}
-                                          name={input.name}
-                                          value={input.value}
-                                          onChange={input.onChange}
-                                          options={input.options}
-                                        />
-                                      )}
-                                    </InputCol>
+                                    <InputCol>{renderInput(input)}</InputCol>
                                   </InputRow>
                                 ))}
                               </InputTableBody>

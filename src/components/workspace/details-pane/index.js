@@ -6,7 +6,7 @@ import useComputeDetails from './details/compute';
 import useStorageDetails from './details/storage';
 import useExternalEventDetails from './details/event-external';
 import useInternalEventDetails from './details/event-internal';
-import useConnectionDetails from './details/connection';
+import useReferenceDetails from './details/reference';
 import MustSelectPane from './none-selected';
 import { Compute, Storage, EventExternal, EventInternal, Trigger, Reference } from '~types';
 
@@ -25,9 +25,8 @@ function Current({ type }) {
       case EventInternal:
         return <Details details={useInternalEventDetails()} />;
 
-      case Trigger:
       case Reference:
-        return <Details details={useConnectionDetails()} />;
+        return <Details details={useReferenceDetails()} />;
 
       default:
         return <p>Unable to display details for selected type</p>;

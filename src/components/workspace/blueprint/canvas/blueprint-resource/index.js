@@ -40,6 +40,7 @@ function BlueprintResource({ resource, onRemove }) {
       y={resource.meta.y}
       onClick={onClick}
       onKeyPress={onKeyPress}
+      isValid={resource.validation.isValid}
     >
       <Resource type={resource.meta.type} width={60} height={60} />
     </View>

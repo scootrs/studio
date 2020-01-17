@@ -1,4 +1,6 @@
-export function useKeyValueDetailTabs({ config }, onChange) {
+export function useKeyValueDetailTabs(selected, updateSelectedConfiguration) {
+  const onChange = ev => updateSelectedConfiguration({ [ev.target.name]: ev.target.value });
+
   return [
     {
       title: 'Configuration',
@@ -10,21 +12,21 @@ export function useKeyValueDetailTabs({ config }, onChange) {
               type: 'text',
               label: 'Collection Name',
               name: 'collection',
-              value: config.collection,
+              value: selected.config.collection,
               onChange
             },
             {
               type: 'text',
               label: 'Primary Key Name',
               name: 'keyName',
-              value: config.keyName,
+              value: selected.config.keyName,
               onChange
             },
             {
               type: 'select',
               label: 'Primary Key Type',
               name: 'keyType',
-              value: config.keyType,
+              value: selected.config.keyType,
               onChange,
               options: [
                 {

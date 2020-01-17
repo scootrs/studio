@@ -1,4 +1,5 @@
 import { Reference } from '~types';
+import Joi from '@hapi/joi';
 
 export function createReferenceConnection(meta = {}) {
   return {
@@ -17,3 +18,14 @@ export function createReferenceConnection(meta = {}) {
     }
   };
 }
+
+const idSchema = Joi.string()
+  .alphanum()
+  .error(new Error('Reference ID must only contain alphanumeric characters'));
+
+export function validateId(val) {
+  const { error } = idSchema.validate(val);
+  if (error) return error.message;
+  return '';
+}
+

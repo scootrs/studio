@@ -1,8 +1,8 @@
 import React from 'react';
 import { useApplicationContext } from '~contexts/application';
-import RegionSelectView from './view';
+import { SelectInput } from '~styles/input/select';
 
-export default function RegionSelect() {
+export default function ProviderSelect() {
   const {
     state: { region },
     actions: { setRegion }
@@ -10,5 +10,16 @@ export default function RegionSelect() {
 
   const onChange = ev => setRegion(ev.target.value);
 
-  return <RegionSelectView value={region} onChange={onChange} />;
+  const options = [
+    {
+      name: 'Select a region',
+      value: ''
+    },
+    {
+      name: 'US West 2',
+      value: 'us-west-2'
+    }
+  ];
+
+  return <SelectInput value={region.value} onChange={onChange} options={options} />;
 }

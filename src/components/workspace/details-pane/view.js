@@ -7,6 +7,7 @@ const DetailsPaneRoot = styled.div`
   flex-direction: column;
   align-items: stretch;
   flex-grow: 1;
+  overflow: hidden;
 
   &:focus {
     outline: none;

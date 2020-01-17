@@ -1,29 +1,31 @@
 import { useWorkspaceContext } from '~contexts/workspace';
-import { validateName } from '../validation';
+import { validateId } from '~resources/event-internal';
 
 export default function useInternalEventDetails() {
   const {
-    state: {
-      selected: { meta, config, monitor }
-    },
+    state: { selected },
     actions: { updateSelectedConfiguration }
   } = useWorkspaceContext();
 
   const onChange = ev => updateSelectedConfiguration({ [ev.target.name]: ev.target.value });
 
-  const [error, caption] = validateName(config.id);
-
   return {
-    type: meta.type,
+    type: selected.meta.type,
     header: {
-      icon: meta.type,
+      icon: selected.meta.type,
       title: {
-        value: config.id,
-        placeholder: 'UnnamedInternalEvent',
+        id: selected.meta.id,
+        value: selected.config.id,
+        placeholder: 'InternalEventName',
         name: 'id',
-        onChange,
-        error,
-        caption
+        onChangeEnd: function(val, error) {
+          updateSelectedConfiguration({ id: val }, { id: error });
+        },
+        onValidate: function(val) {
+          return validateId(val);
+        },
+        seedIsValid: selected.validation.isValid,
+        seedCaption: selected.validation.fields.id
       },
       inputs: []
     },
@@ -33,12 +35,12 @@ export default function useInternalEventDetails() {
         sections: [
           {
             title: 'General',
-            inputs:[
+            inputs: [
               {
                 type: 'text',
                 label: 'Topic Name',
                 name: 'name',
-                value: config.name,
+                value: selected.config.name,
                 onChange
               }
             ]

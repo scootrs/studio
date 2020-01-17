@@ -1,7 +1,7 @@
 import React from 'react';
 import { useApplicationContext } from '~contexts/application';
 import { useWorkspaceContext } from '~contexts/workspace';
-import SaveButtonView from './view';
+import { Button } from '~styles/input/button';
 
 export default function SaveButton() {
   const appCtx = useApplicationContext();
@@ -12,5 +12,5 @@ export default function SaveButton() {
     workspaceCtx.save();
   };
 
-  return <SaveButtonView onSave={onSave} />;
+  return <Button onClick={onSave}>Save</Button>;
 }

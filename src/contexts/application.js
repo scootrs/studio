@@ -14,9 +14,18 @@ export function useApplicationContext() {
 }
 
 export function ApplicationContextProvider({ children }) {
-  const [provider, setProvider] = useState('');
-  const [name, setName] = useState('');
-  const [region, setRegion] = useState('');
+  const [provider, setProvider] = useState({
+    value: '',
+    error: ''
+  });
+  const [name, setName] = useState({
+    value: '',
+    error: ''
+  });
+  const [region, setRegion] = useState({
+    value: '',
+    error: ''
+  });
 
   const state = {
     provider,
@@ -25,17 +34,23 @@ export function ApplicationContextProvider({ children }) {
   };
 
   const actions = {
-    setProvider,
-    setName,
-    setRegion
+    setProvider: function(value, error = '') {
+      setProvider({ value, error });
+    },
+    setName: function(value, error = '') {
+      setName({ value, error });
+    },
+    setRegion: function(value, error = '') {
+      setRegion({ value, error });
+    }
   };
 
   const pack = function() {
     return {
       app: {
-        name,
-        provider,
-        region
+        name: name.value,
+        provider: provider.value,
+        region: region.value
       }
     };
   };

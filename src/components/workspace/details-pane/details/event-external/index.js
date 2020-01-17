@@ -1,5 +1,5 @@
 import { useWorkspaceContext } from '~contexts/workspace';
-import { validateName } from '../validation';
+import { validateId } from '~resources/event-external';
 import useHttpEventDetailTabs from './http';
 import { getDefaultsForType } from './defaults';
 
@@ -26,19 +26,23 @@ export default function useEventDetails() {
     });
   };
 
-  const [error, caption] = validateName(selected.config.id);
-
   return {
     type: selected.meta.type,
     header: {
       icon: selected.meta.type,
       title: {
-        value: selected.config.id,
-        placeholder: 'UnnamedExternalEvent',
+        id: selected.meta.id,
         name: 'id',
-        onChange,
-        error,
-        caption
+        value: selected.config.id,
+        placeholder: 'ExternalEventName',
+        onChangeEnd: function(val, error) {
+          updateSelectedConfiguration({ id: val }, { id: error });
+        },
+        onValidate: function(val) {
+          return validateId(val);
+        },
+        seedIsValid: selected.validation.isValid,
+        seedCaption: selected.validation.fields.id
       },
       inputs: [
         {

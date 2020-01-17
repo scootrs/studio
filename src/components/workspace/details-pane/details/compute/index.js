@@ -1,38 +1,40 @@
 import React from 'react';
 import { useWorkspaceContext } from '~contexts/workspace';
 import Code from './code';
-import { validateName } from '../validation';
+import { validateId } from '~resources/compute';
 
 export default function useComputeDetails() {
   const {
-    state: {
-      selected: { meta, config }
-    },
+    state: { selected },
     actions: { updateSelectedConfiguration }
   } = useWorkspaceContext();
 
-  const [error, caption] = validateName(config.id);
-
-  const onChange = ev => updateSelectedConfiguration({ [ev.target.name]: ev.target.value });
-
   return {
-    type: meta.type,
+    type: selected.meta.type,
     header: {
-      icon: meta.type,
+      icon: selected.meta.type,
       title: {
-        value: config.id,
+        id: selected.meta.id,
         name: 'id',
-        onChange,
-        error,
-        caption,
-        placeholder: 'UnnamedCompute'
+        value: selected.config.id,
+        placeholder: 'ComputeName',
+        onChangeEnd: function(val, error) {
+          updateSelectedConfiguration({ id: val }, { id: error });
+        },
+        onValidate: function(val) {
+          return validateId(val);
+        },
+        seedIsValid: selected.validation.isValid,
+        seedCaption: selected.validation.fields.id
       },
       inputs: [
         {
           type: 'select',
           name: 'runtime',
-          value: config.runtime,
-          onChange,
+          value: selected.config.runtime,
+          onChange: function(ev) {
+            updateSelectedConfiguration({ [ev.target.name]: ev.target.value });
+          },
           options: [
             {
               name: 'Please select a runtime',
@@ -75,7 +77,7 @@ export default function useComputeDetails() {
                     value: ''
                   }
                 ],
-                rows: config.environment,
+                rows: selected.config.environment,
                 onAddRow: function(row) {
                   updateSelectedConfiguration({ environment: [...config.environment, row] });
                 },

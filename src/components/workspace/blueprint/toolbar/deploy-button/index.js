@@ -1,9 +1,23 @@
 import React from 'react';
+import styled from 'styled-components';
 import axios from 'axios';
 import { useApplicationContext } from '~contexts/application';
 import { useWorkspaceContext } from '~contexts/workspace';
 import { useStatusContext } from '~contexts/status';
-import DeployButtonView from './view';
+import { Button } from '~styles/input/button';
+
+const StyledDeployButton = styled(Button)`
+  font-weight: bold;
+  color: ${({ theme }) => theme.colors.fonts.light};
+  border-color: ${({ theme }) => theme.colors.primary.main}
+  background-color: ${({ theme }) => theme.colors.primary.main};
+  padding: 3px 8px;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.primary.light};
+    border-color: ${({ theme }) => theme.colors.primary.light};
+  }
+`;
 
 export default function DeployButton() {
   const {
@@ -21,9 +35,14 @@ export default function DeployButton() {
     };
     console.log(pkg);
     setWaiting(true, 'Deploying configuration');
-    const result = await axios.post('http://localhost:3030/api/v0/deploy', pkg, { withCredentials: true });
-    console.log(result);
+    try {
+      const result = await axios.post('http://localhost:3030/api/v0/deploy', pkg, { withCredentials: true });
+      console.log(result);
+    } catch (err) {
+      console.error(err);
+      setWaiting(false, 'Failed to deploy configuration: ' + err.message);
+    }
   };
 
-  return <DeployButtonView onDeploy={onDeploy} />;
+  return <StyledDeployButton onClick={onDeploy}>Deploy</StyledDeployButton>;
 }

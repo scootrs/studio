@@ -1,29 +1,29 @@
 import { useWorkspaceContext } from '~contexts/workspace';
-import { validateName } from '../validation';
+import { validateId } from '~connections/reference';
 
 export default function useConnectionDetails() {
   const {
-    state: {
-      selected: { meta, config }
-    },
+    state: { selected },
     actions: { updateSelectedConfiguration }
   } = useWorkspaceContext();
 
-  const onChange = ev => updateSelectedConfiguration({ [ev.target.name]: ev.target.value });
-
-  const [error, caption] = validateName(config.id);
-
   return {
-    type: meta.type,
+    type: selected.meta.type,
     header: {
-      icon: meta.type,
+      icon: selected.meta.type,
       title: {
-        value: config.id,
-        placeholder: 'UnnamedConnection',
+        id: selected.meta.id,
         name: 'id',
-        onChange,
-        error,
-        caption
+        value: selected.config.id,
+        placeholder: 'ReferenceName',
+        onChangeEnd: function(val, error) {
+          updateSelectedConfiguration({ id: val }, { id: error });
+        },
+        onValidate: function(val) {
+          return validateId(val);
+        },
+        seedIsValid: selected.validation.isValid,
+        seedCaption: selected.validation.fields.id
       },
       inputs: []
     },
@@ -38,8 +38,10 @@ export default function useConnectionDetails() {
                 type: 'select',
                 label: 'Allowed Actions',
                 name: 'allows',
-                value: config.allows,
-                onChange,
+                value: selected.config.allows,
+                onChange: function(ev) {
+                  updateSelectedConfiguration({ allows: ev.target.value });
+                },
                 options: [
                   {
                     name: 'Please select an action',

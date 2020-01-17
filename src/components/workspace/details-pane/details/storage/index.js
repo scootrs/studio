@@ -1,7 +1,7 @@
 import { useWorkspaceContext } from '~contexts/workspace';
-import { validateName } from '../validation';
 import { getDefaultsForType } from './defaults';
 import { useKeyValueDetailTabs } from './key-value';
+import { validateId } from '~resources/storage';
 
 export default function useStorageDetails() {
   const {
@@ -9,47 +9,35 @@ export default function useStorageDetails() {
     actions: { updateSelectedConfiguration }
   } = useWorkspaceContext();
 
-  const { meta, config } = selected;
-
-  const onChange = ev => updateSelectedConfiguration({ [ev.target.name]: ev.target.value });
-
-  /**
-   * Updates the default configuration for the storage resource based on the type.
-   *
-   * We have to do this to prevent React from warning us about uncontrolled vs. controlled elements.
-   *
-   * @param {Event} ev The change event on the input element.
-   */
-  const onTypeChange = function(ev) {
-    let defaults = getDefaultsForType(ev.target.value);
-    updateSelectedConfiguration({
-      [ev.target.name]: ev.target.value,
-      ...defaults
-    });
-  };
-
-  const [error, caption] = validateName(config.id);
-
-  
-
   return {
-    type: meta.type,
+    type: selected.meta.type,
     header: {
-      icon: meta.type,
+      icon: selected.meta.type,
       title: {
-        value: config.id,
-        placeholder: 'UnnamedStorage',
         name: 'id',
-        onChange,
-        error,
-        caption
+        value: selected.config.id,
+        placeholder: 'UnnamedStorage',
+        onChangeEnd: function(val, error) {
+          updateSelectedConfiguration({ id: val }, { id: error });
+        },
+        onValidate: function(val) {
+          return validateId(val);
+        },
+        seedIsValid: selected.validation.isValid,
+        seedCaption: selected.validation.fields.id
       },
       inputs: [
         {
           type: 'select',
           name: 'type',
           value: selected.config.type,
-          onChange: onTypeChange,
+          onChange: function(ev) {
+            let defaults = getDefaultsForType(ev.target.value);
+            updateSelectedConfiguration({
+              [ev.target.name]: ev.target.value,
+              ...defaults
+            });
+          },
           options: [
             {
               name: 'Please select a storage type',
@@ -63,14 +51,14 @@ export default function useStorageDetails() {
         }
       ]
     },
-    tabs: getTabsForType(selected, onChange)
+    tabs: getTabsForType(selected, updateSelectedConfiguration)
   };
 }
 
-function getTabsForType(selected, onChange) {
+function getTabsForType(selected, updateSelectedConfiguration) {
   switch (selected.config.type) {
     case 'keyval':
-      return useKeyValueDetailTabs(selected, onChange);
+      return useKeyValueDetailTabs(selected, updateSelectedConfiguration);
 
     default:
       return [];
