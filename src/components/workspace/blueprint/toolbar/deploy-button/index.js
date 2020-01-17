@@ -29,9 +29,17 @@ export default function DeployButton() {
   const workspaceCtx = useWorkspaceContext();
 
   const onDeploy = async () => {
+    const appPackResult = appCtx.pack();
+    const workspacePackResult = workspaceCtx.pack();
+    if (appPackResult.error) {
+      return setWaiting(false, appPackResult.error);
+    }
+    if (workspacePackResult.error) {
+      return setWaiting(false, workspacePackResult.error);
+    }
     const pkg = {
-      ...appCtx.pack(),
-      ...workspaceCtx.pack()
+      ...appPackResult.package,
+      ...workspacePackResult.package
     };
     console.log(pkg);
     setWaiting(true, 'Deploying configuration');

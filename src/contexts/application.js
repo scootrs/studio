@@ -46,13 +46,27 @@ export function ApplicationContextProvider({ children }) {
   };
 
   const pack = function() {
-    return {
-      app: {
-        name: name.value,
-        provider: provider.value,
-        region: region.value
-      }
-    };
+    const pkg = {};
+
+    if (!name.error) {
+      pkg.name = name.value;
+    } else {
+      return { package: null, error: name.error };
+    }
+
+    if (!provider.error) {
+      pkg.provider = provider.value;
+    } else {
+      return { package: null, error: provider.error };
+    }
+
+    if (!region.error) {
+      pkg.region = region.value;
+    } else {
+      return { package: null, error: region.error };
+    }
+
+    return { package: pkg, error: null };
   };
 
   const save = function() {

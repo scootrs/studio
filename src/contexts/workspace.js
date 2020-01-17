@@ -92,7 +92,11 @@ export function WorkspaceContextProvider({ children }) {
     };
 
     // Pack the resources according to their types
-    Object.values(state.resources).forEach(function(resource) {
+    for (let resource of Object.values(state.resources)) {
+      // If we encounter invalid configuration, stop packing and return early
+      if (!resource.validation.isValid) {
+        return { package: null, error: 'Resource configuration is not valid' };
+      }
       switch (resource.meta.type) {
         case Compute:
           pkg.compute.push(resource.config);
@@ -117,10 +121,14 @@ export function WorkspaceContextProvider({ children }) {
               '" was encountered during packing. This indicates state corruption occurring elsewhere in the context.'
           );
       }
-    });
+    }
 
     // Pack the connections according to their types
-    Object.values(state.connections).forEach(function(connection) {
+    for (let connection of Object.values(state.connections)) {
+      // If we encounter invalid configuration, stop packing and return early
+      if (!connection.validation.isValid) {
+        return { package: null, error: 'Connection configuration is not valid' };
+      }
       switch (connection.meta.type) {
         case Trigger:
           pkg.triggers.push({
@@ -146,9 +154,9 @@ export function WorkspaceContextProvider({ children }) {
               '" was encountered during packing. This indicates state corruption occurring elsewhere in the context.'
           );
       }
-    });
+    }
 
-    return pkg;
+    return { package: pkg, error: null };
   };
 
   const serialize = function(state) {
@@ -188,15 +196,11 @@ export function WorkspaceContextProvider({ children }) {
     const serial = JSON.parse(serialized);
     const connections = serial.connections.reduce(function(acc, curr) {
       curr.meta.type = deserializeType(curr.meta.type);
-      if (!curr.validation) curr.validation = {};
-      if (!curr.validation.fields) curr.validation.fields = {};
       acc[curr.meta.id] = curr;
       return acc;
     }, {});
     const resources = serial.resources.reduce(function(acc, curr) {
       curr.meta.type = deserializeType(curr.meta.type);
-      if (!curr.validation) curr.validation = {};
-      if (!curr.validation.fields) curr.validation.fields = {};
       acc[curr.meta.id] = curr;
       return acc;
     }, {});
