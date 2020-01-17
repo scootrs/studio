@@ -6,7 +6,7 @@
     "paths": {
       "~components/*": ["src/components/*"],
       "~hooks/*": ["src/hooks/*"],
-      "~styles/*": ["src/styles"],
+      "~styles/*": ["src/styles/*"],
       "~templates/*": ["src/templates/*"],
       "~contexts/*": ["src/contexts/*"],
       "~resources/*": ["src/resources/*"],
