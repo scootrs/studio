@@ -8,7 +8,8 @@ const ViewRoot = styled.footer`
   padding: 0.3em;
   background-color: ${({ theme }) => theme.colors.backgrounds.dark};
   flex-shrink: 1;
-  color: ${({ theme }) => theme.colors.fonts.light};
+  color: ${({ theme }) => theme.colors.fonts.inverse};
+  font-family: ${({ theme }) => theme.fonts.main};
 `;
 
 const StatusContainer = styled.div`

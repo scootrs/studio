@@ -9,7 +9,7 @@ const TooltipText = styled.div`
   position: absolute;
   visibility: ${({ showing }) => (showing ? 'visible' : 'hidden')};
   background-color: ${({ theme }) => theme.colors.backgrounds.dark};
-  color: ${({ theme }) => theme.colors.fonts.light};
+  color: ${({ theme }) => theme.colors.fonts.inverse};
   text-align: center;
   padding: 5px;
   border-radius: 3px;

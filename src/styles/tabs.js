@@ -16,7 +16,7 @@ const FlexTabTitle = styled.div`
   cursor: pointer;
   display: inline-block;
   padding: 10px;
-  background-color: ${({ theme, selected }) => (selected ? theme.colors.backgrounds.light : '')};
+  background-color: ${({ theme, selected }) => (selected ? theme.colors.backgrounds.light : 'inherit')};
 `;
 
 const FlexTabPanelContainer = styled.div`

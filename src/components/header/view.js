@@ -9,7 +9,7 @@ const Header = styled.header`
   align-items: center;
   justify-content: flex-start;
   background-color: ${({ theme }) => theme.colors.primary.main};
-  color: ${({ theme }) => theme.colors.fonts.light};
+  color: ${({ theme }) => theme.colors.fonts.inverse};
   padding: 0px 10px;
 `;
 

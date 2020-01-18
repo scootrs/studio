@@ -11,7 +11,6 @@ root.style.alignItems = 'stretch';
 root.style.justifyContent = 'flex-start';
 root.style.height = '100%';
 root.style.width = '100%';
-root.style.fontFamily = theme.fonts.main;
 document.body.appendChild(root);
 
 render(
