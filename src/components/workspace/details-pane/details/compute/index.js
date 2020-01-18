@@ -44,6 +44,10 @@ export default function useComputeDetails() {
             {
               name: 'Node.js | 12.x',
               value: 'nodejs12.x'
+            },
+            {
+              name: 'Python | 3.8',
+              value: 'python3.8'
             }
           ],
           isValid: selected.validation.fields.runtime === '',
