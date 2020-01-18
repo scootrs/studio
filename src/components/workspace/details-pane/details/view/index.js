@@ -9,6 +9,7 @@ import { ValidatedTextInput } from '~styles/input/text-validated';
 import { SelectInput } from '~styles/input/select';
 import { TextInput } from '~styles/input/text';
 import { InputTable, InputTableBody, InputRow, InputLabelCol, InputCol } from './input-table';
+import { ValidatedSelectInput } from '~styles/input/select-validated';
 
 const DetailsViewRoot = styled.div`
   display: flex;
@@ -24,6 +25,9 @@ function renderInput(input) {
 
     case 'text':
       return <TextInput key={input.name} {...input} />;
+
+    case 'validated-select':
+      return <ValidatedSelectInput key={input.name} {...input} />;
 
     case 'select':
       return <SelectInput key={input.name} {...input} />;

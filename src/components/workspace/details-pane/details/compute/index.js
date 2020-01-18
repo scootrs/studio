@@ -1,7 +1,7 @@
 import React from 'react';
 import { useWorkspaceContext } from '~contexts/workspace';
 import Code from './code';
-import { validateId } from '~resources/compute';
+import { validateId, validateRuntime } from '~resources/compute';
 
 export default function useComputeDetails() {
   const {
@@ -24,16 +24,17 @@ export default function useComputeDetails() {
         onValidate: function(val) {
           return validateId(val);
         },
-        seedIsValid: selected.validation.isValid,
+        seedIsValid: selected.validation.fields.id === '',
         seedCaption: selected.validation.fields.id
       },
       inputs: [
         {
-          type: 'select',
+          type: 'validated-select',
           name: 'runtime',
           value: selected.config.runtime,
           onChange: function(ev) {
-            updateSelectedConfiguration({ [ev.target.name]: ev.target.value });
+            const error = validateRuntime(ev.target.value);
+            updateSelectedConfiguration({ runtime: ev.target.value }, { runtime: error });
           },
           options: [
             {
@@ -44,7 +45,9 @@ export default function useComputeDetails() {
               name: 'Node.js | 12.x',
               value: 'nodejs12.x'
             }
-          ]
+          ],
+          isValid: selected.validation.fields.runtime === '',
+          caption: selected.validation.fields.runtime
         }
       ]
     },

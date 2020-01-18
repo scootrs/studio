@@ -28,7 +28,7 @@ export function createComputeResource(x, y) {
       isValid: false,
       fields: {
         id: 'Resource ID is required',
-        runtime: '',
+        runtime: 'Runtime is required',
         vcs: '',
         code: '',
         environment: '',
@@ -41,9 +41,17 @@ export function createComputeResource(x, y) {
 const idSchema = Joi.string()
   .alphanum()
   .error(new Error('ID must only contain alphanumeric characters'));
+
 export function validateId(id) {
   if (id === '') return 'Resource ID is required';
   const { error } = idSchema.validate(id);
   if (error) return error.message;
+  return '';
+}
+
+export function validateRuntime(runtime) {
+  if (runtime === '') {
+    return 'Runtime is required';
+  }
   return '';
 }

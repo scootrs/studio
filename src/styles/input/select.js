@@ -34,9 +34,9 @@ const Option = styled.option.attrs(({ value }) => ({
   value
 }))``;
 
-export function SelectInput({ id, name, value, options, onChange }) {
+export function SelectInput({ id, name, value, options, onChange, isValid }) {
   return (
-    <Select id={id} name={name} value={value} onChange={onChange}>
+    <Select id={id} name={name} value={value} onChange={onChange} isValid={isValid}>
       {options.map(option => (
         <Option key={option.name} value={option.value}>
           {option.name}

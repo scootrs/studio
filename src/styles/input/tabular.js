@@ -1,7 +1,9 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
+import { ValidatedTextInput } from './text-validated';
 import { TextInput } from './text';
 import { SelectInput } from './select';
+import { ValidatedSelectInput } from './select-validated';
 
 const TabularInputTable = styled.table``;
 
@@ -29,6 +31,25 @@ const TabularInputTableCell = styled.td`
 const TabularInputTableFoot = styled.tfoot``;
 
 const TabularCellButton = styled.button``;
+
+function renderInput(input) {
+  switch (input.type) {
+    case 'validated-text':
+      return <ValidatedTextInput key={input.name} {...input} />;
+
+    case 'text':
+      return <TextInput key={input.name} {...input} />;
+
+    case 'validated-select':
+      return <ValidatedSelectInput key={input.name} {...input} />;
+
+    case 'select':
+      return <SelectInput key={input.name} {...input} />;
+
+    default:
+      return <></>;
+  }
+}
 
 export function TabularInput({ columns, rows, onAddRow, onRemoveRow, onUpdateRow }) {
   const ref = useRef();
@@ -73,19 +94,6 @@ export function TabularInput({ columns, rows, onAddRow, onRemoveRow, onUpdateRow
       onUpdateRow(i, row);
     };
   };
-
-  function renderInput(input) {
-    switch (input.type) {
-      case 'text':
-        return <TextInput key={input.name} {...input} />;
-
-      case 'select':
-        return <SelectInput key={input.name} {...input} />;
-
-      default:
-        return <></>;
-    }
-  }
 
   return (
     <TabularInputTable>
