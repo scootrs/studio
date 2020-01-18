@@ -21,13 +21,27 @@ const Container = styled.div`
   }
 `;
 
+const StyledResource = styled(Resource)`
+  &:hover {
+    cursor: move;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:active {
+    cursor: move;
+  }
+`;
+
 function UtilityBar() {
   return (
     <View>
       {types.map(({ type, title }) => (
         <Container key={title}>
           <Tooltip title={title} position="right">
-            <Resource type={type} draggable={true} />
+            <StyledResource type={type} draggable={true} />
           </Tooltip>
         </Container>
       ))}
