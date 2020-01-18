@@ -1,7 +1,7 @@
 import { useWorkspaceContext } from '~contexts/workspace';
 import { getDefaultsForType } from './defaults';
 import { useKeyValueDetailTabs } from './key-value';
-import { validateId } from '~resources/storage';
+import { validateId, validateType } from '~resources/storage';
 
 export default function useStorageDetails() {
   const {
@@ -23,20 +23,24 @@ export default function useStorageDetails() {
         onValidate: function(val) {
           return validateId(val);
         },
-        seedIsValid: selected.validation.isValid,
+        seedIsValid: selected.validation.fields.id === '',
         seedCaption: selected.validation.fields.id
       },
       inputs: [
         {
-          type: 'select',
+          type: 'validated-select',
           name: 'type',
           value: selected.config.type,
           onChange: function(ev) {
-            let defaults = getDefaultsForType(ev.target.value);
-            updateSelectedConfiguration({
-              [ev.target.name]: ev.target.value,
-              ...defaults
-            });
+            const newValue = ev.target.value;
+            let defaults = getDefaultsForType(newValue);
+            updateSelectedConfiguration(
+              {
+                type: newValue,
+                ...defaults
+              },
+              { type: validateType(newValue) }
+            );
           },
           options: [
             {
@@ -47,7 +51,9 @@ export default function useStorageDetails() {
               name: 'Key-Value',
               value: 'keyval'
             }
-          ]
+          ],
+          isValid: selected.validation.fields.type === '',
+          caption: selected.validation.fields.type
         }
       ]
     },

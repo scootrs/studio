@@ -20,7 +20,8 @@ export function createStorageResource(x, y) {
     validation: {
       isValid: false,
       fields: {
-        id: 'Resource ID must only contain alphanumeric characters'
+        id: 'Resource ID must only contain alphanumeric characters',
+        type: 'Type is required'
       }
     }
   };
@@ -33,5 +34,10 @@ const idSchema = Joi.string()
 export function validateId(val) {
   const { error } = idSchema.validate(val);
   if (error) return error.message;
+  return '';
+}
+
+export function validateType(val) {
+  if (val === '') return 'Type is required';
   return '';
 }
