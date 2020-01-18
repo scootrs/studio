@@ -7,8 +7,8 @@ import useStorageDetails from './details/storage';
 import useExternalEventDetails from './details/event-external';
 import useInternalEventDetails from './details/event-internal';
 import useReferenceDetails from './details/reference';
-import MustSelectPane from './none-selected';
-import { Compute, Storage, EventExternal, EventInternal, Trigger, Reference } from '~types';
+import WelcomePane from './welcome';
+import { Compute, Storage, EventExternal, EventInternal, Reference } from '~types';
 
 function Current({ type }) {
   if (type) {
@@ -32,7 +32,7 @@ function Current({ type }) {
         return <p>Unable to display details for selected type</p>;
     }
   } else {
-    return <MustSelectPane />;
+    return <WelcomePane />;
   }
 }
 
