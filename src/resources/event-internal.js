@@ -22,7 +22,8 @@ export function createInternalEventResource(x, y, config) {
     validation: {
       isValid: false,
       fields: {
-        id: 'Resource ID must only contain alphanumeric characters'
+        id: 'Resource ID must only contain alphanumeric characters',
+        name: 'Topic name is required'
       }
     }
   };
@@ -34,6 +35,17 @@ const idSchema = Joi.string()
 
 export function validateId(val) {
   const { error } = idSchema.validate(val);
+  if (error) return error.message;
+  return '';
+}
+
+const topicNameSchema = Joi.string()
+  .regex(/^[a-zA-Z0-9\-_]+$/m)
+  .error(new Error('Topic name must only included alphanumeric characters, dashes, and underscores'));
+
+export function validateTopicName(name) {
+  if (name === '') return 'Topic name is required';
+  const { error } = topicNameSchema.validate(name);
   if (error) return error.message;
   return '';
 }
