@@ -6,9 +6,9 @@ import Resource from '~components/resources';
 import { Compute, Storage, EventInternal, EventExternal } from '~types';
 
 const types = [
+  { type: EventExternal, title: 'External Event' },
   { type: Compute, title: 'Compute' },
   { type: Storage, title: 'Storage' },
-  { type: EventExternal, title: 'External Event' },
   { type: EventInternal, title: 'Internal Event' }
 ];
 
