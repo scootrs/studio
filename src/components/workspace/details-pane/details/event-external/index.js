@@ -1,15 +1,12 @@
 import { useWorkspaceContext } from '~contexts/workspace';
 import { validateId, validateType } from '~resources/event-external';
-import useHttpEventDetailTabs from './http';
-import { getDefaultsForType } from './defaults';
+import { useHttpEventDetailTabs, defaults as httpDefaults } from './http';
 
 export default function useEventDetails() {
   const {
     state: { selected },
     actions: { updateSelectedConfiguration }
   } = useWorkspaceContext();
-
-  const onChange = ev => updateSelectedConfiguration({ [ev.target.name]: ev.target.value });
 
   /**
    * Updates the default configuration for the external event based on the type.
@@ -20,13 +17,23 @@ export default function useEventDetails() {
    */
   const onTypeChange = function(ev) {
     const newValue = ev.target.value;
-    let defaults = getDefaultsForType(newValue);
+    let defaults = { config: {}, validation: {} };
+    switch (newValue) {
+      case 'http':
+        defaults = httpDefaults;
+
+      case '':
+        break;
+
+      default:
+        throw new Error('Failed to get defaults for the external event: The type ' + type + ' is invalid');
+    }
     updateSelectedConfiguration(
       {
         type: newValue,
-        ...defaults
+        ...defaults.config
       },
-      { type: validateType(newValue) }
+      { type: validateType(newValue), ...defaults.validation }
     );
   };
 
@@ -69,14 +76,14 @@ export default function useEventDetails() {
         }
       ]
     },
-    tabs: getTabsForType(selected, onChange)
+    tabs: getTabsForType(selected, updateSelectedConfiguration)
   };
 }
 
-function getTabsForType(selected, onChange) {
+function getTabsForType(selected, updateSelectedConfiguration) {
   switch (selected.config.type) {
     case 'http':
-      return useHttpEventDetailTabs(selected, onChange);
+      return useHttpEventDetailTabs(selected, updateSelectedConfiguration);
 
     default:
       return [];
