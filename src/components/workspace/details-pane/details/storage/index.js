@@ -1,6 +1,5 @@
 import { useWorkspaceContext } from '~contexts/workspace';
-import { getDefaultsForType } from './defaults';
-import { useKeyValueDetailTabs } from './key-value';
+import { useKeyValueDetailTabs, defaults as keyValueDefaults } from './key-value';
 import { validateId, validateType } from '~resources/storage';
 
 export default function useStorageDetails() {
@@ -33,13 +32,23 @@ export default function useStorageDetails() {
           value: selected.config.type,
           onChange: function(ev) {
             const newValue = ev.target.value;
-            let defaults = getDefaultsForType(newValue);
+            let defaults = null;
+            switch (newValue) {
+              case 'keyval':
+                defaults = keyValueDefaults;
+
+              case '':
+                break;
+
+              default:
+                throw new Error('Failed to get default storage configuration: The type ' + type + ' is invalid');
+            }
             updateSelectedConfiguration(
               {
                 type: newValue,
-                ...defaults
+                ...defaults.config
               },
-              { type: validateType(newValue) }
+              { type: validateType(newValue), ...defaults.validation }
             );
           },
           options: [
