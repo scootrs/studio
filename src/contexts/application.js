@@ -14,17 +14,17 @@ export function useApplicationContext() {
 }
 
 export function ApplicationContextProvider({ children }) {
-  const [provider, setProvider] = useState({
-    value: '',
-    error: ''
-  });
   const [name, setName] = useState({
     value: '',
-    error: ''
+    error: 'App name is required'
+  });
+  const [provider, setProvider] = useState({
+    value: '',
+    error: 'Provider is required'
   });
   const [region, setRegion] = useState({
     value: '',
-    error: ''
+    error: 'Region is required'
   });
 
   const state = {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useApplicationContext } from '~contexts/application';
-import { SelectInput } from '~styles/input/select';
+import { ValidatedSelectInput } from '~styles/input/select-validated';
 
 export default function ProviderSelect() {
   const {
@@ -8,7 +8,14 @@ export default function ProviderSelect() {
     actions: { setProvider }
   } = useApplicationContext();
 
-  const onChange = ev => setProvider(ev.target.value);
+  const onChange = ev => {
+    const val = ev.target.value;
+    let error = '';
+    if (val === '') {
+      error = 'Provider is required';
+    }
+    setProvider(val, error);
+  };
 
   const options = [
     {
@@ -21,5 +28,13 @@ export default function ProviderSelect() {
     }
   ];
 
-  return <SelectInput value={provider.value} onChange={onChange} options={options} />;
+  return (
+    <ValidatedSelectInput
+      value={provider.value}
+      onChange={onChange}
+      options={options}
+      isValid={provider.error === ''}
+      caption={provider.error}
+    />
+  );
 }
