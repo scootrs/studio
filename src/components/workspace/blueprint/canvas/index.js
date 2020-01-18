@@ -69,7 +69,7 @@ export default function BlueprintCanvas() {
     },
 
     onDisconnect: function(conn) {
-      if (selected.meta.id === conn.id) {
+      if (selected && selected.meta.id === conn.id) {
         unhighlightSelected();
       }
       removeConnection(conn.id);
