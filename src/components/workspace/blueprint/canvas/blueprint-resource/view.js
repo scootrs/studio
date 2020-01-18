@@ -51,7 +51,16 @@ const InvalidAlert = styled(ExclamationTriangleSolidSvg)`
 
 function BlueprintResourceView({ id, name, selected, x, y, onClick, children, onKeyPress, isValid }, ref) {
   return (
-    <View ref={ref} id={id} tabIndex={-1} selected={selected} x={x} y={y} onClick={onClick} onKeyPress={onKeyPress}>
+    <View
+      ref={ref}
+      id={id}
+      tabIndex={-1}
+      selected={selected}
+      x={x}
+      y={y}
+      onClick={onClick}
+      onKeyPress={onKeyPress}
+    >
       <InnerContaier>
         <TitleSpan>{name}</TitleSpan>
         {isValid ? '' : <IconSpan>{!isValid ? <InvalidAlert width={20} height={20} /> : ''}</IconSpan>}

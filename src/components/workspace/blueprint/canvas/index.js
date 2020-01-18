@@ -50,6 +50,8 @@ export default function BlueprintCanvas() {
     else return Reference;
   };
 
+  const newConnectionRef = useRef(false);
+
   const [ref, plumb] = usePlumbContainer({
     // Prevent events from trickeling up the DOM and potentially causing side effects
     stopEvents: true,
@@ -66,6 +68,11 @@ export default function BlueprintCanvas() {
       }
       let newConnection = createConnectionWithType(type, conn);
       addConnection(newConnection, shouldSelect);
+      newConnectionRef.current = true;
+      // HACK: trying to get new connections to not trigger a blueprint on click event
+      setTimeout(function() {
+        newConnectionRef.current = false;
+      }, 1000);
     },
 
     onDisconnect: function(conn) {
@@ -114,6 +121,10 @@ export default function BlueprintCanvas() {
   const onBlueprintClick = function(ev) {
     ev.preventDefault();
     ev.stopPropagation();
+    if (newConnectionRef.current === true) {
+      newConnectionRef.current = false;
+      return;
+    }
     if (ev.didSetSelected) {
       unhighlightSelected();
     } else {
