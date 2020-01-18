@@ -1,7 +1,7 @@
 import { useWorkspaceContext } from '~contexts/workspace';
 import { validateId } from '~connections/reference';
 
-export default function useConnectionDetails() {
+export default function useReferenceDetails() {
   const {
     state: { selected },
     actions: { updateSelectedConfiguration }

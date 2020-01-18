@@ -15,6 +15,12 @@ export function createReferenceConnection(meta = {}) {
       // We don't immediately grab the source and target. We will grab it when we pack the configuration to send
       // to the deployment server. This helps us avoid state inconsitencies and complext update logic when resources
       // are updated after connections have been made.
+    },
+    validation: {
+      isValid: false,
+      fields: {
+        id: 'Reference ID is required'
+      }
     }
   };
 }
@@ -24,8 +30,8 @@ const idSchema = Joi.string()
   .error(new Error('Reference ID must only contain alphanumeric characters'));
 
 export function validateId(val) {
+  if (val === '') return 'Reference ID is required';
   const { error } = idSchema.validate(val);
   if (error) return error.message;
   return '';
 }
-
