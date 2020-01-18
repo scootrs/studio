@@ -1,5 +1,5 @@
 import { useWorkspaceContext } from '~contexts/workspace';
-import { validateId } from '~resources/event-external';
+import { validateId, validateType } from '~resources/event-external';
 import useHttpEventDetailTabs from './http';
 import { getDefaultsForType } from './defaults';
 
@@ -19,11 +19,15 @@ export default function useEventDetails() {
    * @param {Event} ev The change event on the input element.
    */
   const onTypeChange = function(ev) {
-    let defaults = getDefaultsForType(ev.target.value);
-    updateSelectedConfiguration({
-      [ev.target.name]: ev.target.value,
-      ...defaults
-    });
+    const newValue = ev.target.value;
+    let defaults = getDefaultsForType(newValue);
+    updateSelectedConfiguration(
+      {
+        type: newValue,
+        ...defaults
+      },
+      { type: validateType(newValue) }
+    );
   };
 
   return {
@@ -41,12 +45,12 @@ export default function useEventDetails() {
         onValidate: function(val) {
           return validateId(val);
         },
-        seedIsValid: selected.validation.isValid,
+        seedIsValid: selected.validation.fields.id === '',
         seedCaption: selected.validation.fields.id
       },
       inputs: [
         {
-          type: 'select',
+          type: 'validated-select',
           name: 'type',
           value: selected.config.type,
           onChange: onTypeChange,
@@ -59,7 +63,9 @@ export default function useEventDetails() {
               name: 'HTTP',
               value: 'http'
             }
-          ]
+          ],
+          isValid: selected.validation.fields.type === '',
+          caption: selected.validation.fields.type
         }
       ]
     },

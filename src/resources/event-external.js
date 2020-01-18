@@ -20,7 +20,8 @@ export function createExternalEventResource(x, y) {
     validation: {
       isValid: false,
       fields: {
-        id: 'Resource ID must only contain alphanumeric characters'
+        id: 'Resource ID must only contain alphanumeric characters',
+        type: 'Type is required'
       }
     },
     deployment: {
@@ -37,5 +38,26 @@ const idSchema = Joi.string()
 export function validateId(val) {
   const { error } = idSchema.validate(val);
   if (error) return error.message;
+  return '';
+}
+
+export function validateType(val) {
+  if (val === '') {
+    return 'Type is required';
+  }
+  return '';
+}
+
+export function validateUrl(val) {
+  if (val === '') {
+    return 'URL is required';
+  }
+  return '';
+}
+
+export function validateMethod(method) {
+  if (method === '') {
+    return 'Method is required';
+  }
   return '';
 }
