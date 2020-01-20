@@ -22,7 +22,7 @@ export default function useReferenceDetails() {
         onValidate: function(val) {
           return validateId(val);
         },
-        seedIsValid: selected.validation.isValid,
+        seedIsValid: selected.validation.fields.id === '',
         seedCaption: selected.validation.fields.id
       },
       inputs: []
