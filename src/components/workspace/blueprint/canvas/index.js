@@ -1,16 +1,17 @@
 import React, { useRef } from 'react';
+import { withTheme } from 'styled-components';
 import usePlumbContainer from 'react-plumb';
 import useDrop from '~hooks/useDrop';
 import { useWorkspaceContext } from '~contexts/workspace';
-import theme from '~styles/theme';
 import { createResourceWithType } from '~resources/';
 import { EventInternal, EventExternal, Trigger, Reference } from '~types';
 import { createConnectionWithType } from '~connections/';
 import UtilityBar from './utility-bar';
 import BlueprintCanvasView from './view';
 import BlueprintResource from './blueprint-resource';
+import Label from './label';
 
-export default function BlueprintCanvas() {
+function BlueprintCanvas({ theme }) {
   const {
     state: { selected, resources, connections },
     actions: { addResource, updateResourcePosition, removeResource, setSelected, addConnection, removeConnection }
@@ -98,6 +99,16 @@ export default function BlueprintCanvas() {
       updateResourcePosition(id, x, y);
     },
 
+    createLabel: function(id) {
+      let content = '';
+      let isValid = false;
+      if (connections[id]) {
+        content = connections[id].meta.label;
+        isValid = connections[id].validation.isValid;
+      }
+      return <Label content={content} isValid={isValid} theme={theme} />;
+    },
+
     // Specified the property path to the jsPlumb information for our connections
     connectionPropPath: 'meta',
 
@@ -160,3 +171,5 @@ export default function BlueprintCanvas() {
     </BlueprintCanvasView>
   );
 }
+
+export default withTheme(BlueprintCanvas);
