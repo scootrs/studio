@@ -53,10 +53,6 @@ function mergeConnectionWithPreviousState(prev, id, config, validationFields = {
     ...prev.connections,
     [id]: {
       ...prev.connections[id],
-      meta: {
-        ...prev.connections[id].meta,
-        label: config.id || prev.connections[id].meta.label
-      },
       config: {
         ...prev.connections[id].config,
         ...config

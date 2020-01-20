@@ -103,7 +103,7 @@ function BlueprintCanvas({ theme }) {
       let content = '';
       let isValid = false;
       if (connections[id]) {
-        content = connections[id].meta.label;
+        content = connections[id].config.id;
         isValid = connections[id].validation.isValid;
       }
       return <Label content={content} isValid={isValid} theme={theme} />;
