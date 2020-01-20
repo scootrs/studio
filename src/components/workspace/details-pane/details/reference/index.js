@@ -1,5 +1,5 @@
 import { useWorkspaceContext } from '~contexts/workspace';
-import { validateId } from '~connections/reference';
+import { validateId, validateAllows } from '~connections/reference';
 
 export default function useReferenceDetails() {
   const {
@@ -35,12 +35,13 @@ export default function useReferenceDetails() {
             title: 'Permissions',
             inputs: [
               {
-                type: 'select',
+                type: 'validated-select',
                 label: 'Allowed Actions',
                 name: 'allows',
                 value: selected.config.allows,
                 onChange: function(ev) {
-                  updateSelectedConfiguration({ allows: ev.target.value });
+                  const newValue = ev.target.value;
+                  updateSelectedConfiguration({ allows: newValue }, { allows: validateAllows(newValue) });
                 },
                 options: [
                   {
@@ -67,7 +68,9 @@ export default function useReferenceDetails() {
                     name: 'All',
                     value: '*'
                   }
-                ]
+                ],
+                isValid: selected.validation.fields.allows === '',
+                caption: selected.validation.fields.allows
               }
             ]
           }

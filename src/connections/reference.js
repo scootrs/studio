@@ -20,7 +20,8 @@ export function createReferenceConnection(meta = {}) {
     validation: {
       isValid: false,
       fields: {
-        id: 'Reference ID is required'
+        id: 'Reference ID is required',
+        allows: 'Permissions are required'
       }
     }
   };
@@ -34,5 +35,10 @@ export function validateId(val) {
   if (val === '') return 'Reference ID is required';
   const { error } = idSchema.validate(val);
   if (error) return error.message;
+  return '';
+}
+
+export function validateAllows(val) {
+  if (val === '') return 'Permissions are required';
   return '';
 }
