@@ -6,6 +6,7 @@ import { useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useStatusContext } from '~contexts/status';
 import { useWorkspaceContext } from '~contexts/workspace';
+import { useApplicationContext } from '~contexts/application';
 
 export default function useServerSentEvents(baseUrl) {
   const {
@@ -16,6 +17,8 @@ export default function useServerSentEvents(baseUrl) {
     actions: { mergeDeploymentResults }
   } = useWorkspaceContext();
 
+  const appContext = useApplicationContext();
+
   function onDeploymentProgress(event) {
     const data = JSON.parse(event.data);
     setWaiting(true, data.message);
@@ -25,6 +28,7 @@ export default function useServerSentEvents(baseUrl) {
     const data = JSON.parse(event.data);
     setWaiting(false, data.message);
     mergeDeploymentResults(data.results);
+    appContext.actions.mergeDeploymentResults(data.results);
   }
 
   function onDeploymentFailure(event) {
