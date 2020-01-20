@@ -14,79 +14,96 @@ export function useApplicationContext() {
 }
 
 export function ApplicationContextProvider({ children }) {
-  const [name, setName] = useState({
-    value: '',
-    error: 'App name is required'
-  });
-  const [provider, setProvider] = useState({
-    value: '',
-    error: 'Provider is required'
-  });
-  const [region, setRegion] = useState({
-    value: '',
-    error: 'Region is required'
-  });
-
-  const state = {
-    provider,
-    name,
-    region
-  };
-
-  const actions = {
-    setProvider: function(value, error = '') {
-      setProvider({ value, error });
+  const [state, setState] = useState({
+    name: {
+      value: '',
+      error: 'App name is required'
     },
-    setName: function(value, error = '') {
-      setName({ value, error });
+    provider: {
+      value: '',
+      error: 'Provider is required'
     },
-    setRegion: function(value, error = '') {
-      setRegion({ value, error });
+    region: {
+      value: '',
+      error: 'Region is required'
     }
-  };
+  });
 
   const pack = function() {
     const pkg = {};
 
-    if (!name.error) {
-      pkg.name = name.value;
+    if (!state.name.error) {
+      pkg.name = state.name.value;
     } else {
-      return { package: null, error: name.error };
+      return { package: null, error: state.name.error };
     }
 
-    if (!provider.error) {
-      pkg.provider = provider.value;
+    if (!state.provider.error) {
+      pkg.provider = state.provider.value;
     } else {
-      return { package: null, error: provider.error };
+      return { package: null, error: state.provider.error };
     }
 
-    if (!region.error) {
-      pkg.region = region.value;
+    if (!state.region.error) {
+      pkg.region = state.region.value;
     } else {
-      return { package: null, error: region.error };
+      return { package: null, error: state.region.error };
     }
 
     return { package: pkg, error: null };
   };
 
-  const save = function() {
-    window.localStorage.setItem(
-      'application-context',
-      JSON.stringify({
-        name,
-        provider,
-        region
-      })
-    );
+  const save = function(s = state) {
+    window.localStorage.setItem('application-context', JSON.stringify(s));
   };
 
   const load = function() {
     const val = window.localStorage.getItem('application-context');
     if (val) {
       const deser = JSON.parse(val);
-      setName(deser.name);
-      setProvider(deser.provider);
-      setRegion(deser.region);
+      setState(deser);
+    }
+  };
+
+  const actions = {
+    setProvider: function(value, error = '') {
+      setState(function(prev) {
+        return {
+          ...prev,
+          provider: {
+            value,
+            error
+          }
+        };
+      });
+    },
+    setName: function(value, error = '') {
+      setState(function(prev) {
+        return {
+          ...prev,
+          name: {
+            value,
+            error
+          }
+        };
+      });
+    },
+    setRegion: function(value, error = '') {
+      setState(function(prev) {
+        return {
+          ...prev,
+          region: {
+            value,
+            error
+          }
+        };
+      });
+    },
+    mergeDeploymentResults: function(results) {
+      setState(function(prev) {
+        save(prev);
+        return prev;
+      });
     }
   };
 
