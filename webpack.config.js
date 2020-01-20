@@ -35,6 +35,7 @@ module.exports = {
     extensions: ['*', '.js', '.jsx'],
     alias: {
       react: path.resolve(__dirname, 'node_modules', 'react'),
+      'react-dom': path.resolve(__dirname, 'node_modules', 'react-dom'),
       '~components': path.resolve(__dirname, 'src', 'components'),
       '~hooks': path.resolve(__dirname, 'src', 'hooks'),
       '~styles': path.resolve(__dirname, 'src', 'styles'),
