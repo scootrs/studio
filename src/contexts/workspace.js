@@ -341,7 +341,6 @@ export function WorkspaceContextProvider({ children }) {
     },
 
     removeResource: function(id) {
-      console.log('removeResource', id);
       setState(function(prev) {
         // Remove the resource
         const { [id]: omit, ...resources } = prev.resources;
