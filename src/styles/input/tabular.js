@@ -68,18 +68,22 @@ export function TabularInput({ columns, rows, onAddRow, onRemoveRow, onUpdateRow
     });
   };
 
+  const addRow = function(ev) {
+    onAddRow(state);
+    ref.current.querySelector('#first').focus();
+    ev.preventDefault();
+    ev.stopPropagation();
+    setState(defaultState);
+  };
+
   const onFooterLastCellKeyDown = ev => {
     if (ev.key === 'Tab') {
-      onAddRow(state);
-      ref.current.querySelector('#first').focus();
-      ev.preventDefault();
-      ev.stopPropagation();
-      setState(defaultState);
+      addRow(ev);
     }
   };
 
   const onAddClick = ev => {
-    onAddRow(state);
+    addRow(ev);
   };
 
   const onRemoveClick = i => ev => {
