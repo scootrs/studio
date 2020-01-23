@@ -8,8 +8,8 @@ const TooltipContainer = styled.div`
 const TooltipText = styled.div`
   position: absolute;
   visibility: ${({ showing }) => (showing ? 'visible' : 'hidden')};
-  background-color: ${({ theme }) => theme.colors.backgrounds.dark};
-  color: ${({ theme }) => theme.colors.fonts.inverse};
+  background-color: ${({ theme }) => theme.colors.static.dark.backgrounds.dark};
+  color: ${({ theme }) => theme.colors.static.dark.fonts.main};
   text-align: center;
   padding: 5px;
   border-radius: 3px;
