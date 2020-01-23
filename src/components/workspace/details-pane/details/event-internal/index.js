@@ -1,5 +1,5 @@
 import { useWorkspaceContext } from '~contexts/workspace';
-import { validateId, validateTopicName } from '~resources/event-internal';
+import { validateId, validateTopicName, validateBroker } from '~resources/event-internal';
 
 export default function useInternalEventDetails() {
   const {
@@ -33,6 +33,36 @@ export default function useInternalEventDetails() {
         sections: [
           {
             title: 'General',
+            inputs: [
+              {
+                type: 'validated-select',
+                label: 'Broker',
+                name: 'broker',
+                value: selected.config.broker,
+                options: [
+                  {
+                    name: 'Please select a broker',
+                    value: ''
+                  },
+                  {
+                    name: 'Amazon SNS',
+                    value: 'sns'
+                  }
+                ],
+                onChange: function(event) {
+                  const newValue = event.target.value;
+                  updateSelectedConfiguration({ broker: newValue }, { broker: validateBroker(newValue) });
+                },
+                onValidate: function(val) {
+                  return validateBroker(val);
+                },
+                isValid: selected.validation.fields.broker === '',
+                caption: selected.validation.fields.broker
+              }
+            ]
+          },
+          {
+            title: 'Topic',
             inputs: [
               {
                 type: 'validated-text',

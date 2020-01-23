@@ -23,7 +23,9 @@ export function createInternalEventResource(x, y, config) {
       isValid: false,
       fields: {
         id: 'Resource ID must only contain alphanumeric characters',
-        name: 'Topic name is required'
+        broker: 'Broker is required',
+        name: 'Topic name is required',
+        broker: 'Broker is required'
       }
     }
   };
@@ -36,6 +38,11 @@ const idSchema = Joi.string()
 export function validateId(val) {
   const { error } = idSchema.validate(val);
   if (error) return error.message;
+  return '';
+}
+
+export function validateBroker(val) {
+  if (val === '') return 'Broker is required';
   return '';
 }
 
