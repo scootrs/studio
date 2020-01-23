@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { ValidatedTextInput } from './text-validated';
 import { TextInput } from './text';
 import { SelectInput } from './select';
+import { Button } from './button';
 import { ValidatedSelectInput } from './select-validated';
 
 const TabularInputTable = styled.table``;
@@ -29,8 +30,6 @@ const TabularInputTableCell = styled.td`
 `;
 
 const TabularInputTableFoot = styled.tfoot``;
-
-const TabularCellButton = styled.button``;
 
 function renderInput(input) {
   switch (input.type) {
@@ -124,7 +123,7 @@ export function TabularInput({ columns, rows, onAddRow, onRemoveRow, onUpdateRow
                 );
               })}
               <TabularInputTableCell>
-                <TabularCellButton onClick={onRemoveClick(i)}>Remove</TabularCellButton>
+                <Button onClick={onRemoveClick(i)}>Remove</Button>
               </TabularInputTableCell>
             </TabularInputTableRow>
           );
@@ -148,7 +147,7 @@ export function TabularInput({ columns, rows, onAddRow, onRemoveRow, onUpdateRow
             );
           })}
           <TabularInputTableCell>
-            <TabularCellButton onClick={onAddClick}>Add</TabularCellButton>
+            <Button onClick={onAddClick}>Add</Button>
           </TabularInputTableCell>
         </TabularInputTableRow>
       </TabularInputTableFoot>
