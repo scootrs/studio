@@ -86,17 +86,17 @@ export default function useComputeDetails() {
                 ],
                 rows: selected.config.environment,
                 onAddRow: function(row) {
-                  updateSelectedConfiguration({ environment: [...config.environment, row] });
+                  updateSelectedConfiguration({ environment: [...selected.config.environment, row] });
                 },
                 onRemoveRow: function(row) {
                   updateSelectedConfiguration({
-                    environment: config.environment.filter(function(e) {
+                    environment: selected.config.environment.filter(function(e) {
                       return e.name !== row.name;
                     })
                   });
                 },
                 onUpdateRow: function(row, value) {
-                  const enviroment = [...config.environment];
+                  const enviroment = [...selected.config.environment];
                   enviroment[row] = value;
                   updateSelectedConfiguration({ environment });
                 }

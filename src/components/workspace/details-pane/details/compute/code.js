@@ -18,13 +18,16 @@ const Editor = styled.div`
   flex-grow: 1;
 `;
 
-export default function ComputeCodeDetailsPanel() {
+function setMonacoLanguageForRuntime(runtime) {
+  const language = detectLanguageFromRuntime(runtime);
+  monaco.editor.setModelLanguage(document.editor.monaco.getModel(), language);
+}
+
+export default function ComputeCodeDetailsPanel({ autosaveDelayMs = 1000 }) {
   const {
     state: { selected },
     actions: { updateResourceConfiguration }
   } = useWorkspaceContext();
-
-  const { code, runtime } = selected.config;
 
   // Initialize our global instance of the Monaco editor
   //
@@ -42,6 +45,7 @@ export default function ComputeCodeDetailsPanel() {
       });
 
       document.editor = {
+        id: null,
         el,
         monaco: editor
       };
@@ -52,12 +56,17 @@ export default function ComputeCodeDetailsPanel() {
     document.addEventListener('split-resize', resize);
     return function() {
       document.removeEventListener('split-resize', resize);
-    }
+    };
   }, []);
 
   // Create an effect that will update the context handler for updating resource configuration every time the state
   // changes. Note that state does not change when a user is typing text into the editor itself (reducing renders).
-  const saveActionRegistrationRef = useRef();
+  // We do, however, set a timeout on every keystroke so that the editor will autosave after the user has stopped typing
+  // for a certain amount of time.
+  const saveActionRegistrationRef = useRef(null);
+  const onKeyupListenerRef = useRef(null);
+  const timeoutSaveRef = useRef(null);
+  const didSaveAfterTimeoutRef = useRef(false);
   useEffect(() => {
     saveActionRegistrationRef.current = document.editor.monaco.addAction({
       id: 'save',
@@ -69,12 +78,28 @@ export default function ComputeCodeDetailsPanel() {
         updateResourceConfiguration(document.editor.id, { code: ed.getValue() });
       }
     });
+    onKeyupListenerRef.current = document.editor.monaco.onKeyUp(function() {
+      if (timeoutSaveRef.current !== null) {
+        clearTimeout(timeoutSaveRef.current);
+      }
+      timeoutSaveRef.current = setTimeout(function() {
+        updateResourceConfiguration(document.editor.id, { code: document.editor.monaco.getValue() });
+        timeoutSaveRef.current = null;
+        didSaveAfterTimeoutRef.current = true;
+      }, autosaveDelayMs);
+    });
+
     return function() {
       saveActionRegistrationRef.current.dispose();
+      onKeyupListenerRef.current.dispose();
+      if (timeoutSaveRef.current !== null) {
+        clearTimeout(timeoutSaveRef.current);
+      }
     };
-  }, [updateResourceConfiguration]);
+  }, [saveActionRegistrationRef, onKeyupListenerRef, timeoutSaveRef, autosaveDelayMs, updateResourceConfiguration]);
 
   // This effect simply saves what is in the editor into the context state when the component unmounts.
+  //
   const updateFunctionRef = useRef();
   updateFunctionRef.current = updateResourceConfiguration;
   useEffect(
@@ -89,23 +114,47 @@ export default function ComputeCodeDetailsPanel() {
     [updateFunctionRef]
   );
 
-  // This effect sets the value and langage of the editor when a new resource is selected.
-  const ref = useRef();
+  // This effect sets the value and language of the editor when a new resource is selected. It also catches the edge
+  // case where after an autosave we ignore any potential side-effects in the editor.
+  //
+  const ref = useRef(null);
   useEffect(() => {
-    document.editor.id = selected.meta.id;
-    let editorCode = code || '';
-    if (runtime && runtime !== '') {
-      let language = detectLanguageFromRuntime(runtime);
-      monaco.editor.setModelLanguage(document.editor.monaco.getModel(), language);
-      if (editorCode === '') {
-        editorCode = templates[language];
+    if (selected.meta.id !== document.editor.id) {
+      // A new resource has been selected but the editor is still in view. We need to update the editor with the
+      // new code
+      document.editor.monaco.setValue(selected.config.code || '');
+      setMonacoLanguageForRuntime(selected.config.runtime);
+      document.editor.id = selected.meta.id;
+    } else if (didSaveAfterTimeoutRef.current) {
+      // This effect is being triggered after an automatic save of the updated code after the timeout. Nothing else
+      // would have changed, so we don't need to do anything else.
+      didSaveAfterTimeoutRef.current = false;
+    } else {
+      // Other state may have been updated. We still need to show those changes
+    }
+  }, [selected]);
+
+  // If the runtime changes, then we need to update the intellisense
+  //
+  const { runtime } = selected.config;
+  useEffect(() => {
+    setMonacoLanguageForRuntime(runtime);
+    const language = detectLanguageFromRuntime(runtime);
+    if (document.editor.monaco.getValue() === '') {
+      const template = templates[language];
+      if (template) {
+        document.editor.monaco.setValue(template);
       }
     }
-    document.editor.monaco.setValue(editorCode);
+  }, [runtime]);
 
+  // This effect attaches the editor to the DOM
+  //
+  useEffect(() => {
     ref.current.appendChild(document.editor.el);
     document.editor.monaco.layout();
-  }, [selected, code, runtime]);
+    document.editor.monaco.focus();
+  }, [ref]);
 
   return (
     <CodeDetailsRoot>

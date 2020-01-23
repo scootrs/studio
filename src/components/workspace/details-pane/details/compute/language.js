@@ -4,6 +4,6 @@ export function detectLanguageFromRuntime(runtime) {
   } else if (runtime.includes('python')) {
     return 'python';
   } else {
-    throw new Error('Failed to detect language from runtime ' + runtime);
+    return 'text';
   }
 }
