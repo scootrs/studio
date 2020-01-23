@@ -133,9 +133,15 @@ function BlueprintCanvas({ theme }) {
     }
   });
 
+  const contextMenuDisposeRef = useRef(null);
+
   const onBlueprintClick = function(ev) {
     ev.preventDefault();
     ev.stopPropagation();
+    if (contextMenuDisposeRef.current !== null) {
+      contextMenuDisposeRef.current();
+      contextMenuDisposeRef.current = null;
+    }
     if (newConnectionRef.current === true) {
       newConnectionRef.current = false;
       return;
@@ -159,6 +165,13 @@ function BlueprintCanvas({ theme }) {
     removeResource(id);
   };
 
+  const onContextMenu = function(dispose) {
+    if (contextMenuDisposeRef.current !== null) {
+      contextMenuDisposeRef.current();
+    }
+    contextMenuDisposeRef.current = dispose;
+  };
+
   return (
     <BlueprintCanvasView ref={ref} onClick={onBlueprintClick} UtilityBar={UtilityBar}>
       {plumb(
@@ -168,6 +181,7 @@ function BlueprintCanvas({ theme }) {
             id={r.meta.id}
             resource={r}
             onRemove={onRemove}
+            onContextMenu={onContextMenu}
             endpoints={r.meta.endpoints}
           />
         ))
