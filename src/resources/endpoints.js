@@ -1,21 +1,31 @@
 import uuid from 'uuid/v4';
-import theme from '~styles/theme';
 import { Compute, Storage, EventInternal, EventExternal } from '~types';
 
 const defaults = {
   connector: ['Flowchart', { cornerRadius: 5, stub: 10, alwaysRespectStubs: true }],
-  connectorStyle: {
-    stroke: theme.colors.backgrounds.medium,
-    strokeWidth: 5
-  },
-  paintStyle: {
-    width: 5,
-    height: 5,
-    fill: theme.colors.backgrounds.medium
-  },
   maxConnections: -1,
   endpoint: ['Dot', { radius: 5 }]
 };
+
+export function applyThemeToEndpoints(endpoints, theme) {
+  const newEndpoints = [];
+  for (let e of endpoints) {
+    newEndpoints.push({
+      ...e,
+      connectorStyle: {
+        stroke: theme.mode === 'light' ? theme.colors.backgrounds.medium : theme.colors.backgrounds.light,
+        strokeWidth: 5,
+        dashstyle: e.connectorStyle && e.connectorStyle.dashstyle ? e.connectorStyle.dashstyle : ''
+      },
+      paintStyle: {
+        width: 5,
+        height: 5,
+        fill: theme.mode === 'light' ? theme.colors.backgrounds.medium : theme.colors.backgrounds.light
+      }
+    });
+  }
+  return newEndpoints;
+}
 
 function merge(options) {
   if (options.isSource) options.anchor = [1, 0.5, 1, 0, 6, 0];

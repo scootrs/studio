@@ -10,6 +10,7 @@ import UtilityBar from './utility-bar';
 import BlueprintCanvasView from './view';
 import BlueprintResource from './blueprint-resource';
 import Label from './label';
+import { applyThemeToEndpoints } from '~resources/endpoints';
 
 function BlueprintCanvas({ theme }) {
   const {
@@ -192,7 +193,7 @@ function BlueprintCanvas({ theme }) {
             resource={r}
             onRemove={onRemove}
             onContextMenu={onContextMenu}
-            endpoints={r.meta.endpoints}
+            endpoints={applyThemeToEndpoints(r.meta.endpoints, theme)}
           />
         ))
       )}
