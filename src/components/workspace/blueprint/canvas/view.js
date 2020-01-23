@@ -13,8 +13,16 @@ const Canvas = styled.div`
   display: flex;
   flex-grow: 1;
   background-size: 10px 10px;
-  background-image: linear-gradient(to right, ${({ theme }) => theme.colors.backgrounds.light} 1px, transparent 1px),
-    linear-gradient(to bottom, ${({ theme }) => theme.colors.backgrounds.light} 1px, transparent 1px);
+  background-image: linear-gradient(
+      to right,
+      ${({ theme }) => (theme.mode === 'light' ? theme.colors.backgrounds.light : theme.colors.backgrounds.medium)} 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      ${({ theme }) => (theme.mode === 'light' ? theme.colors.backgrounds.light : theme.colors.backgrounds.medium)} 1px,
+      transparent 1px
+    );
 `;
 
 function BlueprintCanvasView({ children, onClick, UtilityBar, onContextMenu }, ref) {

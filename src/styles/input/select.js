@@ -6,7 +6,9 @@ const Select = styled.select.attrs(({ name, value, onChange }) => ({
   value,
   onChange
 }))`
-  background-color: inherit;
+  background-color: ${({ theme }) => theme.colors.backgrounds.main};
+  cursor: pointer;
+  color: ${({ theme }) => theme.colors.fonts.main};
   border: 2px solid
     ${({ theme, isValid }) => {
       if (isValid === false) {

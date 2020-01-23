@@ -6,10 +6,10 @@ const backgrounds = {
     light: '#efefef'
   },
   dark: {
-    main: '#222222',
-    dark: '#020202',
-    medium: '#141414',
-    light: '#444444'
+    main: '#1E1E1E',
+    dark: '#0B0B0B',
+    medium: '#161616',
+    light: '#323232'
   }
 };
 
@@ -26,6 +26,7 @@ const fonts = {
 
 const theme = function(mode) {
   return {
+    mode,
     colors: {
       primary: {
         main: '#523E8E',
@@ -37,7 +38,7 @@ const theme = function(mode) {
         main: '#CFA44B',
         light: '#F4Cd7C',
         medium: '#AF842B',
-        dark: '#89610E',
+        dark: '#89610E'
       },
       alerts: {
         warning: '#AF842B'
@@ -47,6 +48,24 @@ const theme = function(mode) {
       },
       backgrounds: {
         ...backgrounds[mode]
+      },
+      static: {
+        dark: {
+          backgrounds: {
+            ...backgrounds.dark
+          },
+          fonts: {
+            ...fonts.dark
+          }
+        },
+        light: {
+          backgrounds: {
+            ...backgrounds.light
+          },
+          fonts: {
+            ...fonts.light
+          }
+        }
       }
     },
     fonts: {
@@ -67,4 +86,4 @@ const theme = function(mode) {
   };
 };
 
-export default theme('light');
+export default theme('dark');

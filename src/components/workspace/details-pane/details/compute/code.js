@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import styled from 'styled-components';
+import styled, { withTheme } from 'styled-components';
 import * as monaco from 'monaco-editor';
 import { useWorkspaceContext } from '~contexts/workspace';
 import templates from '~templates';
@@ -23,14 +23,15 @@ function setMonacoLanguageForRuntime(runtime) {
   monaco.editor.setModelLanguage(document.editor.monaco.getModel(), language);
 }
 
-export default function ComputeCodeDetailsPanel({ autosaveDelayMs = 1000 }) {
+export function ComputeCodeDetailsPanel({ theme, autosaveDelayMs = 1000 }) {
   const {
     state: { selected },
     actions: { updateResourceConfiguration }
   } = useWorkspaceContext();
 
-  // Initialize our global instance of the Monaco editor
+  // Initialize our global instance of the Monaco editor. Only change it if the theme mode changes.
   //
+  const mode = theme.mode;
   useEffect(() => {
     if (!document.editor) {
       let el = document.createElement('div');
@@ -50,6 +51,13 @@ export default function ComputeCodeDetailsPanel({ autosaveDelayMs = 1000 }) {
         monaco: editor
       };
     }
+
+    let monacoTheme = 'vs-light';
+    if (mode === 'dark') {
+      monacoTheme = 'vs-dark';
+    }
+    monaco.editor.setTheme(monacoTheme);
+
     function resize() {
       document.editor.monaco.layout();
     }
@@ -57,7 +65,7 @@ export default function ComputeCodeDetailsPanel({ autosaveDelayMs = 1000 }) {
     return function() {
       document.removeEventListener('split-resize', resize);
     };
-  }, []);
+  }, [mode]);
 
   // Create an effect that will update the context handler for updating resource configuration every time the state
   // changes. Note that state does not change when a user is typing text into the editor itself (reducing renders).
@@ -162,3 +170,5 @@ export default function ComputeCodeDetailsPanel({ autosaveDelayMs = 1000 }) {
     </CodeDetailsRoot>
   );
 }
+
+export default withTheme(ComputeCodeDetailsPanel);

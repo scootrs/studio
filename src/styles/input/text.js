@@ -9,6 +9,8 @@ export const TextInput = styled.input.attrs(({ name, value, onChange, onKeyDown 
   readOnly: onChange === undefined || onChange === null,
   spellCheck: false
 }))`
+  background-color: ${({ theme }) => theme.colors.backgrounds.main};
+  color: ${({ theme }) => theme.colors.fonts.main};
   width: ${({ readOnly }) => (readOnly ? '98%' : 'auto')};
   border: 2px solid
     ${({ theme, isValid, borderless, readOnly }) => {

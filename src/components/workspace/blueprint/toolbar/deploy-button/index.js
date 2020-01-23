@@ -9,7 +9,7 @@ import Spinner from '~styles/spinner';
 
 const StyledDeployButton = styled(Button)`
   font-weight: bold;
-  color: ${({ theme }) => theme.colors.fonts.inverse};
+  color: ${({ theme }) => theme.colors.static.dark.fonts.main};
   border-color: ${({ theme }) => theme.colors.primary.main}
   background-color: ${({ theme }) => theme.colors.primary.main};
   padding: 3px 8px;
