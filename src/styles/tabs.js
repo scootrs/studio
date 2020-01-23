@@ -24,28 +24,45 @@ const FlexTabPanelContainer = styled.div`
   display: flex;
 `;
 
-export const FlexTabs = styled(({ children }) => {
+export const FlexTabs = styled(({ tabsFor, children }) => {
   let childrenArray = React.Children.toArray(children);
-  const [selected, setSelected] = useState();
-  const defaultSelected = !selected ? (childrenArray.length && childrenArray[0].props.name) || null : selected;
+  const [state, setState] = useState({
+    selected: childrenArray.length ? childrenArray[0].props.name : null,
+    tabsFor
+  });
+  if (state.tabsFor !== tabsFor) {
+    // We have a new item in view. Reset to defaults.
+    setState({
+      selected: childrenArray.length ? childrenArray[0].props.name : null,
+      tabsFor
+    });
+  }
+
   return (
     <>
       <FlexTabTitleList>
         {childrenArray.map(child => (
           <FlexTabTitle
             key={child.props.name}
-            selected={defaultSelected === child.props.name}
+            selected={state.selected === child.props.name}
             onClick={ev => {
               ev.preventDefault();
               ev.stopPropagation();
-              setSelected(child.props.name);
+              setState(function(prev) {
+                return {
+                  ...prev,
+                  selected: child.props.name
+                };
+              });
             }}
           >
             {child.props.name}
           </FlexTabTitle>
         ))}
       </FlexTabTitleList>
-      <FlexTabPanelContainer>{childrenArray.filter(child => child.props.name === defaultSelected)}</FlexTabPanelContainer>
+      <FlexTabPanelContainer>
+        {childrenArray.filter(child => child.props.name === state.selected)}
+      </FlexTabPanelContainer>
     </>
   );
 })`

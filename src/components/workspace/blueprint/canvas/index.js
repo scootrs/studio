@@ -125,7 +125,9 @@ function BlueprintCanvas({ theme }) {
     ref,
     svg: true,
     onDrop: function(pkg) {
-      unhighlightConnection();
+      if (currentlySelectedConnectionRef.current !== null) {
+        unhighlightSelectedConnection();
+      }
       const resource = createResourceWithType(pkg.data.type, pkg.x, pkg.y);
       addResource(resource);
     }

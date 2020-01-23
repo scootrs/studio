@@ -51,7 +51,7 @@ export default function DetailsView({ details, onRootKeyPress }) {
         <HeaderRightContent>{details.header.inputs.map(renderInput)}</HeaderRightContent>
       </DetailsViewHeader>
       <DetailsViewBody>
-        <FlexTabs>
+        <FlexTabs tabsFor={details.id}>
           {details.tabs.map(tab => {
             if (tab.component) {
               // We have a custom component provided by the developer that we need to render.

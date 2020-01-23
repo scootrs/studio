@@ -38,6 +38,7 @@ export default function useEventDetails() {
   };
 
   return {
+    id: selected.meta.id,
     type: selected.meta.type,
     header: {
       icon: selected.meta.type,

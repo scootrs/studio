@@ -10,6 +10,7 @@ export default function useComputeDetails() {
   } = useWorkspaceContext();
 
   return {
+    id: selected.meta.id,
     type: selected.meta.type,
     header: {
       icon: selected.meta.type,
