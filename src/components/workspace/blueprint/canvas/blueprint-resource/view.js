@@ -10,6 +10,8 @@ const View = styled.div`
   display: flex;
   cursor: pointer;
   user-select: none;
+  border-radius: 3px;
+  font-weight: ${({ selected }) => (selected ? 'bold' : 'normal')}
 
   &:focus {
     outline: none;
@@ -51,16 +53,7 @@ const InvalidAlert = styled(ExclamationTriangleSolidSvg)`
 
 function BlueprintResourceView({ id, name, selected, x, y, onClick, children, onKeyPress, isValid }, ref) {
   return (
-    <View
-      ref={ref}
-      id={id}
-      tabIndex={-1}
-      selected={selected}
-      x={x}
-      y={y}
-      onClick={onClick}
-      onKeyPress={onKeyPress}
-    >
+    <View ref={ref} id={id} tabIndex={-1} selected={selected} x={x} y={y} onClick={onClick} onKeyPress={onKeyPress}>
       <InnerContaier>
         <TitleSpan>{name}</TitleSpan>
         {isValid ? '' : <IconSpan>{!isValid ? <InvalidAlert width={20} height={20} /> : ''}</IconSpan>}

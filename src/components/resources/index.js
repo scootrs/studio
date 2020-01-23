@@ -2,14 +2,10 @@ import React, { useRef } from 'react';
 import styled from 'styled-components';
 import useDrag from '~hooks/useDrag';
 import { Compute, Storage, EventExternal, EventInternal } from '~types';
-import ObjectComputeSvg from './object-compute.svg';
-import ObjectComputeSvgWhite from './object-compute-white.svg';
-import ObjectStorageSvg from './object-storage.svg';
-import ObjectStorageSvgWhite from './object-storage-white.svg';
-import ObjectEventExternalSvg from './object-event-external.svg';
-import ObjectEventExternalWhiteSvg from './object-event-external-white.svg';
-import ObjectEventInternalSvg from './object-event-internal.svg';
-import ObjectEventInternalWhiteSvg from './object-event-internal-white.svg';
+import ResourceComputeSvg from './resource-compute.svg';
+import ResourceStorageSvg from './resource-storage.svg';
+import ResourceEventExternalSvg from './resource-event-external.svg';
+import ResourceEventInternalSvg from './resource-event-internal.svg';
 
 const ResourceContainer = styled.div``;
 
@@ -30,22 +26,22 @@ function Resource({ ...props }) {
 function Svg({ type, invert = false, draggable = false, ...rest }) {
   switch (type) {
     case Compute:
-      const ComputeSvg = invert ? ObjectComputeSvgWhite : ObjectComputeSvg;
+      const ComputeSvg = ResourceComputeSvg;
       if (draggable) return <DraggableSvg type={type} Svg={ComputeSvg} {...rest} />;
       return <ComputeSvg {...rest} />;
 
     case Storage:
-      const StorageSvg = invert ? ObjectStorageSvgWhite : ObjectStorageSvg;
+      const StorageSvg = ResourceStorageSvg;
       if (draggable) return <DraggableSvg type={type} Svg={StorageSvg} {...rest} />;
       return <StorageSvg {...rest} />;
 
     case EventExternal:
-      const EventExternalSvg = invert ? ObjectEventExternalWhiteSvg : ObjectEventExternalSvg;
+      const EventExternalSvg = ResourceEventExternalSvg;
       if (draggable) return <DraggableSvg type={type} Svg={EventExternalSvg} {...rest} />;
       return <EventExternalSvg {...rest} />;
 
     case EventInternal:
-      const EventInternalSvg = invert ? ObjectEventInternalWhiteSvg : ObjectEventInternalSvg;
+      const EventInternalSvg = ResourceEventInternalSvg;
       if (draggable) return <DraggableSvg type={type} Svg={EventInternalSvg} {...rest} />;
       return <EventInternalSvg {...rest} />;
 

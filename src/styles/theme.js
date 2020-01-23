@@ -28,19 +28,19 @@ const theme = function(mode) {
   return {
     colors: {
       primary: {
-        main: '#61269E',
-        light: '#9466C2',
-        medium: '#4A1383',
-        dark: '#370868'
+        main: '#523E8E',
+        light: '#715FA8',
+        medium: '#3C2879',
+        dark: '#26135E'
       },
       secondary: {
-        main: '#EABF2A',
-        dark: '#9A7700',
-        medium: '#C29A0E',
-        light: '#FAD553'
+        main: '#CFA44B',
+        light: '#F4Cd7C',
+        medium: '#AF842B',
+        dark: '#89610E',
       },
       alerts: {
-        warning: '#C29A0E'
+        warning: '#AF842B'
       },
       fonts: {
         ...fonts[mode]

@@ -102,11 +102,15 @@ function BlueprintCanvas({ theme }) {
     createLabel: function(id) {
       let content = '';
       let isValid = false;
+      let isSelected = false;
       if (connections[id]) {
         content = connections[id].config.id;
         isValid = connections[id].validation.isValid;
       }
-      return <Label content={content} isValid={isValid} theme={theme} />;
+      if (selected && selected.meta.id === id) {
+        isSelected = true;
+      }
+      return <Label content={content} isValid={isValid} theme={theme} isSelected={isSelected} />;
     },
 
     // Specified the property path to the jsPlumb information for our connections

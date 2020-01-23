@@ -8,7 +8,11 @@ const Header = styled.header`
   flex-shrink: 0;
   align-items: center;
   justify-content: flex-start;
-  background-color: ${({ theme }) => theme.colors.primary.main};
+  background-image: linear-gradient(
+    to top right,
+    ${({ theme }) => theme.colors.primary.dark},
+    ${({ theme }) => theme.colors.primary.main}
+  );
   color: ${({ theme }) => theme.colors.fonts.inverse};
   padding: 0px 10px;
 `;

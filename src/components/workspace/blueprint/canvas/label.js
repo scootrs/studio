@@ -16,11 +16,13 @@ const LabelContainer = styled.div`
   font-size: ${({ theme }) => theme.fonts.sizes.small};
   background-color: ${({ theme }) => theme.colors.backgrounds.main};
   cursor: pointer;
+  font-weight: ${({ isSelected }) => (isSelected ? 'bold' : 'normal')};
+  user-select: none;
 `;
 
-function Label({ content, isValid, theme }) {
+function Label({ content, isValid, isSelected, theme }) {
   return (
-    <LabelContainer theme={theme}>
+    <LabelContainer theme={theme} isSelected={isSelected}>
       {content} {isValid ? '' : <InvalidAlert theme={theme} width={20} height={20} />}
     </LabelContainer>
   );
