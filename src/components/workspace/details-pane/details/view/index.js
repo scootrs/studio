@@ -74,7 +74,7 @@ export default function DetailsView({ details, onRootKeyPress }) {
               } else {
                 // We need to render the sections according to the details the user has given us
                 return (
-                  <FlexTabPanel key={tab.title} name={tab.title}>
+                  <FlexTabPanel key={tab.title} name={tab.title} direction="column">
                     {tab.sections.map(section => {
                       return (
                         <DetailsSection key={section.title}>

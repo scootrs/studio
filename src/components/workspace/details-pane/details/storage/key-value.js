@@ -2,16 +2,23 @@ import Joi from '@hapi/joi';
 
 export const defaults = {
   config: {
+    engine: '',
     collection: '',
     keyName: '',
     keyType: ''
   },
   validation: {
+    engine: 'Engine is required',
     collection: 'Collection name is required',
     keyName: 'Primary key name is required',
     keyType: 'Primary key type is required'
   }
 };
+
+function validateEngine(val) {
+  if (val === '') return 'Engine is required';
+  return '';
+}
 
 const collectionNameSchema = Joi.string()
   .min(3)
@@ -59,6 +66,36 @@ export function useKeyValueDetailTabs(selected, updateSelectedConfiguration) {
       sections: [
         {
           title: 'General',
+          inputs: [
+            {
+              type: 'validated-select',
+              label: 'Database Engine',
+              name: 'engine',
+              value: selected.config.engine,
+              options: [
+                {
+                  name: 'Please select an engine',
+                  value: ''
+                },
+                {
+                  name: 'DynamoDB',
+                  value: 'dynamo-db'
+                }
+              ],
+              onChange: function(event) {
+                const newValue = event.target.value;
+                updateSelectedConfiguration({ engine: newValue }, { engine: validateEngine(newValue) });
+              },
+              onValidate: function(val) {
+                return validateEngine(val);
+              },
+              isValid: selected.validation.fields.engine === '',
+              caption: selected.validation.fields.engine
+            }
+          ]
+        },
+        {
+          title: 'Collection',
           inputs: [
             {
               type: 'validated-text',
