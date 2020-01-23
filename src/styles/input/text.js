@@ -7,7 +7,8 @@ export const TextInput = styled.input.attrs(({ name, value, onChange, onKeyDown 
   onChange,
   onKeyDown,
   readOnly: onChange === undefined || onChange === null,
-  spellCheck: false
+  spellCheck: false,
+  autoComplete: 'off'
 }))`
   background-color: ${({ theme }) => theme.colors.backgrounds.main};
   color: ${({ theme }) => theme.colors.fonts.main};
