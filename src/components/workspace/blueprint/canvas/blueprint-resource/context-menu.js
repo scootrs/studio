@@ -7,11 +7,11 @@ const MenuRoot = styled.div`
   left: ${({ x }) => x}px;
   display: flex;
   flex-direction: column;
-  color: ${({ theme }) => theme.colors.fonts.inverse};
-  background-color: ${({ theme }) => theme.colors.backgrounds.dark};
+  color: ${({ theme }) => theme.colors.static.dark.fonts.main};
+  background-color: ${({ theme }) => theme.colors.static.dark.backgrounds.dark};
   min-width: 200px;
   z-index: 999;
-  box-shadow: 1px 1px 2px ${({ theme }) => theme.colors.backgrounds.medium};
+  box-shadow: 1px 1px 2px ${({ theme }) => theme.colors.static.dark.backgrounds.medium};
   font-weight: normal;
 `;
 
@@ -22,7 +22,7 @@ const MenuItem = styled.div`
   cursor: pointer;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.backgrounds.medium};
+    background-color: ${({ theme }) => theme.colors.static.dark.backgrounds.medium};
   }
 `;
 
