@@ -18,32 +18,33 @@ function BlueprintCanvas({ theme }) {
     actions: { addResource, updateResourcePosition, removeResource, setSelected, addConnection, removeConnection }
   } = useWorkspaceContext();
 
-  const selectedRef = useRef(null);
+  const currentlySelectedConnectionRef = useRef(null);
+  const currentlySelectedOldConnectionPaintStyleRef = useRef(null);
+  const currentlySelectedOldEndpointPaintStyleRef = useRef(null);
 
-  const highlightSelected = function() {
-    if (selectedRef.current !== null) {
-      try {
-        selectedRef.current.setPaintStyle({ stroke: theme.colors.secondary.main });
-        selectedRef.current.endpoints.forEach(e => e.setPaintStyle({ fill: theme.colors.secondary.main }));
-      } catch (err) {
-        console.warn('Failed to highlight: ' + err.message);
-        selectedRef.current = null;
-      }
+  const unhighlightSelectedConnection = function() {
+    currentlySelectedConnectionRef.current.setPaintStyle(currentlySelectedOldConnectionPaintStyleRef.current);
+    for (let e of currentlySelectedConnectionRef.current.endpoints) {
+      e.setPaintStyle(currentlySelectedOldEndpointPaintStyleRef.current);
     }
+    currentlySelectedConnectionRef.current = null;
+    currentlySelectedOldConnectionPaintStyleRef.current = null;
+    currentlySelectedOldEndpointPaintStyleRef.current = null;
   };
 
-  const unhighlightSelected = function() {
-    if (selectedRef.current !== null) {
-      try {
-        selectedRef.current.setPaintStyle({ stroke: theme.colors.backgrounds.medium });
-        selectedRef.current.endpoints.forEach(function(e) {
-          e.setPaintStyle({ fill: theme.colors.backgrounds.medium });
-        });
-      } catch (err) {
-        console.warn('Failed to unhighlight: ' + err.message);
-        selectedRef.current = null;
-      }
+  const highlightConnection = function(conn) {
+    if (currentlySelectedConnectionRef.current !== null) {
+      unhighlightSelectedConnection();
     }
+    currentlySelectedOldConnectionPaintStyleRef.current = conn.getPaintStyle();
+    conn.setPaintStyle({ ...currentlySelectedOldConnectionPaintStyleRef.current, stroke: theme.colors.secondary.main });
+    for (let e of conn.endpoints) {
+      if (currentlySelectedOldEndpointPaintStyleRef.current === null) {
+        currentlySelectedOldEndpointPaintStyleRef.current = e.getPaintStyle();
+      }
+      e.setPaintStyle({ fill: theme.colors.secondary.main });
+    }
+    currentlySelectedConnectionRef.current = conn;
   };
 
   const determineConnectionType = function(conn) {
@@ -62,9 +63,7 @@ function BlueprintCanvas({ theme }) {
       const type = determineConnectionType(conn);
       let shouldSelect = true;
       if (type !== Trigger) {
-        unhighlightSelected();
-        selectedRef.current = jsPlumbConn;
-        highlightSelected();
+        highlightConnection(jsPlumbConn);
       } else {
         shouldSelect = false;
       }
@@ -79,7 +78,7 @@ function BlueprintCanvas({ theme }) {
 
     onDisconnect: function(conn) {
       if (selected && selected.meta.id === conn.id) {
-        unhighlightSelected();
+        unhighlightSelectedConnection();
       }
       removeConnection(conn.id);
     },
@@ -88,9 +87,7 @@ function BlueprintCanvas({ theme }) {
       onClick: function(conn, jsPlumbConn) {
         const type = determineConnectionType(conn);
         if (type !== Trigger) {
-          unhighlightSelected();
-          selectedRef.current = jsPlumbConn;
-          highlightSelected();
+          highlightConnection(jsPlumbConn);
           setSelected(connections[conn.id]);
         }
       }
@@ -128,7 +125,7 @@ function BlueprintCanvas({ theme }) {
     ref,
     svg: true,
     onDrop: function(pkg) {
-      unhighlightSelected();
+      unhighlightConnection();
       const resource = createResourceWithType(pkg.data.type, pkg.x, pkg.y);
       addResource(resource);
     }
@@ -152,12 +149,11 @@ function BlueprintCanvas({ theme }) {
       newConnectionRef.current = false;
       return;
     }
-    if (ev.didSetSelected) {
-      unhighlightSelected();
+    if (ev.didSetSelected && currentlySelectedConnectionRef.current !== null) {
+      unhighlightSelectedConnection();
     } else {
-      if (selectedRef.current) {
-        unhighlightSelected();
-        selectedRef.current = null;
+      if (currentlySelectedConnectionRef.current) {
+        unhighlightSelectedConnection();
       }
       if (selected && !ev.didSetSelected) {
         setSelected(null);
@@ -167,7 +163,9 @@ function BlueprintCanvas({ theme }) {
   };
 
   const onRemove = id => {
-    unhighlightSelected();
+    if (currentlySelectedConnectionRef.current !== null) {
+      unhighlightSelectedConnection();
+    }
     removeResource(id);
   };
 

@@ -18,7 +18,6 @@ const LabelContainer = styled.div`
   cursor: pointer;
   font-weight: ${({ isSelected }) => (isSelected ? 'bold' : 'normal')};
   user-select: none;
-  z-index: 100;
 `;
 
 function Label({ content, isValid, isSelected, theme }) {
