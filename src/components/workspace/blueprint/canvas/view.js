@@ -17,9 +17,9 @@ const Canvas = styled.div`
     linear-gradient(to bottom, ${({ theme }) => theme.colors.backgrounds.light} 1px, transparent 1px);
 `;
 
-function BlueprintCanvasView({ children, onClick, UtilityBar }, ref) {
+function BlueprintCanvasView({ children, onClick, UtilityBar, onContextMenu }, ref) {
   return (
-    <CanvasRoot>
+    <CanvasRoot onContextMenu={onContextMenu}>
       <UtilityBar />
       <Canvas ref={ref} onClick={onClick}>
         {children}

@@ -135,6 +135,11 @@ function BlueprintCanvas({ theme }) {
 
   const contextMenuDisposeRef = useRef(null);
 
+  const onBlueprintCanvasContextMenu = function(ev) {
+    ev.preventDefault();
+    ev.stopPropagation();
+  };
+
   const onBlueprintClick = function(ev) {
     ev.preventDefault();
     ev.stopPropagation();
@@ -173,7 +178,12 @@ function BlueprintCanvas({ theme }) {
   };
 
   return (
-    <BlueprintCanvasView ref={ref} onClick={onBlueprintClick} UtilityBar={UtilityBar}>
+    <BlueprintCanvasView
+      ref={ref}
+      onClick={onBlueprintClick}
+      UtilityBar={UtilityBar}
+      onContextMenu={onBlueprintCanvasContextMenu}
+    >
       {plumb(
         Object.values(resources).map(r => (
           <BlueprintResource
