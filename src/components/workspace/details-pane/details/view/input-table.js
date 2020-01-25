@@ -20,9 +20,9 @@ export const InputLabelCol = styled.td`
   min-width: 150px;
   max-width: 150px;
   width: 150px;
-  border-right: 1px solid ${({ theme }) => theme.colors.backgrounds.light};
 `;
 export const InputCol = styled.td`
   width: 100%;
-  padding: 0px 5px;
+  padding: 3px 8px;
+  border-left: 1px solid ${({ theme }) => theme.colors.backgrounds.light}
 `;
