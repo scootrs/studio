@@ -53,13 +53,4 @@ export const TextInput = styled.input.attrs(({ name, value, onChange, onKeyDown 
       }} !important;
     outline: none;
   }
-
-  ${({ readOnly }) =>
-    readOnly
-      ? `
-    border: none !important; 
-    &:focus { 
-      outline: none !important; 
-    }`
-      : ''}
 `;
