@@ -37,6 +37,14 @@ export const FlexTabs = styled(({ tabsFor, children }) => {
       tabsFor
     });
   }
+  if(state.selected === null && childrenArray.length > 0) {
+    // Originally the component was rendered without any tabs. Now there are tabs. Update
+    // the state to reflect it
+    setState({
+      selected: childrenArray[0].props.name,
+      tabsFor
+    });
+  }
 
   return (
     <>
