@@ -3,12 +3,10 @@ import styled from 'styled-components';
 import { SelectInput } from './select';
 
 const InputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
 `;
 
 const InputCaption = styled.span`
+  display: block;
   font-size: 0.7em;
   margin-top: 2px;
   visibility: ${({ isValid }) => (isValid === true ? 'hidden' : 'visible')}
