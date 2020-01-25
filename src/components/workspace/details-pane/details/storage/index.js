@@ -32,7 +32,7 @@ export default function useStorageDetails() {
           value: selected.config.type,
           onChange: function(ev) {
             const newValue = ev.target.value;
-            let defaults = null;
+            let defaults = { config: {}, validation: {} };
             switch (newValue) {
               case 'keyval':
                 defaults = keyValueDefaults;
