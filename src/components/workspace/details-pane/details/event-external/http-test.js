@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import status from 'http-status';
@@ -107,7 +107,9 @@ function HttpEventTestPane({ id, url, method }) {
   // Setup the input state for the component
   const [pathParameters, setPathParameters] = useState(initialPathParameters);
   const [headers, setHeaders] = useState([]);
+  const requestBodyRef = useRef(null);
   const [body, setBody] = useState('');
+  const [cursorPosition, setCursorPosition] = useState(0);
   const [response, setResponse] = useState({
     statusCode: null,
     headers: null,
@@ -181,11 +183,21 @@ function HttpEventTestPane({ id, url, method }) {
     if (ev.key === 'Tab') {
       ev.preventDefault();
       ev.stopPropagation();
-      const value = ev.target.value + '    ';
-      ev.target.selectionEnd = ev.target.selectionStart + 4;
+      const s = ev.target.selectionStart;
+      const value = ev.target.value.substr(0, s) + '    ' + ev.target.value.substr(s, ev.target.value.length);
       setBody(value);
+      setCursorPosition(s + 4);
     }
   };
+
+  const onRequestBodyKeyUp = function(ev) {
+      setCursorPosition(ev.target.selectionStart);
+  };
+
+  useEffect(() => {
+    requestBodyRef.current.selectionStart = cursorPosition;
+    requestBodyRef.current.selectionEnd = cursorPosition;
+  }, [requestBodyRef, cursorPosition]);
 
   const onSendRequestButtonClick = async function() {
     // Replace all the URL parameters. As we do this, make sure that all of the URL parameters are present.
@@ -274,11 +286,13 @@ function HttpEventTestPane({ id, url, method }) {
         <BodyBuilder>
           <h3>Request Body</h3>
           <RequestBodyTextArea
+            ref={requestBodyRef}
             value={body}
             onChange={onRequestBodyChange}
             rows={10}
             spellCheck={false}
             onKeyDown={onRequestBodyKeyDown}
+            onKeyUp={onRequestBodyKeyUp}
           />
         </BodyBuilder>
       </RequestBuilderContainer>
