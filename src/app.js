@@ -15,6 +15,7 @@ const Main = styled.main`
   font-family: ${({ theme }) => theme.fonts.main};
   color: ${({ theme }) => theme.colors.fonts.main};
   background-color: ${({ theme }) => theme.colors.backgrounds.main};
+  overflow: hidden;
 `;
 
 function App() {

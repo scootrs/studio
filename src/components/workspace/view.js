@@ -8,6 +8,7 @@ const SplitBlueprintContainer = styled(Split)`
   flex-direction: row;
   align-items: stretch;
   flex-grow: 1;
+  overflow: hidden;
 `;
 
 function LiveBlueprintView({ children, onDrag }) {

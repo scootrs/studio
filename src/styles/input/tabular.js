@@ -112,49 +112,53 @@ export function TabularInput({ columns, rows, onAddRow, onRemoveRow, onUpdateRow
         {rows.map(function(row, i) {
           return (
             <TabularInputTableRow key={i}>
-              {Object.entries(row).map(function([prop, val], i) {
+              {Object.entries(row).map(function([prop, val], j) {
                 return (
                   <TabularInputTableCell key={prop}>
                     {renderInput({
-                      type: columns[i].type,
+                      type: columns[j].type,
                       name: prop,
                       value: val,
-                      placeholder: columns[i].placeholder,
-                      options: columns[i].options,
+                      placeholder: columns[j].placeholder,
+                      options: columns[j].options,
                       onChange: onRowChange(i)
                     })}
                   </TabularInputTableCell>
                 );
               })}
               <TabularInputTableCell>
-                <Button onClick={onRemoveClick(i)}>Remove</Button>
+                {onRemoveRow ? <Button onClick={onRemoveClick(i)}>Remove</Button> : <></>}
               </TabularInputTableCell>
             </TabularInputTableRow>
           );
         })}
       </TabularInputTableBody>
-      <TabularInputTableFoot>
-        <TabularInputTableRow ref={ref}>
-          {columns.map(function(col, i) {
-            return (
-              <TabularInputTableCell key={col.name}>
-                {renderInput({
-                  id: i === 0 ? 'first' : '',
-                  type: col.type,
-                  name: col.name,
-                  value: state[col.name],
-                  placeholder: col.placeholder,
-                  onChange: onChange,
-                  onKeyDown: i === columns.length - 1 ? onFooterLastCellKeyDown : null
-                })}
-              </TabularInputTableCell>
-            );
-          })}
-          <TabularInputTableCell>
-            <Button onClick={onAddClick}>Add</Button>
-          </TabularInputTableCell>
-        </TabularInputTableRow>
-      </TabularInputTableFoot>
+      {onAddRow ? (
+        <TabularInputTableFoot>
+          <TabularInputTableRow ref={ref}>
+            {columns.map(function(col, i) {
+              return (
+                <TabularInputTableCell key={col.name}>
+                  {renderInput({
+                    id: i === 0 ? 'first' : '',
+                    type: col.type,
+                    name: col.name,
+                    value: state[col.name],
+                    placeholder: col.placeholder,
+                    onChange: onChange,
+                    onKeyDown: i === columns.length - 1 ? onFooterLastCellKeyDown : null
+                  })}
+                </TabularInputTableCell>
+              );
+            })}
+            <TabularInputTableCell>
+              <Button onClick={onAddClick}>Add</Button>
+            </TabularInputTableCell>
+          </TabularInputTableRow>
+        </TabularInputTableFoot>
+      ) : (
+        <></>
+      )}
     </TabularInputTable>
   );
 }

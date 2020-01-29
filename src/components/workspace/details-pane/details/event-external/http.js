@@ -1,3 +1,6 @@
+import React from 'react';
+import HttpEventTestPane from './http-test';
+
 export const defaults = {
   config: {
     path: '',
@@ -94,6 +97,12 @@ export function useHttpEventDetailTabs(selected, updateSelectedConfiguration) {
           ]
         }
       ]
+    },
+    {
+      title: 'Test',
+      component: (
+        <HttpEventTestPane id={selected.meta.id} url={selected.deployment.url} method={selected.config.method} />
+      )
     }
   ];
 }

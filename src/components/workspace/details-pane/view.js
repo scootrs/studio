@@ -1,32 +1,37 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const DetailsPaneRoot = styled.div`
-  box-shadow: 1px 1px 3px ${({ theme }) => theme.colors.backgrounds.medium};
+const ViewRoot = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  flex-grow: 1;
   overflow: hidden;
+  box-shadow: 1px 1px 3px ${({ theme }) => theme.colors.backgrounds.medium};
+  flex-grow: 1;
 
   &:focus {
     outline: none;
   }
 `;
 
-const DetailsContainer = styled.div`
-  flex-shrink: 0;
+const ViewContent = styled.div`
+  flex: 1;
   display: flex;
+  overflow: auto;
+`;
+
+const ViewScrollBox = styled.div`
+  display: flex;
+  flex-grow: 1;
   min-height: min-content;
 `;
 
 function DetailsPaneView({ children, onClick, onKeyDown }) {
   return (
-    <DetailsContainer>
-      <DetailsPaneRoot tabIndex={-1} onClick={onClick} onKeyDown={onKeyDown}>
-        {children}
-      </DetailsPaneRoot>
-    </DetailsContainer>
+    <ViewRoot tabIndex={-1} onClick={onClick} onKeyDown={onKeyDown}>
+      <ViewContent>
+        <ViewScrollBox>{children}</ViewScrollBox>
+      </ViewContent>
+    </ViewRoot>
   );
 }
 
