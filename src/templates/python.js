@@ -5,12 +5,18 @@ def endpoint(event, context):
     #
     # TODO: add business logic here
     #
-    response = {
-        "statusCode": 200,
-        "body": json.dumps({
-            "message": "Success!"
-        })
-    }
+    return create_json_response(200, { "message": "Success" })
 
-    return response
+def create_json_response(code, body = {}, headers = {}):
+    original_headers = {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "*"
+    }
+    original_headers.update(headers)
+    return {
+        "statusCode": code,
+        "headers": original_headers,
+        "body": json.dumps(body)
+    }
 `;
