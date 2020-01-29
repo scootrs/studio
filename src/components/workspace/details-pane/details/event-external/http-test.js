@@ -251,7 +251,9 @@ function HttpEventTestPane({ id, url, method }) {
             err +
             '\n\n' +
             'Make sure you allow test requests by setting the "Access-Control-Allow-Origin" and ' +
-            '"Access-Control-Allow-Headers" headers in your response.'
+            '"Access-Control-Allow-Headers" headers in your response.\n\n' +
+            'You may also have an uncaught error in your handler function that is causing the provider to reject ' +
+            'the request due to CORS.'
         });
       }
     }
