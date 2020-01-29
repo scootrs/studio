@@ -74,7 +74,11 @@ function getRawHttpResponseFromAxiosResponse(response) {
     const dataType = typeof response.data;
     switch (dataType) {
       case 'object':
-        raw += JSON.stringify(response.data, null, 4);
+        try {
+          raw += JSON.stringify(response.data, null, 4);
+        } catch (err) {
+          raw += '* Unable to display JSON output: ' + err.message;
+        }
         break;
       case 'string':
         raw += response.data;
@@ -191,7 +195,7 @@ function HttpEventTestPane({ id, url, method }) {
   };
 
   const onRequestBodyKeyUp = function(ev) {
-      setCursorPosition(ev.target.selectionStart);
+    setCursorPosition(ev.target.selectionStart);
   };
 
   useEffect(() => {
