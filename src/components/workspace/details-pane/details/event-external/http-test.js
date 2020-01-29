@@ -251,7 +251,7 @@ function HttpEventTestPane({ id, url, method }) {
             err +
             '\n\n' +
             'Make sure you allow test requests by setting the "Access-Control-Allow-Origin" and ' +
-            '"Access-Control-Allow-Heaers" headers in your response.'
+            '"Access-Control-Allow-Headers" headers in your response.'
         });
       }
     }
