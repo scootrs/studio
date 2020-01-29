@@ -1,5 +1,5 @@
-# MooterStudio
-Client web application for designing and managing the Mooter microservice runtime
+# Scootr Studio
+A web application that enables the desing, development, and deployment of microservices and serverless applications using the Scootr runtime library.
 
 ## Contributing
 Follow the below guidelines when contributing to this project.
