@@ -1,5 +1,6 @@
 export default `import boto3
 import json
+import decimal
 
 def endpoint(event, context):
     #
