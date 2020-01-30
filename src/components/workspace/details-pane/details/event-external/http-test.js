@@ -110,7 +110,7 @@ function HttpEventTestPane({ id, url, method }) {
 
   // Setup the input state for the component
   const [pathParameters, setPathParameters] = useState(initialPathParameters);
-  const [headers, setHeaders] = useState([]);
+  const [headers, setHeaders] = useState([{ name: 'Content-Type', value: 'application/json' }]);
   const requestBodyRef = useRef(null);
   const [body, setBody] = useState('');
   const [cursorPosition, setCursorPosition] = useState(0);
