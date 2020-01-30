@@ -108,9 +108,15 @@ function HttpEventTestPane({ id, url, method }) {
     initialPathParameters.push({ name: match[1], value: '' });
   }
 
+  // Set initial headers
+  let initialHeaders = [];
+  if(method === 'post' || method === 'put') {
+    initialHeaders.push({ name: 'Content-Type', value: 'application/json' })
+  }
+
   // Setup the input state for the component
   const [pathParameters, setPathParameters] = useState(initialPathParameters);
-  const [headers, setHeaders] = useState([{ name: 'Content-Type', value: 'application/json' }]);
+  const [headers, setHeaders] = useState(initialHeaders);
   const requestBodyRef = useRef(null);
   const [body, setBody] = useState('');
   const [cursorPosition, setCursorPosition] = useState(0);
