@@ -248,6 +248,13 @@ function HttpEventTestPane({ id, url, method }) {
   }, [requestBodyRef, cursorPosition]);
 
   const onSendRequestButtonClick = async function() {
+    // Clear the previous response
+    setResponse({
+      statusCode: null,
+      headers: null,
+      body: null,
+      raw: null
+    })
     // Replace all the URL parameters. As we do this, make sure that all of the URL parameters are present.
     let finalUrl = url;
     for (const param of pathParameters) {
