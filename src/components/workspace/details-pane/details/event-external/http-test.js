@@ -34,6 +34,44 @@ const RequestBodyTextArea = styled.textarea`
   color: ${({ theme }) => theme.colors.fonts.main};
   padding: 5px;
   border-radius: 3px;
+  border: 2px solid
+    ${({ theme, isValid, borderless, readOnly }) => {
+      if (readOnly) {
+        return 'transparent';
+      }
+      if (isValid === false) {
+        return theme.colors.alerts.warning;
+      }
+      if (borderless === true) {
+        return 'transparent';
+      }
+      return theme.colors.backgrounds.light;
+    }};
+
+  &:hover {
+    border: 2px solid
+      ${({ theme, isValid, readOnly }) => {
+        if (readOnly) return 'transparent';
+        if (isValid === false) return theme.colors.alerts.warning;
+        return theme.colors.backgrounds.light;
+      }};
+  }
+
+  &:focus {
+    box-shadow: 0px 0px 2px
+      ${({ theme, isValid, readOnly }) => {
+        if (readOnly) return 'transparent';
+        if (isValid === false) return theme.colors.alerts.warning;
+        return theme.colors.primary.light;
+      }};
+    border: 2px solid
+      ${({ theme, isValid, readOnly }) => {
+        if (readOnly) return 'transparent';
+        if (isValid === false) return theme.colors.alerts.warning;
+        return theme.colors.primary.light;
+      }} !important;
+    outline: none;
+  }
 `;
 
 const ErrorMessageSpan = styled.span`
@@ -110,8 +148,8 @@ function HttpEventTestPane({ id, url, method }) {
 
   // Set initial headers
   let initialHeaders = [];
-  if(method === 'post' || method === 'put') {
-    initialHeaders.push({ name: 'Content-Type', value: 'application/json' })
+  if (method === 'post' || method === 'put') {
+    initialHeaders.push({ name: 'Content-Type', value: 'application/json' });
   }
 
   // Setup the input state for the component
