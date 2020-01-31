@@ -9,14 +9,16 @@ const ViewRoot = styled.div`
   flex-direction: column;
 `;
 
-const LoadingLogsSpinner = styled(Spinner)`
-  margin-left: 0px 10px;
-`;
-
 const LoadingStatus = styled.span`
   display: flex;
   align-items: center;
   font-size: ${({ theme }) => theme.fonts.sizes.small};
+  margin-top: 5px;
+  margin-left: 8px;
+`;
+
+const LoadingLogsSpinner = styled(Spinner)`
+  margin-right: 10px;
 `;
 
 const LogContainer = styled.div`
@@ -59,13 +61,18 @@ function ComputeResourceLogsPane({ name }) {
 
   return (
     <ViewRoot>
-      {state.isFetchingLogs ? (
-        <LoadingStatus>
-          <LoadingLogsSpinner /> Connecting to log stream
-        </LoadingStatus>
-      ) : (
-        ''
-      )}
+      <LoadingStatus>
+        {state.isFetchingLogs ? (
+          <>
+            <LoadingLogsSpinner /> Connecting to log stream
+          </>
+        ) : (
+          <>
+            Log stream connected. Polling every 1000ms.
+          </>
+        )}
+      </LoadingStatus>
+
       <LogContainer>
         <LogOutputPre>{state.logs}</LogOutputPre>
       </LogContainer>
