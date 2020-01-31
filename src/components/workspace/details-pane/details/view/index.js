@@ -18,6 +18,10 @@ const DetailsViewRoot = styled.div`
   width: 100%;
 `;
 
+const DetailsTabPanel = styled(FlexTabPanel)`
+  background-color: ${({ theme }) => theme.colors.backgrounds.main};
+`;
+
 function renderInput(input) {
   switch (input.type) {
     case 'validated-text':
@@ -63,9 +67,9 @@ export default function DetailsView({ details, onRootKeyPress }) {
                 );
               }
               return (
-                <FlexTabPanel key={tab.title} name={tab.title}>
+                <DetailsTabPanel key={tab.title} name={tab.title}>
                   {tab.component}
-                </FlexTabPanel>
+                </DetailsTabPanel>
               );
             } else {
               if (!tab.sections) {
@@ -74,7 +78,7 @@ export default function DetailsView({ details, onRootKeyPress }) {
               } else {
                 // We need to render the sections according to the details the user has given us
                 return (
-                  <FlexTabPanel key={tab.title} name={tab.title} direction="column">
+                  <DetailsTabPanel key={tab.title} name={tab.title} direction="column">
                     {tab.sections.map(section => {
                       return (
                         <DetailsSection key={section.title}>
@@ -96,7 +100,7 @@ export default function DetailsView({ details, onRootKeyPress }) {
                         </DetailsSection>
                       );
                     })}
-                  </FlexTabPanel>
+                  </DetailsTabPanel>
                 );
               }
             }
