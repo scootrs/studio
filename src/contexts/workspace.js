@@ -345,8 +345,7 @@ export function WorkspaceContextProvider({ children }) {
         return {
           ...prev,
           resources,
-          selected,
-          hasChanges: true
+          selected
         };
       });
     },
