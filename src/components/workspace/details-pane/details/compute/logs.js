@@ -10,7 +10,13 @@ const ViewRoot = styled.div`
 `;
 
 const LoadingLogsSpinner = styled(Spinner)`
-  margin-left: 10px;
+  margin-left: 0px 10px;
+`;
+
+const LoadingStatus = styled.span`
+  display: flex;
+  align-items: center;
+  font-size: ${({ theme }) => theme.fonts.sizes.small};
 `;
 
 const LogContainer = styled.div`
@@ -53,7 +59,13 @@ function ComputeResourceLogsPane({ name }) {
 
   return (
     <ViewRoot>
-      {state.isFetchingLogs ? <LoadingLogsSpinner /> : ''}
+      {state.isFetchingLogs ? (
+        <LoadingStatus>
+          <LoadingLogsSpinner /> Connecting to log stream
+        </LoadingStatus>
+      ) : (
+        ''
+      )}
       <LogContainer>
         <LogOutputPre>{state.logs}</LogOutputPre>
       </LogContainer>
