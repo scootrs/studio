@@ -32,6 +32,11 @@ export default function DeployButton() {
   const workspaceCtx = useWorkspaceContext();
 
   const onDeploy = async () => {
+    // Save the current state
+    appCtx.save();
+    workspaceCtx.save();
+
+    // Pack our deployment configuration
     const appPackResult = appCtx.pack();
     const workspacePackResult = workspaceCtx.pack();
     if (appPackResult.error) {
@@ -47,6 +52,8 @@ export default function DeployButton() {
       ...workspacePackResult.package
     };
     console.log(pkg);
+
+    // Send the configuration to be deployed
     setWaiting(true, 'Deploying configuration');
     try {
       const result = await axios.post('http://localhost:3030/api/v0/deploy', pkg, { withCredentials: true });
