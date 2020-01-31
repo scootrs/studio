@@ -5,7 +5,7 @@ import Spinner from '~styles/spinner';
 const ViewRoot = styled.footer`
   display: flex;
   font-size: 0.8em;
-  padding: 8px;
+  padding: 8px 12px;
   background-color: ${({ theme }) => theme.colors.static.dark.backgrounds.dark};
   flex-shrink: 1;
   color: ${({ theme }) => theme.colors.static.dark.fonts.main};
