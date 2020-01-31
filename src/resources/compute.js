@@ -23,7 +23,9 @@ export function createComputeResource(x, y) {
       environment: [],
       tags: []
     },
-    deployment: {},
+    deployment: {
+      name: null
+    },
     validation: {
       isValid: false,
       fields: {

@@ -438,19 +438,34 @@ export function WorkspaceContextProvider({ children }) {
         const resources = {
           ...prev.resources
         };
+
         for (let r of Array.from(Object.values(resources))) {
-          let event = results.events.external.find(e => e.id === r.config.id);
-          if (event) {
-            // We are dealing with an event. Capture the live URL and the HTTP method used on the endpoint
+          // Handle the compute
+          if (r.meta.type === Compute) {
+            // Save the name it was deployed under
             resources[r.meta.id] = {
               ...resources[r.meta.id],
               deployment: {
-                url: event.url,
-                method: event.method
+                name: r.config.id
               }
             };
           }
+          // Handle the events
+          else if (r.meta.type === EventExternal) {
+            let event = results.events.external.find(e => e.id === r.config.id);
+            if (event) {
+              // We are dealing with an event. Capture the live URL and the HTTP method used on the endpoint
+              resources[r.meta.id] = {
+                ...resources[r.meta.id],
+                deployment: {
+                  url: event.url,
+                  method: event.method
+                }
+              };
+            }
+          }
         }
+
         const next = {
           ...prev,
           resources

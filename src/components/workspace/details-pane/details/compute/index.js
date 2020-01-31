@@ -1,6 +1,7 @@
 import React from 'react';
 import { useWorkspaceContext } from '~contexts/workspace';
 import Code from './code';
+import Logs from './logs';
 import { validateId, validateRuntime } from '~resources/compute';
 
 export default function useComputeDetails() {
@@ -105,6 +106,10 @@ export default function useComputeDetails() {
             ]
           }
         ]
+      },
+      {
+        title: 'Logs',
+        component: <Logs name={selected.deployment.name} />
       }
     ]
   };
