@@ -8,7 +8,7 @@ export const HeaderTitleContainer = styled.div`
   display: flex;
   flex-direction: column;
   max-width: 100%;
-  margin-right: 10px
+  margin-right: 10px;
 `;
 
 export const HeaderTitleInput = styled(ValidatedTextInput)`
