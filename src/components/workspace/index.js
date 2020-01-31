@@ -6,7 +6,7 @@ import DetailsPane from './details-pane';
 
 export default function Workspace() {
   const onDrag = () => {
-    document.dispatchEvent(new Event('split-resize'));
+    document.dispatchEvent(new Event('monaco:resize'));
   };
 
   const ctx = useWorkspaceContext();

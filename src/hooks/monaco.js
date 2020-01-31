@@ -19,7 +19,7 @@ const _views = {};
 // This object defines all of the events that the monoco editor will react to
 //
 const _events = {
-  resize: 'monoco:resize'
+  resize: 'monaco:resize'
 };
 
 // These are the default options for the hook
