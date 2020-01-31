@@ -13,14 +13,14 @@ export function applyThemeToEndpoints(endpoints, theme) {
     newEndpoints.push({
       ...e,
       connectorStyle: {
-        stroke: theme.mode === 'light' ? theme.colors.backgrounds.medium : theme.colors.backgrounds.light,
+        stroke: theme.colors.static.endpoints[theme.mode],
         strokeWidth: 5,
         dashstyle: e.connectorStyle && e.connectorStyle.dashstyle ? e.connectorStyle.dashstyle : ''
       },
       paintStyle: {
         width: 5,
         height: 5,
-        fill: theme.mode === 'light' ? theme.colors.backgrounds.medium : theme.colors.backgrounds.light
+        fill: theme.colors.static.endpoints[theme.mode]
       }
     });
   }

@@ -24,6 +24,11 @@ const fonts = {
   }
 };
 
+const endpoints = {
+  light: '#575757',
+  dark: '#989898'
+};
+
 const theme = function(mode) {
   return {
     mode,
@@ -65,6 +70,9 @@ const theme = function(mode) {
           fonts: {
             ...fonts.light
           }
+        },
+        endpoints: {
+          ...endpoints
         }
       }
     },
