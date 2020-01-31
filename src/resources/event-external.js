@@ -52,6 +52,10 @@ export function validateUrl(val) {
   if (val === '') {
     return 'URL is required';
   }
+  const re = /\/+ *$/gm;
+  if (val.match(re)) {
+    return 'URL cannot have a trailing slash';
+  }
   return '';
 }
 

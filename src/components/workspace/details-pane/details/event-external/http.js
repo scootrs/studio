@@ -14,6 +14,10 @@ export const defaults = {
 
 function validatePath(val) {
   if (val === '') return 'URL path is required';
+  const re = /\/+ *$/gm;
+  if (val.match(re)) {
+    return 'URL cannot have a trailing slash';
+  }
   return '';
 }
 
