@@ -74,6 +74,8 @@ function mergeConnectionWithPreviousState(prev, id, config, validationFields = {
 
 export function WorkspaceContextProvider({ children }) {
   const [state, setState] = useState({
+    hasChanges: false,
+    isDeployed: false,
     selected: null,
     resources: {},
     connections: {}
@@ -188,7 +190,9 @@ export function WorkspaceContextProvider({ children }) {
     return JSON.stringify({
       resources,
       connections,
-      selected
+      selected,
+      hasChanges: state.hasChanges,
+      isDeployed: state.isDeployed
     });
   };
 
@@ -212,7 +216,9 @@ export function WorkspaceContextProvider({ children }) {
     return {
       connections,
       resources,
-      selected
+      selected,
+      hasChanges: serial.hasChanges,
+      isDeployed: serial.isDeployed
     };
   };
 
@@ -256,14 +262,16 @@ export function WorkspaceContextProvider({ children }) {
             return {
               ...prev,
               resources,
-              selected: resources[id]
+              selected: resources[id],
+              hasChanges: true
             };
           } else if (prev.connections[id]) {
             const connections = mergeConnectionWithPreviousState(prev, id, config, validation);
             return {
               ...prev,
               connections,
-              selected: connections[id]
+              selected: connections[id],
+              hasChanges: true
             };
           } else {
             throw new Error(
@@ -288,7 +296,8 @@ export function WorkspaceContextProvider({ children }) {
         return {
           ...prev,
           resources,
-          selected: resources[resource.meta.id]
+          selected: resources[resource.meta.id],
+          hasChanges: true
         };
       });
     },
@@ -310,7 +319,8 @@ export function WorkspaceContextProvider({ children }) {
         return {
           ...prev,
           resources,
-          selected
+          selected,
+          hasChanges: true
         };
       });
     },
@@ -335,7 +345,8 @@ export function WorkspaceContextProvider({ children }) {
         return {
           ...prev,
           resources,
-          selected
+          selected,
+          hasChanges: true
         };
       });
     },
@@ -374,7 +385,8 @@ export function WorkspaceContextProvider({ children }) {
           ...prev,
           resources,
           connections,
-          selected
+          selected,
+          hasChanges: true
         };
       });
     },
@@ -394,7 +406,8 @@ export function WorkspaceContextProvider({ children }) {
         return {
           ...prev,
           connections,
-          selected
+          selected,
+          hasChanges: true
         };
       });
     },
@@ -409,7 +422,8 @@ export function WorkspaceContextProvider({ children }) {
         return {
           ...prev,
           connections,
-          selected
+          selected,
+          hasChanges: true
         };
       });
     },
@@ -427,7 +441,8 @@ export function WorkspaceContextProvider({ children }) {
         return {
           ...prev,
           connections,
-          selected
+          selected,
+          hasChanges: true
         };
       });
     },
@@ -468,7 +483,9 @@ export function WorkspaceContextProvider({ children }) {
 
         const next = {
           ...prev,
-          resources
+          resources,
+          hasChanges: false,
+          isDeployed: true
         };
         save(next);
         return next;

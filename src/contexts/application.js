@@ -15,6 +15,8 @@ export function useApplicationContext() {
 
 export function ApplicationContextProvider({ children }) {
   const [state, setState] = useState({
+    hasChanges: false,
+    isDeployed: false,
     name: {
       value: '',
       error: 'App name is required'
@@ -50,6 +52,9 @@ export function ApplicationContextProvider({ children }) {
       return { package: null, error: state.region.error };
     }
 
+    pkg.hasChanges = state.hasChanges;
+    pkg.isDeployed = state.isDeployed;
+
     return { package: pkg, error: null };
   };
 
@@ -73,7 +78,8 @@ export function ApplicationContextProvider({ children }) {
           provider: {
             value,
             error
-          }
+          },
+          hasChanges: true
         };
       });
     },
@@ -84,7 +90,8 @@ export function ApplicationContextProvider({ children }) {
           name: {
             value,
             error
-          }
+          },
+          hasChanges: true
         };
       });
     },
@@ -95,14 +102,20 @@ export function ApplicationContextProvider({ children }) {
           region: {
             value,
             error
-          }
+          },
+          hasChanges: true
         };
       });
     },
     mergeDeploymentResults: function(results) {
       setState(function(prev) {
-        save(prev);
-        return prev;
+        const next = {
+          ...prev,
+          hasChanges: false,
+          isDeployed: true
+        };
+        save(next);
+        return next;
       });
     }
   };
