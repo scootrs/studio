@@ -9,7 +9,7 @@ const ViewRoot = styled.div`
   flex-direction: column;
 `;
 
-const LoadingStatus = styled.span`
+const StatusSpan = styled.span`
   display: flex;
   align-items: center;
   font-size: ${({ theme }) => theme.fonts.sizes.small};
@@ -43,8 +43,11 @@ const baseUrl = 'http://localhost:3030/api/v0';
 function ComputeResourceLogsPane({ name }) {
   // Fetch logs on mount
   const [state, setState] = useState({
-    logs: '',
-    isFetchingLogs: true
+    logs: {
+      value: '',
+      isFetching: true,
+      message: 'Connecting to log stream'
+    }
   });
 
   const logEventSourceRef = useRef(null);
@@ -61,20 +64,12 @@ function ComputeResourceLogsPane({ name }) {
 
   return (
     <ViewRoot>
-      <LoadingStatus>
-        {state.isFetchingLogs ? (
-          <>
-            <LoadingLogsSpinner /> Connecting to log stream
-          </>
-        ) : (
-          <>
-            Log stream connected. Polling every 1000ms.
-          </>
-        )}
-      </LoadingStatus>
+      <StatusSpan>
+        {state.logs.isFetching ? <LoadingLogsSpinner /> : ''} {state.logs.message}
+      </StatusSpan>
 
       <LogContainer>
-        <LogOutputPre>{state.logs}</LogOutputPre>
+        <LogOutputPre>{state.logs.value}</LogOutputPre>
       </LogContainer>
     </ViewRoot>
   );
