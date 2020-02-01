@@ -42,8 +42,6 @@ export function useMonaco(model = 'default', options = {}) {
   // TODO: make this a deep merge
   options = Object.assign(_options, options);
 
-  console.log(options);
-
   // Create the reference we will use for attaching our editor to the DOM
   const domElementRef = useRef();
 
@@ -58,7 +56,6 @@ export function useMonaco(model = 'default', options = {}) {
     }
     if (_editor === null) {
       // This is the first time the editor has been needed. We should create the editor.
-      console.log('Initializing monoco editor');
       _editor = monaco.editor.create(_el, {
         minimap: {
           enabled: false
@@ -83,7 +80,6 @@ export function useMonaco(model = 'default', options = {}) {
   const prevModelNameRef = useRef(model);
   useEffect(() => {
     if (!_models[model]) {
-      console.log('Creating a new monaco model: ' + model);
       _models[model] = monaco.editor.createModel();
     }
     _views[prevModelNameRef.current] = _editor.saveViewState();
