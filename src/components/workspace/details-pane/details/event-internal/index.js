@@ -1,10 +1,11 @@
 import { useWorkspaceContext } from '~contexts/workspace';
 import { validateId, validateTopicName, validateBroker } from '~resources/event-internal';
+import DeleteIcon from '../view/delete-icon';
 
 export default function useInternalEventDetails() {
   const {
     state: { selected },
-    actions: { updateSelectedConfiguration }
+    actions: { updateSelectedConfiguration, removeResource }
   } = useWorkspaceContext();
 
   return {
@@ -26,7 +27,20 @@ export default function useInternalEventDetails() {
         seedIsValid: selected.validation.fields.id === '',
         seedCaption: selected.validation.fields.id
       },
-      inputs: []
+      inputs: [
+        {
+          type: 'component',
+          name: 'delete',
+          component: DeleteIcon,
+          props: {
+            onClick: function() {
+              // HACK: need a better way to unregister the node with jsPlumb
+              document.unregisterNode(selected.meta.id);
+              removeResource(selected.meta.id);
+            }
+          }
+        }
+      ]
     },
     tabs: [
       {

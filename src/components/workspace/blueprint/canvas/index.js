@@ -33,6 +33,8 @@ function BlueprintCanvas({ theme }) {
       currentlySelectedOldEndpointPaintStyleRef.current = null;
     }
   };
+  // HACK: need a better way to do this
+  document.unhighlightSelectedConnection = unhighlightSelectedConnection;
 
   const highlightConnection = function(conn) {
     unhighlightSelectedConnection();
@@ -56,7 +58,7 @@ function BlueprintCanvas({ theme }) {
 
   const newConnectionRef = useRef(false);
 
-  const [ref, plumb] = usePlumbContainer({
+  const [ref, plumb, unregister] = usePlumbContainer({
     // Prevent events from trickeling up the DOM and potentially causing side effects
     stopEvents: true,
 
@@ -91,6 +93,10 @@ function BlueprintCanvas({ theme }) {
           highlightConnection(jsPlumbConn);
           setSelected(conn.id);
         }
+      },
+
+      onContextMenu: function(conn, jsPlumbConn) {
+        console.log(jsPlumbConn);
       }
     },
 
@@ -142,6 +148,9 @@ function BlueprintCanvas({ theme }) {
     // Drag by 10 pixels
     dragGrid: [10, 10]
   });
+
+  // HACK: we need to find a better way of letting React handle the DOM and jsPlumb handle the connections/nodes
+  document.unregisterNode = unregister;
 
   useDrop({
     ref,

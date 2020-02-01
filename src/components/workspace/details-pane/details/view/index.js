@@ -39,6 +39,10 @@ function renderInput(input) {
     case 'tabular':
       return <TabularInput key={input.name} {...input} />;
 
+    case 'component':
+      const CustomInputComponent = input.component;
+      return <CustomInputComponent key={input.name} {...input.props} />
+
     default:
       return <></>;
   }

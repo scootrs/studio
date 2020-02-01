@@ -1,11 +1,12 @@
 import { useWorkspaceContext } from '~contexts/workspace';
 import { validateId, validateType } from '~resources/event-external';
 import { useHttpEventDetailTabs, defaults as httpDefaults } from './http';
+import DeleteIcon from '../view/delete-icon';
 
 export default function useEventDetails() {
   const {
     state: { selected },
-    actions: { updateSelectedConfiguration }
+    actions: { updateSelectedConfiguration, removeResource }
   } = useWorkspaceContext();
 
   /**
@@ -74,6 +75,18 @@ export default function useEventDetails() {
           ],
           isValid: selected.validation.fields.type === '',
           caption: selected.validation.fields.type
+        },
+        {
+          type: 'component',
+          name: 'delete',
+          component: DeleteIcon,
+          props: {
+            onClick: function() {
+              // HACK: need a better way to unregister the node with jsPlumb
+              document.unregisterNode(selected.meta.id);
+              removeResource(selected.meta.id);
+            }
+          }
         }
       ]
     },

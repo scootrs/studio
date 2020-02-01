@@ -3,12 +3,17 @@ import { useWorkspaceContext } from '~contexts/workspace';
 import Code from './code';
 import Logs from './logs';
 import { validateId, validateRuntime } from '~resources/compute';
+import DeleteIcon from '../view/delete-icon';
 
 export default function useComputeDetails() {
   const {
     state: { selected },
-    actions: { updateSelectedConfiguration }
+    actions: { updateSelectedConfiguration, removeResource }
   } = useWorkspaceContext();
+
+  const onDeleteIconClick = function() {
+    console.log('Hello');
+  };
 
   return {
     id: selected.meta.id,
@@ -54,6 +59,18 @@ export default function useComputeDetails() {
           ],
           isValid: selected.validation.fields.runtime === '',
           caption: selected.validation.fields.runtime
+        },
+        {
+          type: 'component',
+          name: 'delete',
+          component: DeleteIcon,
+          props: {
+            onClick: function() {
+              // HACK: need a better way to unregister the node with jsPlumb
+              document.unregisterNode(selected.meta.id);
+              removeResource(selected.meta.id);
+            }
+          }
         }
       ]
     },

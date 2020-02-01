@@ -1,10 +1,11 @@
 import { useWorkspaceContext } from '~contexts/workspace';
 import { validateId, validateAllows } from '~connections/reference';
+import DeleteIcon from '../view/delete-icon';
 
 export default function useReferenceDetails() {
   const {
     state: { selected },
-    actions: { updateSelectedConfiguration }
+    actions: { updateSelectedConfiguration, removeConnection }
   } = useWorkspaceContext();
 
   return {
@@ -27,7 +28,20 @@ export default function useReferenceDetails() {
         seedIsValid: selected.validation.fields.id === '',
         seedCaption: selected.validation.fields.id
       },
-      inputs: []
+      inputs: [
+        {
+          type: 'component',
+          name: 'delete',
+          component: DeleteIcon,
+          props: {
+            onClick: function() {
+              removeConnection(selected.meta.id);
+              // HACK: need a better way to do this
+              document.unhighlightSelectedConnection();
+            }
+          }
+        }
+      ]
     },
     tabs: [
       {

@@ -1,11 +1,12 @@
 import { useWorkspaceContext } from '~contexts/workspace';
 import { useKeyValueDetailTabs, defaults as keyValueDefaults } from './key-value';
 import { validateId, validateType } from '~resources/storage';
+import DeleteIcon from '../view/delete-icon';
 
 export default function useStorageDetails() {
   const {
     state: { selected },
-    actions: { updateSelectedConfiguration }
+    actions: { updateSelectedConfiguration, removeResource }
   } = useWorkspaceContext();
 
   return {
@@ -63,6 +64,18 @@ export default function useStorageDetails() {
           ],
           isValid: selected.validation.fields.type === '',
           caption: selected.validation.fields.type
+        },
+        {
+          type: 'component',
+          name: 'delete',
+          component: DeleteIcon,
+          props: {
+            onClick: function() {
+              // HACK: need a better way to unregister the node with jsPlumb
+              document.unregisterNode(selected.meta.id);
+              removeResource(selected.meta.id);
+            }
+          }
         }
       ]
     },
