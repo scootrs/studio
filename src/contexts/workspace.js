@@ -236,15 +236,9 @@ export function WorkspaceContextProvider({ children }) {
   };
 
   const actions = {
-    setSelected: function(val) {
+    setSelected: function(id) {
       setState(function(prev) {
-        if (val === null) return { ...prev, selected: null };
-        if (!val.meta || !val.meta.id) {
-          throw new Error(
-            'Failed to set value for `selected` in the WorkspaceContext: The provided value does not have a meta ID'
-          );
-        }
-        const id = val.meta.id;
+        if (id === null) return { ...prev, selected: null };
         if (prev.resources[id]) return { ...prev, selected: prev.resources[id] };
         if (prev.connections[id]) return { ...prev, selected: prev.connections[id] };
         throw new Error(

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import ExclamationTriangleSolidSvg from './blueprint-resource/vectors/exclamation-triangle-solid.svg';
 
 const InvalidAlert = styled(ExclamationTriangleSolidSvg)`
+  pointer-events: none;
   path {
     fill: ${({ theme }) => theme.colors.secondary.medium};
     stroke: white;
@@ -20,9 +21,9 @@ const LabelContainer = styled.div`
   user-select: none;
 `;
 
-function Label({ content, isValid, isSelected, theme }) {
+function Label({ content, isValid, isSelected, theme, onClick }) {
   return (
-    <LabelContainer theme={theme} isSelected={isSelected}>
+    <LabelContainer theme={theme} isSelected={isSelected} onClick={onClick}>
       {content} {isValid ? '' : <InvalidAlert theme={theme} width={20} height={20} />}
     </LabelContainer>
   );

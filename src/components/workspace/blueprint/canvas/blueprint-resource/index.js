@@ -4,7 +4,7 @@ import Resource from '~components/resources';
 import View from './view';
 import ResourceContextMenu from './context-menu';
 
-function BlueprintResource({ resource, onRemove, onContextMenu }) {
+function BlueprintResource({ resource, onRemove, onSelect, onContextMenu }) {
   const ref = useRef();
   const {
     state: { selected },
@@ -17,13 +17,17 @@ function BlueprintResource({ resource, onRemove, onContextMenu }) {
   const didRemoveFromContextMenuRef = useRef(false);
 
   const onClick = ev => {
+    ev.preventDefault();
+    ev.stopPropagation();
     if (didRemoveFromContextMenuRef.current) {
       didRemoveFromContextMenuRef.current = false;
       return;
     }
-    ev.didSetSelected = true;
     ref.current.focus();
-    setSelected(resource);
+    setSelected(resource.meta.id);
+    if (onSelect) {
+      onSelect();
+    }
   };
 
   const onKeyPress = ev => {

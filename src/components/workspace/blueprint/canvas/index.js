@@ -23,19 +23,20 @@ function BlueprintCanvas({ theme }) {
   const currentlySelectedOldEndpointPaintStyleRef = useRef(null);
 
   const unhighlightSelectedConnection = function() {
-    currentlySelectedConnectionRef.current.setPaintStyle(currentlySelectedOldConnectionPaintStyleRef.current);
-    for (let e of currentlySelectedConnectionRef.current.endpoints) {
-      e.setPaintStyle(currentlySelectedOldEndpointPaintStyleRef.current);
+    if (currentlySelectedConnectionRef.current !== null) {
+      currentlySelectedConnectionRef.current.setPaintStyle(currentlySelectedOldConnectionPaintStyleRef.current);
+      for (let e of currentlySelectedConnectionRef.current.endpoints) {
+        e.setPaintStyle(currentlySelectedOldEndpointPaintStyleRef.current);
+      }
+      currentlySelectedConnectionRef.current = null;
+      currentlySelectedOldConnectionPaintStyleRef.current = null;
+      currentlySelectedOldEndpointPaintStyleRef.current = null;
     }
-    currentlySelectedConnectionRef.current = null;
-    currentlySelectedOldConnectionPaintStyleRef.current = null;
-    currentlySelectedOldEndpointPaintStyleRef.current = null;
   };
 
   const highlightConnection = function(conn) {
-    if (currentlySelectedConnectionRef.current !== null) {
-      unhighlightSelectedConnection();
-    }
+    unhighlightSelectedConnection();
+
     currentlySelectedOldConnectionPaintStyleRef.current = conn.getPaintStyle();
     conn.setPaintStyle({ ...currentlySelectedOldConnectionPaintStyleRef.current, stroke: theme.colors.secondary.main });
     for (let e of conn.endpoints) {
@@ -88,7 +89,7 @@ function BlueprintCanvas({ theme }) {
         const type = determineConnectionType(conn);
         if (type !== Trigger) {
           highlightConnection(jsPlumbConn);
-          setSelected(connections[conn.id]);
+          setSelected(conn.id);
         }
       }
     },
@@ -97,7 +98,7 @@ function BlueprintCanvas({ theme }) {
       updateResourcePosition(id, x, y);
     },
 
-    createLabel: function(id) {
+    createLabel: function(id, jsPlumbConn) {
       let content = '';
       let isValid = false;
       let isSelected = false;
@@ -108,7 +109,15 @@ function BlueprintCanvas({ theme }) {
       if (selected && selected.meta.id === id) {
         isSelected = true;
       }
-      return <Label content={content} isValid={isValid} theme={theme} isSelected={isSelected} />;
+
+      const onClick = function(ev) {
+        ev.stopPropagation();
+        ev.preventDefault();
+        highlightConnection(jsPlumbConn);
+        setSelected(id);
+      };
+
+      return <Label content={content} isValid={isValid} theme={theme} isSelected={isSelected} onClick={onClick} />;
     },
 
     // Specified the property path to the jsPlumb information for our connections
@@ -125,9 +134,7 @@ function BlueprintCanvas({ theme }) {
     ref,
     svg: true,
     onDrop: function(pkg) {
-      if (currentlySelectedConnectionRef.current !== null) {
-        unhighlightSelectedConnection();
-      }
+      unhighlightSelectedConnection();
       const resource = createResourceWithType(pkg.data.type, pkg.x, pkg.y);
       addResource(resource);
     }
@@ -143,25 +150,24 @@ function BlueprintCanvas({ theme }) {
   const onBlueprintClick = function(ev) {
     ev.preventDefault();
     ev.stopPropagation();
+
+    // Cover clicking when a context menu is visible
+    //
     if (contextMenuDisposeRef.current !== null) {
       contextMenuDisposeRef.current();
       contextMenuDisposeRef.current = null;
+      return;
     }
+
+    // Cover the edge case where dropping a new connection triggers this handler
+    //
     if (newConnectionRef.current === true) {
       newConnectionRef.current = false;
       return;
     }
-    if (ev.didSetSelected && currentlySelectedConnectionRef.current !== null) {
-      unhighlightSelectedConnection();
-    } else {
-      if (currentlySelectedConnectionRef.current) {
-        unhighlightSelectedConnection();
-      }
-      if (selected && !ev.didSetSelected) {
-        setSelected(null);
-      }
-    }
-    ev.didSetSelected = false;
+
+    unhighlightSelectedConnection();
+    setSelected(null);
   };
 
   const onRemove = id => {
@@ -169,6 +175,12 @@ function BlueprintCanvas({ theme }) {
       unhighlightSelectedConnection();
     }
     removeResource(id);
+  };
+
+  const onSelectResource = function() {
+    if (currentlySelectedConnectionRef.current !== null) {
+      unhighlightSelectedConnection();
+    }
   };
 
   const onContextMenu = function(dispose) {
@@ -194,6 +206,7 @@ function BlueprintCanvas({ theme }) {
             onRemove={onRemove}
             onContextMenu={onContextMenu}
             endpoints={applyThemeToEndpoints(r.meta.endpoints, theme)}
+            onSelect={onSelectResource}
           />
         ))
       )}
