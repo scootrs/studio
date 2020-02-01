@@ -296,29 +296,6 @@ export function WorkspaceContextProvider({ children }) {
       });
     },
 
-    updateResourceConfiguration: function(id, config, validation = {}) {
-      setState(function(prev) {
-        // There is an edge case where the Monaco Code editor unmounts and attempts to update the state of a resource
-        // that has been removed. This happens if the resource being removed was selected and the editor was visible.
-        // To prevent this, we need to make sure the ID we are attempting to update is still in our list of resources.
-        // If it isn't, then we skip the state update.
-        if (!prev.resources[id]) return prev;
-
-        // The resource still exists, carry on
-        const resources = mergeResourceWithPreviousState(prev, id, config, validation);
-        let selected = prev.selected;
-        if (selected && resources[selected.meta.id]) {
-          selected = resources[selected.meta.id];
-        }
-        return {
-          ...prev,
-          resources,
-          selected,
-          hasChanges: true
-        };
-      });
-    },
-
     updateResourcePosition: function(id, x, y) {
       setState(function(prev) {
         const resources = {
@@ -396,22 +373,6 @@ export function WorkspaceContextProvider({ children }) {
           selected = connections[connection.meta.id];
         } else if (selected && prev.connections[selected.meta.id]) selected = connections[selected.meta.id];
 
-        return {
-          ...prev,
-          connections,
-          selected,
-          hasChanges: true
-        };
-      });
-    },
-
-    updateConnectionConfiguration: function(id, config, validation = {}) {
-      setState(function(prev) {
-        const connections = mergeConnectionWithPreviousState(prev, id, config, validation);
-        let selected = prev.selected;
-        if (selected && connections[selected.meta.id]) {
-          selected = connections[selected.meta.id];
-        }
         return {
           ...prev,
           connections,
