@@ -474,8 +474,16 @@ export function WorkspaceContextProvider({ children }) {
           }
         }
 
+        // Updated the selected reference
+        let selected = null;
+        if (prev.selected) {
+          if (resources[prev.selected.meta.id]) selected = resources[prev.selected.meta.id];
+          else if (prev.connections[prev.selected.meta.id]) selected = prev.connections[prev.selected.meta.id];
+        }
+
         const next = {
           ...prev,
+          selected,
           resources,
           hasChanges: false,
           isDeployed: true
