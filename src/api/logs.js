@@ -13,7 +13,7 @@ export function useLogEvents(baseUrl, computeName, ref, setState) {
         logs: {
           isFetching: false,
           isError: false,
-          value: prev.logs.isError ? '' : prev.logs.value + data.message,
+          value: prev.logs.isError ? '' : prev.logs.value + '\n' + data.message,
           message: 'Log stream connected. Polling every 1000ms.'
         }
       };
