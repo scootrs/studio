@@ -250,23 +250,17 @@ export function WorkspaceContextProvider({ children }) {
     updateSelectedConfiguration: function(config, validation = {}) {
       setState(function(prev) {
         if (prev.selected) {
+          const next = {
+            ...prev,
+            hasChanges: true
+          };
           const id = prev.selected.meta.id;
           if (prev.resources[id]) {
-            const resources = mergeResourceWithPreviousState(prev, id, config, validation);
-            return {
-              ...prev,
-              resources,
-              selected: resources[id],
-              hasChanges: true
-            };
+            next.resources = mergeResourceWithPreviousState(prev, id, config, validation);
+            next.selected = next.resources[id];
           } else if (prev.connections[id]) {
-            const connections = mergeConnectionWithPreviousState(prev, id, config, validation);
-            return {
-              ...prev,
-              connections,
-              selected: connections[id],
-              hasChanges: true
-            };
+            next.connections = mergeConnectionWithPreviousState(prev, id, config, validation);
+            next.selected = next.connections[id];
           } else {
             throw new Error(
               'Failed to update selected configuration: The meta ID "' +
@@ -275,6 +269,32 @@ export function WorkspaceContextProvider({ children }) {
                 'else in the context.'
             );
           }
+
+          // Ensure there are no id colisions
+          const ids = new Set();
+          for (let c of Object.values(next.connections)) {
+            if (c.meta.type === Reference) {
+              if (!ids.has(c.config.id)) {
+                ids.add(c.config.id);
+              } else {
+                // Another reference has the same name
+                c.validation.isValid = false;
+                c.validation.fields.id = 'Reference ID must be unique';
+              }
+            }
+          }
+
+          for (let r of Object.values(next.resources)) {
+            if (!ids.has(r.config.id)) {
+              ids.add(r.config.id);
+            } else {
+              // Another reference or resource has the same name
+              r.validation.isValid = false;
+              r.validation.fields.id = 'Resource ID must be unique';
+            }
+          }
+
+          return next;
         } else {
           return prev;
         }
