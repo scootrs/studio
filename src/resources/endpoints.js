@@ -1,97 +1,92 @@
 import uuid from 'uuid/v4';
 import { Compute, Storage, EventInternal, EventExternal } from '~types';
 
-const defaults = {
-  connector: ['Flowchart', { cornerRadius: 5, stub: 10, alwaysRespectStubs: true }],
-  maxConnections: -1,
-  endpoint: ['Dot', { radius: 5 }]
-};
-
 export function applyThemeToEndpoints(endpoints, theme) {
   const newEndpoints = [];
   for (let e of endpoints) {
-    newEndpoints.push({
+    let ne = {
       ...e,
-      connectorStyle: {
-        stroke: theme.colors.static.endpoints[theme.mode],
-        strokeWidth: 5,
-        dashstyle: e.connectorStyle && e.connectorStyle.dashstyle ? e.connectorStyle.dashstyle : ''
-      },
-      paintStyle: {
-        width: 5,
-        height: 5,
-        fill: theme.colors.static.endpoints[theme.mode]
-      }
-    });
+      connector: ['Flowchart', { cornerRadius: 5, stub: 10, alwaysRespectStubs: true }],
+      maxConnections: -1,
+      endpoint: ['Dot', { radius: 7 }]
+    };
+
+    if (e.isSource) {
+      ne.anchor = [1, 0.5, 1, 0, 8, 0];
+    } else if (e.isTarget) {
+      ne.anchor = [0, 0.5, -1, 0, -8, 0];
+    }
+
+    ne.connectorStyle = {
+      stroke: theme.colors.static.endpoints[theme.mode],
+      strokeWidth: 5
+    };
+
+    if (e.dashed) {
+      ne.connectorStyle.dashstyle = '2 2';
+    }
+
+    ne.paintStyle = {
+      width: 5,
+      height: 5,
+      fill: theme.colors.static.endpoints[theme.mode]
+    };
+
+    newEndpoints.push(ne);
   }
   return newEndpoints;
 }
 
-function merge(options) {
-  if (options.isSource) options.anchor = [1, 0.5, 1, 0, 6, 0];
-  else if (options.isTarget) options.anchor = [0, 0.5, -1, 0, -6, 0];
-  if (options.dashed)
-    options.connectorStyle = {
-      ...defaults.connectorStyle,
-      dashstyle: '2 2'
-    };
-
-  return {
-    ...defaults,
-    ...options
-  };
-}
-
 export function createComputeEndpoints() {
   return [
-    merge({
+    {
       isSource: true,
       uuid: uuid(),
       scope: 'storage event-internal'
-    }),
-    merge({
+    },
+    {
       isTarget: true,
       uuid: uuid(),
       scope: 'compute'
-    })
+    }
   ];
 }
 
 export function createStorageEndpoints() {
   return [
-    merge({
+    {
       isTarget: true,
       uuid: uuid(),
       scope: 'storage'
-    })
+    }
   ];
 }
 
 export function createExternalEventEndpoints() {
   return [
-    merge({
+    {
       isSource: true,
       uuid: uuid(),
       scope: 'compute',
       dashed: true
-    })
+    }
   ];
 }
 
 export function createInternalEventEndpoints() {
   return [
-    merge({
+    {
       isSource: true,
       uuid: uuid(),
       scope: 'compute',
       dashed: true
-    }),
-    merge({
+    },
+    {
       isTarget: true,
       uuid: uuid(),
       scope: 'event-internal',
       dashed: true
-    })
+    }
   ];
 }
 
