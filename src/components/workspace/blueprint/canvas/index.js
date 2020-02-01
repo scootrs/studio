@@ -99,16 +99,29 @@ function BlueprintCanvas({ theme }) {
     },
 
     createLabel: function(id, jsPlumbConn) {
+      let isTrigger = false;
+      let isSelected = false;
+      if (selected && selected.meta.id === id) {
+        isSelected = true;
+        isTrigger = selected.meta.type === Trigger;
+      }
+
       let content = '';
       let isValid = false;
-      let isSelected = false;
       if (connections[id]) {
         content = connections[id].config.id;
         isValid = connections[id].validation.isValid;
+        if (!isTrigger) {
+          isTrigger = connections[id].meta.type === Trigger;
+        }
       }
-      if (selected && selected.meta.id === id) {
-        isSelected = true;
+
+      // At this point we know if it is a trigger. If it is, then just return an empty string.
+      if (isTrigger) {
+        return '';
       }
+
+      // It's a reference. Allow it to be selected and return the name label.
 
       const onClick = function(ev) {
         ev.stopPropagation();
