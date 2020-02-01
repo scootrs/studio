@@ -24,6 +24,7 @@ function BlueprintCanvas({ theme }) {
 
   const unhighlightSelectedConnection = function() {
     if (currentlySelectedConnectionRef.current !== null) {
+      currentlySelectedConnectionRef.current.removeClass('jtk-connection-selected');
       currentlySelectedConnectionRef.current.setPaintStyle(currentlySelectedOldConnectionPaintStyleRef.current);
       for (let e of currentlySelectedConnectionRef.current.endpoints) {
         e.setPaintStyle(currentlySelectedOldEndpointPaintStyleRef.current);
@@ -47,6 +48,9 @@ function BlueprintCanvas({ theme }) {
       }
       e.setPaintStyle({ fill: theme.colors.secondary.main });
     }
+
+    conn.addClass('jtk-connection-selected');
+
     currentlySelectedConnectionRef.current = conn;
   };
 
