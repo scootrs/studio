@@ -284,6 +284,8 @@ export function WorkspaceContextProvider({ children }) {
             }
           }
 
+          // Ensure there are no id collision and that the runtimes are all the same
+          let runtime = null;
           for (let r of Object.values(next.resources)) {
             if (!ids.has(r.config.id)) {
               ids.add(r.config.id);
@@ -291,6 +293,17 @@ export function WorkspaceContextProvider({ children }) {
               // Another reference or resource has the same name
               r.validation.isValid = false;
               r.validation.fields.id = 'Resource ID must be unique';
+            }
+
+            if (r.meta.type === Compute) {
+              if (runtime === null && r.config.runtime !== '') {
+                // Set the allowed runtime to the first valid runtime we encounter
+                runtime = r.config.runtime;
+              }
+              if (r.config.runtime !== '' && r.config.runtime !== runtime) {
+                r.validation.isValid = false;
+                r.validation.fields.runtime = 'Multiple compute runtimes detected';
+              }
             }
           }
 
