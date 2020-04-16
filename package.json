@@ -12,10 +12,7 @@
     "monaco-editor": "^0.18.1",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
-    "react-plumb": "^0.1.0",
     "react-split": "^2.0.7",
-    "react-tabs": "^3.0.0",
-    "react-tippy": "^1.3.1",
     "styled-components": "^4.4.0",
     "uuid": "^3.3.3"
   },
