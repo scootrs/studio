@@ -2,39 +2,55 @@
  * This module contains the code that subscribes to the Server-Side Events sent by the Studio Services for long-running
  * requests made by this client.
  */
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
+import { useDispatch, batch } from 'react-redux';
 import axios from 'axios';
-import { useStatusContext } from '~contexts/status';
+
+import statusOps from 'components/status/operations';
+
 import { useWorkspaceContext } from '~contexts/workspace';
 import { useApplicationContext } from '~contexts/application';
 
 export default function useServerSentEvents(baseUrl) {
-  const {
-    actions: { setWaiting }
-  } = useStatusContext();
+  const dispatch = useDispatch();
 
   const {
-    actions: { mergeDeploymentResults }
+    actions: { mergeDeploymentResults },
   } = useWorkspaceContext();
 
   const appContext = useApplicationContext();
 
-  function onDeploymentProgress(event) {
-    const data = JSON.parse(event.data);
-    setWaiting(true, data.message);
-  }
+  const onDeploymentProgress = useCallback(
+    (event) => {
+      const data = JSON.parse(event.data);
+      batch(() => {
+        dispatch(statusOps.updateMessage(data.message));
+        dispatch(statusOps.setIsWaiting());
+      });
+    },
+    [dispatch]
+  );
 
-  function onDeploymentSuccess(event) {
-    const data = JSON.parse(event.data);
-    setWaiting(false, data.message);
-    mergeDeploymentResults(data.results);
-    appContext.actions.mergeDeploymentResults(data.results);
-  }
+  const onDeploymentSuccess = useCallback(
+    (event) => {
+      const data = JSON.parse(event.data);
+      batch(() => {
+        dispatch(statusOps.updateMessage(data.message));
+        dispatch(statusOps.setNotWaiting());
+      });
+      mergeDeploymentResults(data.results);
+      appContext.actions.mergeDeploymentResults(data.results);
+    },
+    [dispatch, mergeDeploymentResults, appContext]
+  );
 
-  function onDeploymentFailure(event) {
+  const onDeploymentFailure = useCallback((event) => {
     const data = JSON.parse(event.data);
-    setWaiting(false, data.message + ': ' + data.details);
-  }
+    batch(() => {
+      dispatch(statusOps.updateMessage(data.message + ': ' + data.details));
+      dispatch(statusOps.setNotWaiting());
+    });
+  });
 
   function addEventListeners(source) {
     source.addEventListener('deployment:progress', onDeploymentProgress);
@@ -52,11 +68,11 @@ export default function useServerSentEvents(baseUrl) {
 
   // This effect will continually update our listeners on our source depending on the state of the application
   useEffect(
-    function() {
+    function () {
       if (ref.current !== null) {
         addEventListeners(ref.current);
       }
-      return function() {
+      return function () {
         if (ref.current !== null) {
           removeEventListeners(ref.current);
         }
@@ -67,7 +83,7 @@ export default function useServerSentEvents(baseUrl) {
 
   // This effect initializes our event source
   useEffect(
-    function() {
+    function () {
       async function subscribe() {
         // We subscribe first so that we can get the session information (in case we don't already have it)
         await axios.get(baseUrl + '/subscribe', { withCredentials: true });
@@ -76,7 +92,7 @@ export default function useServerSentEvents(baseUrl) {
         ref.current = new EventSource(baseUrl + '/listen', { withCredentials: true });
       }
       if (ref.current === null) {
-        subscribe().then(function() {
+        subscribe().then(function () {
           // Note that we don't include this function reference in our memoized values for this hook. This is because
           // we only want this hook to run once at the beginning, but having a reference to add the event listeners
           // reduces code duplication and won't result in a usable stale value after the update, since this hook is
@@ -84,7 +100,7 @@ export default function useServerSentEvents(baseUrl) {
           addEventListeners(ref.current);
         });
       }
-      return function() {
+      return function () {
         if (ref.current) {
           removeEventListeners(ref.current);
           ref.current.close();

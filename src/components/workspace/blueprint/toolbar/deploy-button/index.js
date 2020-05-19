@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { useSelector, useDispatch, batch } from 'react-redux';
+
+import statusSelectors from 'components/status/selectors';
+import statusOps from 'components/status/operations';
 import { useApplicationContext } from '~contexts/application';
 import { useWorkspaceContext } from '~contexts/workspace';
-import { useStatusContext } from '~contexts/status';
 import { Button } from '~styles/input/button';
 import Spinner from '~styles/spinner';
 
@@ -45,10 +48,13 @@ const StyledDeployButton = styled(Button)`
 `;
 
 export default function DeployButton() {
-  const {
-    state: { isWaiting },
-    actions: { setWaiting }
-  } = useStatusContext();
+  const dispatch = useDispatch();
+
+  const isWaiting = useSelector(statusSelectors.checkIsWaiting);
+
+  const setIsWaiting = useCallback(() => dispatch(statusOps.setIsWaiting()), [dispatch]);
+  const setNotWaiting = useCallback(() => dispatch(statusOps.setNotWaiting()), [dispatch]);
+  const setMessage = useCallback((message) => dispatch(statusOps.updateMessage(message)), [dispatch]);
 
   const appCtx = useApplicationContext();
 
@@ -68,27 +74,41 @@ export default function DeployButton() {
     const appPackResult = appCtx.pack();
     const workspacePackResult = workspaceCtx.pack();
     if (appPackResult.error) {
-      return setWaiting(false, appPackResult.error);
+      batch(() => {
+        setNotWaiting();
+        setMessage(appPackResult.error);
+      });
+      return;
     }
     if (workspacePackResult.error) {
-      return setWaiting(false, workspacePackResult.error);
+      batch(() => {
+        setNotWaiting();
+        setMessage(workspacePackResult.error);
+      });
+      return;
     }
     const pkg = {
       app: {
-        ...appPackResult.package
+        ...appPackResult.package,
       },
-      ...workspacePackResult.package
+      ...workspacePackResult.package,
     };
     console.log(pkg);
 
     // Send the configuration to be deployed
-    setWaiting(true, 'Deploying configuration');
+    batch(() => {
+      setWaiting();
+      setMessage('Deploying configuration');
+    });
     try {
       const result = await axios.post('http://localhost:3030/api/v0/deploy', pkg, { withCredentials: true });
       console.log(result);
     } catch (err) {
       console.error(err);
-      setWaiting(false, 'Failed to deploy configuration: ' + err.message);
+      batch(() => {
+        setNotWaiting();
+        setMessage('Failed to deploy configuration: ' + err.message);
+      });
     }
   };
 

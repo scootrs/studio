@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import Header from './components/header';
-import Footer from './components/footer';
-import Workspace from './components/workspace';
+
+import Footer from 'layouts/Footer';
 import { ServerSentEventListener } from '~api/subscriber';
+
+import Header from './components/header';
+import Workspace from './components/workspace';
 
 const studioServicesBaseUrl = 'http://localhost:3030/api/v0/streams';
 

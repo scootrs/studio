@@ -2,7 +2,11 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { rootSaga } from './saga';
 
-const reduce = combineReducers();
+import reduceStatus from 'components/status/reducers';
+
+const reduce = combineReducers({
+  status: reduceStatus,
+});
 
 const sagaMiddleware = createSagaMiddleware();
 
