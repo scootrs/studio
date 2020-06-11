@@ -1,11 +1,16 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
-import { rootSaga } from './saga';
 
-import reduceStatus from 'components/status/reducers';
+import reduceStatus from 'status/reducers';
+import reduceApplications from 'application/reducers';
+import reduceSelected from 'selected/reducers';
+
+import { rootSaga } from './saga';
 
 const reduce = combineReducers({
   status: reduceStatus,
+  applications: reduceApplications,
+  selected: reduceSelected,
 });
 
 const sagaMiddleware = createSagaMiddleware();

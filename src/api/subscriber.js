@@ -6,10 +6,9 @@ import { useEffect, useRef, useCallback } from 'react';
 import { useDispatch, batch } from 'react-redux';
 import axios from 'axios';
 
-import statusOps from 'components/status/operations';
+import statusOps from 'status/operations';
 
 import { useWorkspaceContext } from '~contexts/workspace';
-import { useApplicationContext } from '~contexts/application';
 
 export default function useServerSentEvents(baseUrl) {
   const dispatch = useDispatch();
@@ -18,7 +17,7 @@ export default function useServerSentEvents(baseUrl) {
     actions: { mergeDeploymentResults },
   } = useWorkspaceContext();
 
-  const appContext = useApplicationContext();
+  //const appContext = useApplicationContext();
 
   const onDeploymentProgress = useCallback(
     (event) => {
@@ -39,9 +38,9 @@ export default function useServerSentEvents(baseUrl) {
         dispatch(statusOps.setNotWaiting());
       });
       mergeDeploymentResults(data.results);
-      appContext.actions.mergeDeploymentResults(data.results);
+      //appContext.actions.mergeDeploymentResults(data.results);
     },
-    [dispatch, mergeDeploymentResults, appContext]
+    [dispatch, mergeDeploymentResults]
   );
 
   const onDeploymentFailure = useCallback((event) => {

@@ -1,16 +1,20 @@
 import React, { useEffect } from 'react';
-import { useApplicationContext } from '~contexts/application';
+import { useDispatch } from 'react-redux';
+
+import actions from 'application/actions';
+import DeployButton from 'application/ApplicationDeployButton';
+import SaveButton from 'application/ApplicationSaveButton';
+import ProviderSelect from 'application/ApplicationProvider';
+import ApplicationName from 'application/ApplicationName';
+import RegionSelect from 'application/ApplicationRegion';
+
 import ToolbarView, { ToolbarViewActions } from './view';
-import DeployButton from './deploy-button';
-import SaveButton from './save-button';
-import ProviderSelect from './provider-select';
-import ApplicationName from './application-name';
-import RegionSelect from './region';
 
 export default function Toolbar() {
-  const ctx = useApplicationContext();
-  useEffect(function() {
-    ctx.load();
+  const dispatch = useDispatch();
+
+  useEffect(function () {
+    dispatch(actions.load('edaam:application/default'))
   }, []);
 
   return (

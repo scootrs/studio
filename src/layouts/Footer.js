@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import StatusBar from 'components/status/StatusBar';
+import StatusBar from 'status/StatusBar';
 
 const FooterRoot = styled.footer`
   display: flex;
