@@ -40,6 +40,9 @@ module.exports = {
       layouts: path.resolve(__dirname, 'src', 'layouts'),
       styles: path.resolve(__dirname, 'src', 'styles'),
       shared: path.resolve(__dirname, 'src', 'shared'),
+      application: path.resolve(__dirname, 'src', 'application'),
+      status: path.resolve(__dirname, 'src', 'status'),
+      selected: path.resolve(__dirname, 'src', 'selected'),
       '~components': path.resolve(__dirname, 'src', 'components'),
       '~hooks': path.resolve(__dirname, 'src', 'hooks'),
       '~styles': path.resolve(__dirname, 'src', 'styles'),
@@ -59,6 +62,7 @@ module.exports = {
     new HtmlWebpackPlugin({ template: './src/index.html' }),
     new MonacoWebpackPlugin({
       languages: ['javascript', 'typescript'],
+      features: ['!gotoSymbol'],
     }),
   ],
 };

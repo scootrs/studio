@@ -6,7 +6,10 @@
     "paths": {
       "shared/*": ["src/shared/*"],
       "layouts/*": ["src/layouts/*"],
-      "components/*": ["src/components"],
+      "status/*": ["src/status/*"],
+      "application/*": ["src/application/*"],
+      "selected/*": ["src/selected/*"],
+      "components/*": ["src/components/*"],
       "styles/*": ["src/styles/*"],
       "~components/*": ["src/components/*"],
       "~hooks/*": ["src/hooks/*"],
