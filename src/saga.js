@@ -1,7 +1,10 @@
 import { all } from 'redux-saga/effects';
 
-import applicationSaga from 'application/operations';
+import applicationSaga from 'edaam/application/operations';
+import handlerSaga from 'edaam/handler/operations';
 
-export function* rootSaga() {
-  yield all([applicationSaga]);
+function* rootSaga() {
+  yield all([applicationSaga, handlerSaga]);
 }
+
+export default rootSaga;

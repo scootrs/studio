@@ -8,16 +8,8 @@ import axios from 'axios';
 
 import statusOps from 'status/operations';
 
-import { useWorkspaceContext } from '~contexts/workspace';
-
 export default function useServerSentEvents(baseUrl) {
   const dispatch = useDispatch();
-
-  const {
-    actions: { mergeDeploymentResults },
-  } = useWorkspaceContext();
-
-  //const appContext = useApplicationContext();
 
   const onDeploymentProgress = useCallback(
     (event) => {
@@ -37,10 +29,10 @@ export default function useServerSentEvents(baseUrl) {
         dispatch(statusOps.updateMessage(data.message));
         dispatch(statusOps.setNotWaiting());
       });
-      mergeDeploymentResults(data.results);
+      //mergeDeploymentResults(data.results);
       //appContext.actions.mergeDeploymentResults(data.results);
     },
-    [dispatch, mergeDeploymentResults]
+    [dispatch]
   );
 
   const onDeploymentFailure = useCallback((event) => {

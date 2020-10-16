@@ -1,8 +1,14 @@
 import React from 'react';
+import { ThemeProvider } from 'styled-components';
 import { Provider } from 'react-redux';
 import { render } from 'react-dom';
-import App from './app';
-import AppProviders from './providers';
+
+import Header from 'layouts/Header';
+import Main from 'layouts/Main';
+import Footer from 'layouts/Footer';
+
+import { ServerSentEventListener } from './api/subscriber';
+import theme from './shared/styles/theme';
 import { store } from './state';
 
 const root = document.createElement('div');
@@ -15,11 +21,17 @@ root.style.width = '100%';
 root.style.overflow = 'hidden';
 document.body.appendChild(root);
 
+const studioServicesBaseUrl = 'http://localhost:3030/api/v0/streams';
+
 render(
   <Provider store={store}>
-    <AppProviders>
-      <App />
-    </AppProviders>
+    <ThemeProvider theme={theme}>
+      <ServerSentEventListener baseUrl={studioServicesBaseUrl}>
+        <Header />
+        <Main />
+        <Footer />
+      </ServerSentEventListener>
+    </ThemeProvider>
   </Provider>,
   root
 );

@@ -1,0 +1,116 @@
+import React from 'react';
+import styled from 'styled-components';
+import { FlexTabs, FlexTabPanel } from 'shared/styles/tabs';
+import { HeaderTitleContainer, HeaderTitleInput, HeaderIcon, HeaderRightContent } from './Header';
+import { DetailsViewHeader, DetailsViewBody, DetailsSection, DetailsSectionTitle, DetailsSectionBody } from './Body';
+import { TabularInput } from 'shared/styles/input/tabular';
+import { InputLabel } from 'shared/styles/input/label';
+import { ValidatedTextInput } from 'shared/styles/input/text-validated';
+import { SelectInput } from 'shared/styles/input/select';
+import { TextInput } from 'shared/styles/input/text';
+import { InputTable, InputTableBody, InputRow, InputLabelCol, InputCol } from './InputTable';
+import { ValidatedSelectInput } from 'shared/styles/input/select-validated';
+
+const DetailsViewRoot = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 100%;
+`;
+
+const DetailsTabPanel = styled(FlexTabPanel)`
+  background-color: ${({ theme }) => theme.colors.backgrounds.main};
+`;
+
+function renderInput(input) {
+  switch (input.type) {
+    case 'validated-text':
+      return <ValidatedTextInput key={input.name} {...input} />;
+
+    case 'text':
+      return <TextInput key={input.name} {...input} />;
+
+    case 'validated-select':
+      return <ValidatedSelectInput key={input.name} {...input} />;
+
+    case 'select':
+      return <SelectInput key={input.name} {...input} />;
+
+    case 'tabular':
+      return <TabularInput key={input.name} {...input} />;
+
+    case 'component':
+      const CustomInputComponent = input.component;
+      return <CustomInputComponent key={input.name} {...input.props} />
+
+    default:
+      return <></>;
+  }
+}
+
+export default function DetailsView({ details, onRootKeyPress }) {
+  return (
+    <DetailsViewRoot onKeyPress={onRootKeyPress}>
+      <DetailsViewHeader>
+        <HeaderIcon type={details.header.type} />
+        <HeaderTitleContainer>
+          <HeaderTitleInput borderless={true} {...details.header.title} />
+        </HeaderTitleContainer>
+        <HeaderRightContent>{details.header.inputs.map(renderInput)}</HeaderRightContent>
+      </DetailsViewHeader>
+      <DetailsViewBody>
+        <FlexTabs tabsFor={details.id}>
+          {details.tabs.map(tab => {
+            if (tab.component) {
+              // We have a custom component provided by the developer that we need to render.
+              if (tab.sections) {
+                console.warn(
+                  `You have specified both a React component and a list of sections to render in the ${tab.title}` +
+                    ' tab. React will render the specified component, but make sure you only use one or ' +
+                    'the other'
+                );
+              }
+              return (
+                <DetailsTabPanel key={tab.title} name={tab.title}>
+                  {tab.component}
+                </DetailsTabPanel>
+              );
+            } else {
+              if (!tab.sections) {
+                // No component was provided and no sections were provided. Warn the developer.
+                console.warn(`You have not specified 'component' or 'sections' for the tab ${tab.title}`);
+              } else {
+                // We need to render the sections according to the details the user has given us
+                return (
+                  <DetailsTabPanel key={tab.title} name={tab.title} direction="column">
+                    {tab.sections.map(section => {
+                      return (
+                        <DetailsSection key={section.title}>
+                          <DetailsSectionTitle>{section.title}</DetailsSectionTitle>
+                          <DetailsSectionBody>
+                            <InputTable>
+                              <InputTableBody>
+                                {section.inputs.map(input => (
+                                  <InputRow key={input.name}>
+                                    <InputLabelCol>
+                                      <InputLabel htmlFor={input.name}>{input.label}</InputLabel>
+                                    </InputLabelCol>
+                                    <InputCol>{renderInput(input)}</InputCol>
+                                  </InputRow>
+                                ))}
+                              </InputTableBody>
+                            </InputTable>
+                          </DetailsSectionBody>
+                        </DetailsSection>
+                      );
+                    })}
+                  </DetailsTabPanel>
+                );
+              }
+            }
+          })}
+        </FlexTabs>
+      </DetailsViewBody>
+    </DetailsViewRoot>
+  );
+}

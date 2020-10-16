@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Spinner from 'styles/spinner';
+import Spinner from 'shared/styles/spinner';
 
 const StatusContainer = styled.div`
   display: flex;
