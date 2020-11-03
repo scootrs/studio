@@ -1,6 +1,8 @@
 export default {
   SELECT: 'scootrio.studio.edaam.handler.select',
   CREATE: 'scootrio.studio.edaam.handler.create',
+  CREATE_SUCCESS: 'scootrio.studio.edaam.handler.create-success',
+  CREATE_FAILURE: 'scootrio.studio.edaam.handler.create-failure',
   UPDATE: 'scootrio.studio.edaam.handler.update',
   DELETE: 'scootrio.studio.edaam.handler.delete',
 

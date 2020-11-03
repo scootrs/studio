@@ -65,7 +65,7 @@ export default function useComputeDetails(resource) {
           props: {
             onClick: useCallback(() => {
               dispatch(actions.delete(id));
-            }, [dispatch]),
+            }, [dispatch, id]),
           },
         },
       ],

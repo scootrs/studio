@@ -1,8 +1,52 @@
 import { eventChannel, END } from 'redux-saga';
 import { all, call, put, take, takeEvery } from 'redux-saga/effects';
+import uuid from 'uuid/v4';
 
 import actions from './actions';
 import events from './events';
+import { captions } from './validation';
+
+function doCreateHandler(options) {
+  return {
+    id: 'edaam:handler/' + uuid(),
+    name: '',
+    runtime: '',
+    code: '',
+    environment: [],
+    _meta: {
+      id: uuid(),
+      type: 'handler',
+      tooltip: 'Handler',
+      position: { x: options.x, y: options.y },
+      endpoints: [
+        {
+          isSource: true,
+          id: uuid(),
+          scopes: ['storage', 'event-internal'],
+        },
+        {
+          isTarget: true,
+          id: uuid(),
+          scopes: ['compute'],
+        },
+      ],
+      errors: {
+        name: captions.NameMissing,
+        runtime: captions.RuntimeMissing,
+        code: captions.CodeMissing,
+      },
+    },
+  };
+}
+
+function* create(action) {
+  const newHandler = yield call(doCreateHandler, action.payload);
+  yield put(actions.createSuccess(newHandler));
+}
+
+function* watchCreate() {
+  yield takeEvery(events.CREATE, create);  
+}
 
 function createLogChannel(id) {
   return eventChannel((emitter) => {
@@ -51,7 +95,7 @@ function* watchFetchLogs() {
 }
 
 function* saga() {
-  yield all([watchFetchLogs]);
+  yield all([watchCreate(), watchFetchLogs()]);
 }
 
 export default saga;

@@ -5,6 +5,8 @@ import events from './events';
 export default {
   select: (id) => action(events.SELECT, id),
   create: (options) => action(events.CREATE, options),
+  createSuccess: (newHandler) => action(events.CREATE_SUCCESS, newHandler),
+  createFailure: (message) => action(events.CREATE_FAILURE, message, true),
   update: (id, property, value) => action(events.UPDATE, { id, property, value }),
   delete: (id) => action(events.DELETE, id),
 
