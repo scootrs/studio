@@ -52,6 +52,13 @@ const reduceSelected = produce((draft, action) => {
       };
       break;
 
+      case storageEvents.CREATE_SUCCESS:
+        draft.resource = {
+          type: 'storage',
+          id: action.payload.id
+        };
+        break;
+
     case referenceEvents.SELECT:
       draft.resource = {
         type: 'reference',

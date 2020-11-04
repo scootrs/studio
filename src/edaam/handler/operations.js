@@ -50,7 +50,14 @@ function* watchCreate() {
 
 function createLogChannel(id) {
   return eventChannel((emitter) => {
-    const source = new EventSource('http://localhost:3001/logs/' + id, { withCredentials: true });
+
+    let source = null;
+    try {
+      source = new EventSource('http://localhost:3001/logs/' + id, { withCredentials: true });
+    } catch(err) {
+      // TODO: emit something that indicates a failure
+      return () => {};
+    }
 
     function onLogEntry(event) {
       const data = JSON.parse(event.data);
@@ -84,7 +91,7 @@ function* fetchLogs(action) {
   while (true) {
     const a = yield take(events.CANCEL_FETCH_LOGS);
     if (a.payload == action.payload) {
-      chan.cancel();
+      chan.close();
       break;
     }
   }

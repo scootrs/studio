@@ -1,41 +1,14 @@
 import produce from 'immer';
-import uuid from 'uuid/v4';
 
 import events from './events';
-import { captions, validators } from './validation';
+import { validators } from './validation';
 
 const initialState = {};
 
-function createStorage(options) {
-  return {
-    id: 'edaam:storage/' + uuid(),
-    name: '',
-    type: '',
-    _meta: {
-      id: uuid(),
-      type: 'storage',
-      tooltip: 'Storage',
-      position: { x: options.x, y: options.y },
-      endpoints: [
-        {
-          isTarget: true,
-          id: uuid(),
-          scopes: ['handler'],
-        },
-      ],
-      errors: {
-        name: captions.NameMissing,
-        type: captions.TypeMissing,
-      },
-    },
-  };
-}
-
 const reduce = produce((draft, action) => {
   switch (action.type) {
-    case events.CREATE:
-      const newStorage = createStorage(action.payload);
-      draft[newStorage.id] = newStorage;
+    case events.CREATE_SUCCESS:
+      draft[action.payload.id] = action.payload;
       break;
 
     case events.UPDATE:

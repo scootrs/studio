@@ -10,10 +10,13 @@ export default function useStorageDetails(resource) {
   const dispatch = useDispatch();
   const id = resource.id;
 
+  const keyvalTabs = getKeyValueDetailTabs(resource, dispatch);
+
   let tabs = [];
-  switch (selected.config.type) {
+  switch (resource.type) {
     case 'keyval':
-      tabs = getKeyValueDetailTabs(resource, dispatch);
+      tabs = keyvalTabs;
+      break;
   }
 
   return {
